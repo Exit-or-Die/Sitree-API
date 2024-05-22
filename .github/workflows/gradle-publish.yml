@@ -48,7 +48,7 @@ jobs:
 
   deploy:
     if: ${{ github.event.pull_request.merged == true || github.ref_name == 'main'}}
-#    needs: [build]
+    needs: [build]
     runs-on : ubuntu-latest
     steps:
       - run: echo "The PR was merged"

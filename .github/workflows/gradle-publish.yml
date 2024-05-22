@@ -12,7 +12,9 @@ on:
       - closed
 
 jobs:
-  test:
+
+  
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,22 +34,8 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew --info test
 
-#      - name: Publish Unit Test Results
-#        uses: EnricoMi/publish-unit-test-result-action@v1
-#        if: ${{ always() }}  # 'always' : 테스트 실패해도 Result 출력
-#        with:
-#          file: build/test-results/**/*.xml
-  
-  build:
-    needs: [test]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-    - name: Build with Gradle
-      run: ./gradlew build
+      - name: Build with Gradle
+        run: ./gradlew build
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle

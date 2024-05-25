@@ -69,6 +69,7 @@ jobs:
       ## NLP 적용하면 IP -> 도메인으로 수정 + EC2 늘리면 run 추가
       - name: Deploy to EC2
         run: |
+          echo "${{ secrets.AWS_ACCESS_KEY }}"
           echo "${{ secrets.AWS_ACCESS_KEY }}" > private_key.pem
           chmod 600 private_key.pem
           scp -i private_key.pem -o StrictHostKeyChecking=no build/libs/sitree-0.0.1-SNAPSHOT.jar ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USERNAME }}/sitree.jar

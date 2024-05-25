@@ -9,9 +9,12 @@ name: Sitree Api Pipeline
 
 on:
   push:
-    branches: ["main", "feature/**"]
+    branches:
+      - "main"
+      - "feature/**"
   pull_request:
-    branches: ["main"]
+    branches:
+      - "main"
 
 jobs:
   test:
@@ -48,7 +51,6 @@ jobs:
           rm -f ~/.gradle/caches/modules-2/gc.properties
   
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read

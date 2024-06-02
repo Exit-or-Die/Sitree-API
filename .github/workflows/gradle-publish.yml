@@ -30,10 +30,10 @@ jobs:
 
       # Gradle test 실행
       - name: Test with Gradle
-        run: ./gradlew --info test
+        run: ./gradlew --info test -Dspring.profiles.active=live -Djasypt.encryptor.password=${{secrets.JASYPT_KEY}}
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -Dspring.profiles.active=live -Djasypt.encryptor.password=${{secrets.JASYPT_KEY}}
 
       # 빌드해서 생긴 JAR 파일을 깃허브 아티팩트로 업로드!!
       - name: Upload build artifact
@@ -72,5 +72,5 @@ jobs:
           echo "${{ secrets.AWS_ACCESS_KEY }}" > private_key.pem
           chmod 600 private_key.pem
           scp -i private_key.pem -o StrictHostKeyChecking=no build/libs/sitree-0.0.1-SNAPSHOT.jar ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USERNAME }}/sitree.jar
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "pgrep java | xargs kill -9; nohup java -jar /home/${{ secrets.EC2_USERNAME }}/sitree.jar > app.log 2>&1 &"
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "pgrep java | xargs kill -9; nohup java -jar -Dspring.profiles.active=live -Djasypt.encryptor.password=${{secrets.JASYPT_KEY}} /home/${{ secrets.EC2_USERNAME }}/sitree.jar > app.log 2>&1 &"
           rm -f private_key.pem

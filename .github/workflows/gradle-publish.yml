@@ -52,7 +52,7 @@ jobs:
 #        TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
-    if: ${{ github.event.pull_request.merged == true || github.ref_name == 'main'}}
+    if: ${{ github.ref_name == 'main'}}
     needs: [build]
     runs-on : ubuntu-latest
     steps:

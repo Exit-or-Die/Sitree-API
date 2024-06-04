@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthCheckController {
 
     @GetMapping
-    public String healthCheck(){
+    public String healthCheck() {
         return "healthy";
     }
 }

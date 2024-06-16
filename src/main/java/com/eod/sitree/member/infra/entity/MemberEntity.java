@@ -21,7 +21,7 @@ public class MemberEntity extends BaseEntity {
     private String authId;
 
     @Column(nullable = false)
-    private String nickName;
+    private String nickname;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -29,17 +29,17 @@ public class MemberEntity extends BaseEntity {
     @Column(nullable = false)
     private String profileImgUrl;
 
-    public MemberEntity(Long memberId, String authId, String nickName, String email,
+    public MemberEntity(Long memberId, String authId, String nickname, String email,
         String profileImgUrl) {
         this.memberId = memberId;
         this.authId = authId;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.email = email;
         this.profileImgUrl = profileImgUrl;
     }
 
     public Member toModel() {
-        return new Member(memberId, authId, nickName, email, profileImgUrl);
+        return new Member(memberId, authId, nickname, email, profileImgUrl);
     }
 
     public static MemberEntity from(Member member) {

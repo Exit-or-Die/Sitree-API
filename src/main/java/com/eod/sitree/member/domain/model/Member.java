@@ -1,28 +1,39 @@
 package com.eod.sitree.member.domain.model;
 
 
+import com.eod.sitree.member.ui.dto.common.MemberSignDto;
 import lombok.Getter;
 
 @Getter
 public class Member {
 
-    private Long memberId;
+    private Long memberNo;
 
     private String authId;
 
-    private String nickName;
+    private String nickname;
 
     private String email;
 
     private String profileImgUrl;
 
 
-    public Member(Long memberId, String authId, String nickName, String email,
+    public Member(Long memberNo, String authId, String nickname, String email,
         String profileImgUrl) {
-        this.memberId = memberId;
+        this.memberNo = memberNo;
         this.authId = authId;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.email = email;
         this.profileImgUrl = profileImgUrl;
+    }
+
+    public static Member ofSignUp(MemberSignDto memberSignDto) {
+        return new Member(
+            null,
+            memberSignDto.getAuthId(),
+            memberSignDto.getNickname(),
+            memberSignDto.getEmail(),
+            memberSignDto.getProfileImgUrl()
+            );
     }
 }

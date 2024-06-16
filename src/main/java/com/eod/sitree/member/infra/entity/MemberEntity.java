@@ -44,9 +44,9 @@ public class MemberEntity extends BaseEntity {
 
     public static MemberEntity from(Member member) {
         return new MemberEntity(
-            member.getMemberId(),
+            member.getMemberNo(),
             member.getAuthId(),
-            member.getNickName(),
+            member.getNickname(),
             member.getEmail(),
             member.getProfileImgUrl()
         );

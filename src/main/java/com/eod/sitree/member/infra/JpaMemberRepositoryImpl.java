@@ -3,6 +3,7 @@ package com.eod.sitree.member.infra;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.infra.entity.MemberEntity;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +25,25 @@ public class JpaMemberRepositoryImpl implements MemberRepository {
         Optional<MemberEntity> memberEntityOptional = Optional.ofNullable( memberJpaRepository.findByAuthIdAndEmail(authId, email));
 
         return memberEntityOptional.map(MemberEntity::toModel);
+    }
+
+    @Override
+    public Member findByAuthIdAndEmail(String authId, String email) {
+        MemberEntity memberEntity = memberJpaRepository.findByAuthIdAndEmail(authId, email);
+
+        if(Objects.isNull(memberEntity)){
+            //TODO: customException 머지시 작업
+            //throw new MemberNotFoundException();
+            throw new RuntimeException();
+        }
+
+        return memberEntity.toModel();
+    }
+
+    @Override
+    public Member save(Member member) {
+        MemberEntity savedMemberEntity = memberJpaRepository.save(MemberEntity.from(member));
+
+        return savedMemberEntity.toModel();
     }
 }

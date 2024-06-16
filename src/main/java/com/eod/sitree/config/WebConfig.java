@@ -1,7 +1,7 @@
 package com.eod.sitree.config;
 
-import com.eod.sitree.common.auth.AuthenticationInterceptor;
-import com.eod.sitree.common.auth.service.AuthService;
+import com.eod.sitree.auth.AuthenticationInterceptor;
+import com.eod.sitree.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

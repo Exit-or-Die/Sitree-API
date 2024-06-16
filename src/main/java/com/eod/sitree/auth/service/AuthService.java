@@ -1,10 +1,9 @@
-package com.eod.sitree.common.auth.service;
+package com.eod.sitree.auth.service;
 
-import com.eod.sitree.common.auth.domain.MemberClaim;
+import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.service.MemberService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +12,6 @@ import io.jsonwebtoken.security.Keys;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,7 +1,6 @@
-package com.eod.sitree.common.auth.domain;
+package com.eod.sitree.auth.domain;
 
 import com.eod.sitree.member.domain.model.Member;
-import io.jsonwebtoken.Claims;
 import lombok.Getter;
 
 @Getter

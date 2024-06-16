@@ -1,7 +1,7 @@
-package com.eod.sitree.common.auth;
+package com.eod.sitree.auth;
 
-import com.eod.sitree.common.auth.service.AuthService;
-import com.eod.sitree.common.auth.support.NoAuthRequired;
+import com.eod.sitree.auth.service.AuthService;
+import com.eod.sitree.auth.support.NoAuthRequired;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -21,7 +21,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        authService.validateToken(request);
+        authService.validateToken(request, AuthService.ACCESS_TOKEN_HEADER_NAME);
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }

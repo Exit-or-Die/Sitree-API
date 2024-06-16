@@ -40,7 +40,7 @@ public class MemberService {
         return SignInResponseDto.ofNewMember(memberSignDto);
     }
 
-    public MemberSignDto signUp(MemberSignDto memberSignDto) {
+    public SignUpResponseDto signUp(MemberSignDto memberSignDto) {
         //TODO: ExceptionHandler 처리
         //memberSignDto.validateMemberSignInData();
 
@@ -64,5 +64,11 @@ public class MemberService {
         //memberSignDto.validateMemberSignInData();
 
         return memberRepository.save(Member.ofSignUp(memberSignDto));
+    }
+
+    public SignUpResponseDto refreshToken() {
+
+        //TODO: refresh 로직 구현.
+        return null;
     }
 }

@@ -5,7 +5,6 @@ import com.eod.sitree.auth.ui.dto.SingleTokenDto;
 import com.eod.sitree.auth.ui.dto.TokenDto;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
-import com.eod.sitree.member.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -17,7 +16,6 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +26,8 @@ public class AuthService {
     private final KeyPair jwtKeypair;
 
     private final String JWT_ISSUER = "EOD";
+    public static final String ACCESS_TOKEN_HEADER_NAME = "x-access-token";
+    public static final String REFRESH_TOKEN_HEADER_NAME = "x-refresh-token";
 
     private static final Long ACCESS_TOKEN_EXPIRES_IN_MILLISECONDS = 1000L * 60L * 30L;
 
@@ -85,8 +85,8 @@ public class AuthService {
         return new SingleTokenDto(refreshToken, expiresIn.getTime());
     }
 
-    public void validateToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
+    public void validateToken(HttpServletRequest request, String tokenHeaderName) {
+        String token = request.getHeader(tokenHeaderName);
         MemberClaim memberClaim = extractTokenClaim(token);
 
         Optional<Member> memberOptional = memberRepository.findByAuthIdAndEmailOptional(memberClaim.getAuthId(), memberClaim.getEmail());

@@ -5,12 +5,14 @@ import com.eod.sitree.member.service.MemberService;
 import com.eod.sitree.member.ui.dto.common.MemberSignDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
+import com.eod.sitree.member.ui.dto.response.SignUpResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RestController
+@RestController("/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -20,5 +22,19 @@ public class MemberController {
     public ResponseDto<SignInResponseDto> signIn(MemberSignDto memberSignDto){
 
         return ResponseDto.ok(memberService.signIn(memberSignDto));
+    }
+
+    @NoAuthRequired
+    @PostMapping("/sign-up")
+    public ResponseDto<SignUpResponseDto> signUp(MemberSignDto memberSignDto){
+
+        return ResponseDto.ok(memberService.signUp(memberSignDto));
+    }
+
+    @NoAuthRequired
+    @GetMapping("/refresh")
+    public ResponseDto<SignUpResponseDto> refreshToken(){
+        //TODO: refresh 로직 구현.
+        return null;
     }
 }

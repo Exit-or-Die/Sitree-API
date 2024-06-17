@@ -1,10 +1,13 @@
 package com.eod.sitree.member.domain.model;
 
 
+import com.eod.sitree.member.infra.entity.MemberEntity;
+import lombok.AllArgsConstructor;
 import com.eod.sitree.member.ui.dto.common.MemberSignDto;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class Member {
 
     private Long memberNo;
@@ -18,13 +21,13 @@ public class Member {
     private String profileImgUrl;
 
 
-    public Member(Long memberNo, String authId, String nickname, String email,
-        String profileImgUrl) {
-        this.memberNo = memberNo;
-        this.authId = authId;
-        this.nickname = nickname;
-        this.email = email;
-        this.profileImgUrl = profileImgUrl;
+
+    public Member(MemberEntity memberEntity) {
+        this.memberNo = memberEntity.getMemberNo();
+        this.authId = memberEntity.getAuthId();
+        this.nickname = memberEntity.getNickname();
+        this.email = memberEntity.getEmail();
+        this.profileImgUrl = memberEntity.getProfileImgUrl();
     }
 
     public static Member ofSignUp(MemberSignDto memberSignDto) {

@@ -22,9 +22,10 @@ public class JpaMemberRepositoryImpl implements MemberRepository {
 
     @Override
     public Optional<Member> findByAuthIdAndEmailOptional(String authId, String email) {
-        Optional<MemberEntity> memberEntityOptional = Optional.ofNullable( memberJpaRepository.findByAuthIdAndEmail(authId, email));
+        Optional<MemberEntity> memberEntityOptional = Optional.ofNullable(
+            memberJpaRepository.findByAuthIdAndEmail(authId, email));
 
-        return memberEntityOptional.map(MemberEntity::toModel);
+        return memberEntityOptional.map(Member::new);
     }
 
     @Override
@@ -37,13 +38,13 @@ public class JpaMemberRepositoryImpl implements MemberRepository {
             throw new RuntimeException();
         }
 
-        return memberEntity.toModel();
+        return new Member(memberEntity);
     }
 
     @Override
     public Member save(Member member) {
-        MemberEntity savedMemberEntity = memberJpaRepository.save(MemberEntity.from(member));
+        MemberEntity savedMemberEntity = memberJpaRepository.save(new MemberEntity(member));
 
-        return savedMemberEntity.toModel();
+        return new Member(savedMemberEntity);
     }
 }

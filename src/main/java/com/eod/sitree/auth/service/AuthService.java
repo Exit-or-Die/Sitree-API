@@ -1,8 +1,11 @@
 package com.eod.sitree.auth.service;
 
 import com.eod.sitree.auth.domain.MemberClaim;
+import com.eod.sitree.common.exception.BadRequestException;
+import com.eod.sitree.common.exception.UnauthorizedException;
 import com.eod.sitree.auth.ui.dto.SingleTokenDto;
 import com.eod.sitree.auth.ui.dto.TokenDto;
+import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import io.jsonwebtoken.Claims;
@@ -16,6 +19,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Optional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -113,15 +117,15 @@ public class AuthService {
 
             return new MemberClaim(authId, email);
 
-            //TODO: exception handler 정의된 후 exception handling 처리 필요
         } catch (JwtException e) {
 
             //401 UNAUTHORIZED
-            throw new RuntimeException(e);
+            throw new UnauthorizedException();
+
         } catch (IllegalArgumentException e) {
 
             //400 BAD REQUEST
-            throw new RuntimeException(e);
+            throw new BadRequestException();
         } catch (Exception e) {
 
             //500 INTERNAL SERVER ERROR
@@ -137,7 +141,8 @@ public class AuthService {
 
             return keyPairGenerator.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
-            //TODO: customException 머지시  try/catch 제거
+
+            //TODO: 이거 에러나면 인증안됨 -> critical로 등록 필요?
             throw new RuntimeException(e);
         }
     }

@@ -1,5 +1,7 @@
 package com.eod.sitree.common.exception.handler;
 
+import com.eod.sitree.common.exception.BadRequestException;
+import com.eod.sitree.common.exception.UnauthorizedException;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.common.exception.CustomException;
 import com.eod.sitree.common.response.ResponseDto;
@@ -14,9 +16,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(BadRequestException.class)
+    public <T> ResponseEntity<ResponseDto<T>> handleBadRequestException(
+        BadRequestException badRequestException) {
+        log.info("{}\n{}", badRequestException.getErrorMessage(), badRequestException.getStackTrace());
+        return getErrorResponse(badRequestException);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public <T> ResponseEntity<ResponseDto<T>> handleUnauthorizedException(
+        UnauthorizedException unauthorizedException) {
+        log.info("{}\n{}", unauthorizedException.getErrorMessage(), unauthorizedException.getStackTrace());
+        return getErrorResponse(unauthorizedException);
+    }
+
     @ExceptionHandler(CustomException.class)
     public <T> ResponseEntity<ResponseDto<T>> handleCustomException(CustomException customException) {
-        log.info(customException.getErrorMessage());
+        log.info("{}\n{}", customException.getErrorMessage(), customException.getStackTrace());
         return getErrorResponse(customException);
     }
 

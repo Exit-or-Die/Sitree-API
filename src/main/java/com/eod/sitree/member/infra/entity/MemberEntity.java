@@ -7,8 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @NoArgsConstructor
 public class MemberEntity extends BaseEntity {
@@ -38,17 +40,12 @@ public class MemberEntity extends BaseEntity {
         this.profileImgUrl = profileImgUrl;
     }
 
-    public Member toModel() {
-        return new Member(memberId, authId, nickname, email, profileImgUrl);
-    }
+    public MemberEntity(Member member) {
 
-    public static MemberEntity from(Member member) {
-        return new MemberEntity(
-            member.getMemberId(),
-            member.getAuthId(),
-            member.getNickName(),
-            member.getEmail(),
-            member.getProfileImgUrl()
-        );
+        this.memberId = member.getMemberId();
+        this.authId = member.getAuthId();
+        this.nickname = member.getNickname();
+        this.email = member.getEmail();
+        this.profileImgUrl = member.getProfileImgUrl();
     }
 }

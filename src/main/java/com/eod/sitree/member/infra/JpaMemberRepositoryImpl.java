@@ -21,8 +21,9 @@ public class JpaMemberRepositoryImpl implements MemberRepository {
 
     @Override
     public Optional<Member> findByAuthIdAndEmailOptional(String authId, String email) {
-        Optional<MemberEntity> memberEntityOptional = Optional.ofNullable( memberJpaRepository.findByAuthIdAndEmail(authId, email));
+        Optional<MemberEntity> memberEntityOptional = Optional.ofNullable(
+            memberJpaRepository.findByAuthIdAndEmail(authId, email));
 
-        return memberEntityOptional.map(MemberEntity::toModel);
+        return memberEntityOptional.map(Member::new);
     }
 }

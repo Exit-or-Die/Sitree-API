@@ -15,7 +15,8 @@ public class MemberClaim {
         this.email = email;
     }
 
-    public static MemberClaim from(Member member) {
-        return new MemberClaim(member.getAuthId(), member.getEmail());
+    public MemberClaim(Member member) {
+        this.authId = member.getAuthId();
+        this.email = member.getEmail();
     }
 }

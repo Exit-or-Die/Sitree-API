@@ -21,7 +21,6 @@ public class Member {
     private String profileImgUrl;
 
 
-
     public Member(MemberEntity memberEntity) {
         this.memberNo = memberEntity.getMemberNo();
         this.authId = memberEntity.getAuthId();
@@ -30,13 +29,12 @@ public class Member {
         this.profileImgUrl = memberEntity.getProfileImgUrl();
     }
 
-    public static Member ofSignUp(MemberSignDto memberSignDto) {
-        return new Member(
-            null,
-            memberSignDto.getAuthId(),
-            memberSignDto.getNickname(),
-            memberSignDto.getEmail(),
-            memberSignDto.getProfileImgUrl()
-            );
+    public Member(MemberSignDto memberSignDto) {
+
+        this.memberNo = null;
+        this.authId = memberSignDto.getAuthId();
+        this.nickname = memberSignDto.getNickname();
+        this.email = memberSignDto.getEmail();
+        this.profileImgUrl = memberSignDto.getProfileImgUrl();
     }
 }

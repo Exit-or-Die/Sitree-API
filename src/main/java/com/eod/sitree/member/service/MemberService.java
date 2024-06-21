@@ -66,7 +66,7 @@ public class MemberService {
         //TODO: ExceptionHandler 처리
         //memberSignDto.validateMemberSignInData();
 
-        return memberRepository.save(Member.ofSignUp(memberSignDto));
+        return memberRepository.save(new Member(memberSignDto));
     }
 
     public SignUpResponseDto refreshToken() {

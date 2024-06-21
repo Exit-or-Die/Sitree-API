@@ -25,7 +25,7 @@ public class JwtToken {
     public JwtToken(Member member, JwtTokenType jwtTokenType, KeyPair keyPair) {
         Date now = new Date();
         Date expiresIn = new Date(now.getTime() + jwtTokenType.getExpireInMilliSecond());
-        MemberClaim memberClaim = MemberClaim.from(member);
+        MemberClaim memberClaim = new MemberClaim(member);
 
         this.tokenValue = Jwts.builder()
             .claim("memberClaim", memberClaim)

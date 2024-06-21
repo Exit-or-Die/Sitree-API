@@ -1,5 +1,7 @@
 package com.eod.sitree.member.service;
 
+import com.eod.sitree.auth.domain.JwtToken;
+import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.auth.ui.dto.TokenDto;
 import com.eod.sitree.member.domain.model.Member;
@@ -54,9 +56,10 @@ public class MemberService {
         }
 
         Member registeredNewMember = registerNewMember(memberSignDto);
-        TokenDto jwtToken = authService.createJwtToken(registeredNewMember);
+        JwtToken accessToken = new JwtToken(registeredNewMember, JwtTokenType.ACCESS_TOKEN, authService.getJwtKeypair());
+        JwtToken refreshToken = new JwtToken(registeredNewMember, JwtTokenType.REFRESH_TOKEN, authService.getJwtKeypair());
 
-        return SignUpResponseDto.from(registeredNewMember, jwtToken);
+        return new SignUpResponseDto(registeredNewMember, new TokenDto(accessToken, refreshToken));
     }
 
     private Member registerNewMember(MemberSignDto memberSignDto) {

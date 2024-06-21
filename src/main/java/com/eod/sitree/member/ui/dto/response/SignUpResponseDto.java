@@ -11,24 +11,10 @@ public class SignUpResponseDto extends MemberSignDto {
 
     private TokenDto tokens;
 
-
-    @Builder
-    private SignUpResponseDto(String authId, String email, String nickname, String profileImgUrl,
-        Long memberNo, TokenDto tokens) {
-        super(authId, email, nickname, profileImgUrl);
-        this.memberNo = memberNo;
+    public SignUpResponseDto(Member member, TokenDto tokens) {
+        super(member.getAuthId(), member.getEmail(), member.getNickname(), member.getProfileImgUrl());
+        this.memberNo = member.getMemberNo();
         this.tokens = tokens;
-    }
-
-    public static SignUpResponseDto from(Member member, TokenDto tokens) {
-        return SignUpResponseDto.builder()
-            .memberNo(member.getMemberNo())
-            .authId(member.getAuthId())
-            .email(member.getEmail())
-            .nickname(member.getNickname())
-            .profileImgUrl(member.getProfileImgUrl())
-            .tokens(tokens)
-            .build();
     }
 
 }

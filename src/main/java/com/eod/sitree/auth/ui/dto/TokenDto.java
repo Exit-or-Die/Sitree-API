@@ -1,5 +1,6 @@
 package com.eod.sitree.auth.ui.dto;
 
+import com.eod.sitree.auth.domain.JwtToken;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties.TokenType;
@@ -11,25 +12,16 @@ public class TokenDto {
 
     private String refreshToken;
 
-    private Long accessTokenExpiresIn;
-
-    private Long refreshTokenExpiresIn;
 
     @Builder
     private TokenDto(String accessToken, String refreshToken,
         Long accessTokenExpiresIn, Long refreshTokenExpiresIn) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.accessTokenExpiresIn = accessTokenExpiresIn;
-        this.refreshTokenExpiresIn = refreshTokenExpiresIn;
     }
 
-    public static TokenDto jwtToken(String accessToken, Long accessTokenExpiresIn, String refreshToken, Long refreshTokenExpiresIn){
-        return TokenDto.builder()
-            .accessToken(accessToken)
-            .accessTokenExpiresIn(accessTokenExpiresIn)
-            .refreshToken(refreshToken)
-            .refreshTokenExpiresIn(refreshTokenExpiresIn)
-            .build();
+    public TokenDto(JwtToken accessToken, JwtToken refreshToken) {
+        this.accessToken = accessToken.getTokenValue();
+        this.refreshToken = refreshToken.getTokenValue();
     }
 }

@@ -3,6 +3,9 @@ spring:
     activate:
       on-profile: live
 
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(o8dCxdj5j3NWZX4YCnAMEfnxleTeyod7xsZNheEWW79rxoTS58naHnp6mj5MvjXGxkiPpaEL+eHgdBQPtpGeGeOPn1Jj64ILtNqn3LbKXFKufLQFRPoqW2nPP+DMKA64)

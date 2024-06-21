@@ -12,14 +12,6 @@ public class TokenDto {
 
     private String refreshToken;
 
-
-    @Builder
-    private TokenDto(String accessToken, String refreshToken,
-        Long accessTokenExpiresIn, Long refreshTokenExpiresIn) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-    }
-
     public TokenDto(JwtToken accessToken, JwtToken refreshToken) {
         this.accessToken = accessToken.getTokenValue();
         this.refreshToken = refreshToken.getTokenValue();

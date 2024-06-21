@@ -7,18 +7,17 @@ import java.security.NoSuchAlgorithmException;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
+@Getter
 @Service
 public class AuthService {
 
-    @Getter
     private final KeyPair jwtKeypair;
 
-    public AuthService(MemberRepository memberRepository) {
-
+    public AuthService() {
         this.jwtKeypair = generateKeyPair();
     }
 
-    private static KeyPair generateKeyPair() {
+    private KeyPair generateKeyPair() {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);

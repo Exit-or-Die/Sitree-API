@@ -10,11 +10,6 @@ public class MemberClaim {
 
     private String email;
 
-    public MemberClaim(String authId, String email) {
-        this.authId = authId;
-        this.email = email;
-    }
-
     public MemberClaim(Member member) {
         this.authId = member.getAuthId();
         this.email = member.getEmail();

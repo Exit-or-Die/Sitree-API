@@ -1,18 +1,23 @@
 package com.eod.sitree.member.ui.dto.common;
 
 import io.micrometer.common.util.StringUtils;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.apache.coyote.BadRequestException;
 
 @Getter
 public class MemberSignDto {
 
+    @NotNull
     private String authId;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String nickname;
 
+    @NotNull
     private String profileImgUrl;
 
     public MemberSignDto(String authId, String email, String nickname, String profileImgUrl) {
@@ -22,9 +27,4 @@ public class MemberSignDto {
         this.profileImgUrl = profileImgUrl;
     }
 
-    public void validateMemberSignInData() throws BadRequestException {
-        if(StringUtils.isEmpty(authId) || StringUtils.isEmpty(email) || StringUtils.isEmpty(nickname) || StringUtils.isEmpty(profileImgUrl)){
-            throw new BadRequestException();
-        }
-    }
 }

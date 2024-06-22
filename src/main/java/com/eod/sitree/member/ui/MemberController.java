@@ -6,6 +6,7 @@ import com.eod.sitree.member.ui.dto.common.MemberSignDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
 import com.eod.sitree.member.ui.dto.response.SignUpResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,14 +20,14 @@ public class MemberController {
 
     @NoAuthRequired
     @PostMapping("/sign-in")
-    public ResponseDto<SignInResponseDto> signIn(MemberSignDto memberSignDto){
+    public ResponseDto<SignInResponseDto> signIn(@Valid MemberSignDto memberSignDto){
 
         return ResponseDto.ok(memberService.signIn(memberSignDto));
     }
 
     @NoAuthRequired
     @PostMapping("/sign-up")
-    public ResponseDto<SignUpResponseDto> signUp(MemberSignDto memberSignDto){
+    public ResponseDto<SignUpResponseDto> signUp(@Valid MemberSignDto memberSignDto){
 
         return ResponseDto.ok(memberService.signUp(memberSignDto));
     }

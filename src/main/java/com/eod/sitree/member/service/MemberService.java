@@ -4,8 +4,10 @@ import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.auth.ui.dto.TokenDto;
+import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
+import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.ui.dto.common.MemberSignDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.member.ui.dto.response.SignUpResponseDto;
@@ -29,8 +31,6 @@ public class MemberService {
     }
 
     public SignInResponseDto signIn(MemberSignDto memberSignDto) {
-        //TODO: ExceptionHandler 처리
-        //memberSignDto.validateMemberSignInData();
 
         Optional<Member> memberOptional = findMemberByAuthIdAndEmailWithoutException(
             memberSignDto.getAuthId(), memberSignDto.getEmail());
@@ -43,30 +43,20 @@ public class MemberService {
     }
 
     public SignUpResponseDto signUp(MemberSignDto memberSignDto) {
-        //TODO: ExceptionHandler 처리
-        //memberSignDto.validateMemberSignInData();
 
         Optional<Member> memberOptional = findMemberByAuthIdAndEmailWithoutException(
             memberSignDto.getAuthId(), memberSignDto.getEmail());
 
         if (memberOptional.isPresent()) {
-            //TODO: customException 머지시 작업
-            //throw new MemberAlreadyExistException();
-            throw new RuntimeException("MemberAlreadyExistException");
+
+            throw new MemberException(ApplicationErrorType.MEMBER_ALREADY_EXIST);
         }
 
-        Member registeredNewMember = registerNewMember(memberSignDto);
+        Member registeredNewMember = memberRepository.save(new Member(memberSignDto));
         JwtToken accessToken = new JwtToken(registeredNewMember, JwtTokenType.ACCESS_TOKEN, authService.getJwtKeypair());
         JwtToken refreshToken = new JwtToken(registeredNewMember, JwtTokenType.REFRESH_TOKEN, authService.getJwtKeypair());
 
         return new SignUpResponseDto(registeredNewMember, new TokenDto(accessToken, refreshToken));
-    }
-
-    private Member registerNewMember(MemberSignDto memberSignDto) {
-        //TODO: ExceptionHandler 처리
-        //memberSignDto.validateMemberSignInData();
-
-        return memberRepository.save(new Member(memberSignDto));
     }
 
     public SignUpResponseDto refreshToken() {

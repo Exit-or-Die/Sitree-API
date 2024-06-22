@@ -4,6 +4,7 @@ import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
@@ -22,6 +23,11 @@ public class ResponseDto<T> {
         this.code = errorType.getErrorCode();
         this.message = errorType.getMessage();
         this.value = null;
+    }
+    public ResponseDto(HttpStatus httpStatus, T value) {
+        this.code = httpStatus.value();
+        this.message = httpStatus.getReasonPhrase();
+        this.value = value;
     }
 
     public static <T> ResponseDto<T> ok(T value) {

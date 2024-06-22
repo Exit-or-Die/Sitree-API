@@ -1,7 +1,9 @@
 package com.eod.sitree.member.infra;
 
+import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
+import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.infra.entity.MemberEntity;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,9 +35,7 @@ public class JpaMemberRepositoryImpl implements MemberRepository {
         MemberEntity memberEntity = memberJpaRepository.findByAuthIdAndEmail(authId, email);
 
         if(Objects.isNull(memberEntity)){
-            //TODO: customException 머지시 작업
-            //throw new MemberNotFoundException();
-            throw new RuntimeException();
+            throw new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
         }
 
         return new Member(memberEntity);

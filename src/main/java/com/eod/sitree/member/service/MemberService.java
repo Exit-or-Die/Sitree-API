@@ -23,13 +23,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final AuthService authService;
 
-//    public Optional<Member> findMemberByAuthIdAndEmailWithoutException(String authId, String email) {
-//        return memberRepository.findByAuthIdAndEmailOptional(authId, email);
-//    }
-//
-//    public Member findMemberByAuthIdAndEmail(String authId, String email) {
-//        return memberRepository.findByAuthIdAndEmail(authId, email);
-//    }
 
     public SignInResponseDto signIn(MemberSignDto memberSignDto) {
 

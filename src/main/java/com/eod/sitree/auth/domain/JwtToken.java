@@ -56,8 +56,25 @@ public class JwtToken {
         Claims payload = claimsJws.getPayload();
         Date expiration = payload.getExpiration();
 
-        if(expiration.before(now)){
+        if (expiration.before(now)) {
             throw new JwtException("JWT token is expired");
         }
+    }
+
+    public MemberClaim getMemberClaim() {
+
+        if (StringUtils.isEmpty(this.tokenValue)) {
+            throw new JwtException("JWT token is empty");
+        }
+
+        Jws<Claims> claimsJws = Jwts.parser()
+            .verifyWith(this.keyPair.getPublic()).build()
+            .parseSignedClaims(this.getTokenValue());
+
+        Claims payload = claimsJws.getPayload();
+        String authId = payload.get("authId", String.class);
+        String email = payload.get("email", String.class);
+
+        return new MemberClaim(authId, email);
     }
 }

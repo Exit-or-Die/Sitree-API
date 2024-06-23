@@ -4,6 +4,7 @@ import com.eod.sitree.auth.exception.AuthSettingException;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.common.exception.CustomException;
 import com.eod.sitree.common.response.ResponseDto;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.lang.Strings;
 import java.util.Map;
 import java.util.Optional;
@@ -35,6 +36,12 @@ public class GlobalExceptionHandler {
 
         log.info("{}\n{}", methodArgumentNotValidException.getMessage(), methodArgumentNotValidException.getStackTrace());
         return getResponse(HttpStatus.BAD_REQUEST, errors);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ResponseDto<String>> handleJwtException(JwtException jwtException) {
+        log.error("{}\n{}", jwtException.getMessage(), jwtException.getStackTrace());
+        return getResponse(HttpStatus.UNAUTHORIZED, jwtException.getMessage());
     }
 
     @ExceptionHandler(AuthSettingException.class)

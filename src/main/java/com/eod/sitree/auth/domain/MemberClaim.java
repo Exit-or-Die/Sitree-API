@@ -14,4 +14,9 @@ public class MemberClaim {
         this.authId = member.getAuthId();
         this.email = member.getEmail();
     }
+
+    public MemberClaim(String authId, String email) {
+        this.authId = authId;
+        this.email = email;
+    }
 }

@@ -2,6 +2,7 @@ package com.eod.sitree.member.service;
 
 import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
+import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.auth.ui.dto.TokenDto;
 import com.eod.sitree.common.exception.ApplicationErrorType;
@@ -10,7 +11,7 @@ import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.ui.dto.common.MemberSignDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
-import com.eod.sitree.member.ui.dto.response.SignUpResponseDto;
+import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,17 +23,17 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final AuthService authService;
 
-    public Optional<Member> findMemberByAuthIdAndEmailWithoutException(String authId, String email) {
-        return memberRepository.findByAuthIdAndEmailOptional(authId, email);
-    }
-
-    public Member findMemberByAuthIdAndEmail(String authId, String email) {
-        return memberRepository.findByAuthIdAndEmail(authId, email);
-    }
+//    public Optional<Member> findMemberByAuthIdAndEmailWithoutException(String authId, String email) {
+//        return memberRepository.findByAuthIdAndEmailOptional(authId, email);
+//    }
+//
+//    public Member findMemberByAuthIdAndEmail(String authId, String email) {
+//        return memberRepository.findByAuthIdAndEmail(authId, email);
+//    }
 
     public SignInResponseDto signIn(MemberSignDto memberSignDto) {
 
-        Optional<Member> memberOptional = findMemberByAuthIdAndEmailWithoutException(
+        Optional<Member> memberOptional = memberRepository.findByAuthIdAndEmailOptional(
             memberSignDto.getAuthId(), memberSignDto.getEmail());
 
         if (memberOptional.isPresent()) {
@@ -42,9 +43,9 @@ public class MemberService {
         return SignInResponseDto.ofNewMember(memberSignDto);
     }
 
-    public SignUpResponseDto signUp(MemberSignDto memberSignDto) {
+    public MemberTokensResponseDto signUp(MemberSignDto memberSignDto) {
 
-        Optional<Member> memberOptional = findMemberByAuthIdAndEmailWithoutException(
+        Optional<Member> memberOptional = memberRepository.findByAuthIdAndEmailOptional(
             memberSignDto.getAuthId(), memberSignDto.getEmail());
 
         if (memberOptional.isPresent()) {
@@ -53,15 +54,23 @@ public class MemberService {
         }
 
         Member registeredNewMember = memberRepository.save(new Member(memberSignDto));
-        JwtToken accessToken = new JwtToken(registeredNewMember, JwtTokenType.ACCESS_TOKEN, authService.getJwtKeypair());
-        JwtToken refreshToken = new JwtToken(registeredNewMember, JwtTokenType.REFRESH_TOKEN, authService.getJwtKeypair());
 
-        return new SignUpResponseDto(registeredNewMember, new TokenDto(accessToken, refreshToken));
+        return createTokens(registeredNewMember);
     }
 
-    public SignUpResponseDto refreshToken() {
+    public MemberTokensResponseDto refreshToken(MemberClaim memberClaim) {
 
-        //TODO: refresh 로직 구현.
-        return null;
+        Member member = memberRepository.findByAuthIdAndEmail(memberClaim.getAuthId(),
+            memberClaim.getEmail());
+
+        return createTokens(member);
+    }
+
+    private MemberTokensResponseDto createTokens(Member member){
+
+        JwtToken accessToken = new JwtToken(member, JwtTokenType.ACCESS_TOKEN, authService.getJwtKeypair());
+        JwtToken refreshToken = new JwtToken(member, JwtTokenType.REFRESH_TOKEN, authService.getJwtKeypair());
+
+        return new MemberTokensResponseDto(member, new TokenDto(accessToken, refreshToken));
     }
 }

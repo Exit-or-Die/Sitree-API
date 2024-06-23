@@ -1,11 +1,16 @@
 package com.eod.sitree.member.ui;
 
-import com.eod.sitree.auth.support.NoAuthRequired;
+import com.eod.sitree.auth.domain.JwtToken;
+import com.eod.sitree.auth.domain.JwtTokenType;
+import com.eod.sitree.auth.domain.MemberClaim;
+import com.eod.sitree.auth.service.AuthService;
+import com.eod.sitree.auth.support.AuthNotRequired;
 import com.eod.sitree.member.service.MemberService;
 import com.eod.sitree.member.ui.dto.common.MemberSignDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
-import com.eod.sitree.member.ui.dto.response.SignUpResponseDto;
+import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,25 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+    private final AuthService authService;
 
-    @NoAuthRequired
+    @AuthNotRequired
     @PostMapping("/sign-in")
     public ResponseDto<SignInResponseDto> signIn(@Valid MemberSignDto memberSignDto){
 
         return ResponseDto.ok(memberService.signIn(memberSignDto));
     }
 
-    @NoAuthRequired
+    @AuthNotRequired
     @PostMapping("/sign-up")
-    public ResponseDto<SignUpResponseDto> signUp(@Valid MemberSignDto memberSignDto){
+    public ResponseDto<MemberTokensResponseDto> signUp(@Valid MemberSignDto memberSignDto){
 
         return ResponseDto.ok(memberService.signUp(memberSignDto));
     }
 
-    @NoAuthRequired
+    @AuthNotRequired
     @GetMapping("/refresh")
-    public ResponseDto<SignUpResponseDto> refreshToken(){
-        //TODO: refresh 로직 구현.
-        return null;
+    public ResponseDto<MemberTokensResponseDto> refreshToken(HttpServletRequest request){
+
+        String token = request.getHeader(JwtTokenType.REFRESH_TOKEN.getHeaderName());
+        JwtToken refreshToken = new JwtToken(token, authService.getJwtKeypair());
+        refreshToken.validateToken();
+
+        MemberClaim memberClaim = refreshToken.getMemberClaim();
+
+        return ResponseDto.ok(memberService.refreshToken(memberClaim));
+
     }
 }

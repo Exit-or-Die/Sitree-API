@@ -1,13 +1,18 @@
 package com.eod.sitree.auth.domain;
 
 import com.eod.sitree.member.domain.model.Member;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.jackson.io.JacksonDeserializer;
+import io.jsonwebtoken.lang.Maps;
 import io.micrometer.common.util.StringUtils;
 import java.security.KeyPair;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import lombok.Getter;
 
 @Getter
@@ -63,14 +68,12 @@ public class JwtToken {
 
     public MemberClaim getMemberClaim() {
 
-        Jws<Claims> claimsJws = Jwts.parser()
-            .verifyWith(this.keyPair.getPublic()).build()
-            .parseSignedClaims(this.getTokenValue());
-
-        Claims payload = claimsJws.getPayload();
-        String authId = payload.get("authId", String.class);
-        String email = payload.get("email", String.class);
-
-        return new MemberClaim(authId, email);
+        return Jwts.parser()
+            .verifyWith(this.keyPair.getPublic())
+            .json(new JacksonDeserializer(Maps.of("memberClaim", MemberClaim.class).build()))
+            .build()
+            .parseSignedClaims(this.getTokenValue())
+            .getPayload()
+            .get("memberClaim", MemberClaim.class);
     }
 }

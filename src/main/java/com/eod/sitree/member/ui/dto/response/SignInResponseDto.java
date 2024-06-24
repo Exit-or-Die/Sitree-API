@@ -1,27 +1,44 @@
 package com.eod.sitree.member.ui.dto.response;
 
+import com.eod.sitree.auth.domain.JwtToken;
+import com.eod.sitree.auth.domain.JwtTokenType;
+import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.ui.dto.common.MemberSignDto;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class SignInResponseDto extends MemberSignDto {
 
     private Boolean isNewMember;
 
+    private String accessToken;
+
+    private String refreshToken;
+
 
     @Builder
-    private SignInResponseDto(String authId, String email, String nickname, String profileImgUrl, Boolean isNewMember) {
+    private SignInResponseDto(String authId, String email, String nickname, String profileImgUrl, Boolean isNewMember, String accessToken, String refreshToken) {
         super(authId, email, nickname, profileImgUrl);
         this.isNewMember = isNewMember;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
     public static SignInResponseDto ofNotNewMember(Member member) {
+        JwtToken accessToken = new JwtToken(member, JwtTokenType.ACCESS_TOKEN, AuthService.jwtKeypair);
+        JwtToken refreshToken = new JwtToken(member, JwtTokenType.REFRESH_TOKEN,
+
+            AuthService.jwtKeypair);
         return SignInResponseDto.builder()
             .authId(member.getAuthId())
             .email(member.getEmail())
             .nickname(member.getNickname())
             .profileImgUrl(member.getProfileImgUrl())
             .isNewMember(false)
+            .accessToken(accessToken.getTokenValue())
+            .refreshToken(refreshToken.getTokenValue())
             .build();
     }
 

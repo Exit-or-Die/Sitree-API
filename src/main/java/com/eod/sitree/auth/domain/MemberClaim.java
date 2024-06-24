@@ -2,8 +2,10 @@ package com.eod.sitree.auth.domain;
 
 import com.eod.sitree.member.domain.model.Member;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class MemberClaim {
 
     private String authId;

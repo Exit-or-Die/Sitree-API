@@ -15,10 +15,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RestController("/member")
+@RestController
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -26,14 +29,14 @@ public class MemberController {
 
     @AuthNotRequired
     @PostMapping("/sign-in")
-    public ResponseDto<SignInResponseDto> signIn(@Valid MemberSignDto memberSignDto){
+    public ResponseDto<SignInResponseDto> signIn(@Valid @RequestBody MemberSignDto memberSignDto){
 
         return ResponseDto.ok(memberService.signIn(memberSignDto));
     }
 
     @AuthNotRequired
     @PostMapping("/sign-up")
-    public ResponseDto<MemberTokensResponseDto> signUp(@Valid MemberSignDto memberSignDto){
+    public ResponseDto<MemberTokensResponseDto> signUp(@Valid @RequestBody MemberSignDto memberSignDto){
 
         return ResponseDto.ok(memberService.signUp(memberSignDto));
     }

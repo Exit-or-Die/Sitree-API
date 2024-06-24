@@ -29,6 +29,7 @@ public class MemberService {
             memberSignDto.getAuthId(), memberSignDto.getEmail());
 
         if (memberOptional.isPresent()) {
+
             return SignInResponseDto.ofNotNewMember(memberOptional.get());
         }
 

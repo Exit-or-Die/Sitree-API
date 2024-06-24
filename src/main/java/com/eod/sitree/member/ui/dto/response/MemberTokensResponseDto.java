@@ -5,7 +5,9 @@ import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.ui.dto.common.MemberSignDto;
+import lombok.Getter;
 
+@Getter
 public class MemberTokensResponseDto extends MemberSignDto {
 
     private Long memberNo;

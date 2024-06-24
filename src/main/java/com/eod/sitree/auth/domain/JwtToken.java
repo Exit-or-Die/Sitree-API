@@ -63,10 +63,6 @@ public class JwtToken {
 
     public MemberClaim getMemberClaim() {
 
-        if (StringUtils.isEmpty(this.tokenValue)) {
-            throw new JwtException("JWT token is empty");
-        }
-
         Jws<Claims> claimsJws = Jwts.parser()
             .verifyWith(this.keyPair.getPublic()).build()
             .parseSignedClaims(this.getTokenValue());

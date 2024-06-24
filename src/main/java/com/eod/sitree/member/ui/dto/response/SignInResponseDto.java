@@ -12,6 +12,7 @@ public class SignInResponseDto extends MemberSignDto {
     @Builder
     private SignInResponseDto(String authId, String email, String nickname, String profileImgUrl, Boolean isNewMember) {
         super(authId, email, nickname, profileImgUrl);
+        this.isNewMember = isNewMember;
     }
 
     public static SignInResponseDto ofNotNewMember(Member member) {

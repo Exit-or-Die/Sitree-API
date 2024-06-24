@@ -37,6 +37,10 @@ public class JwtToken {
 
     public JwtToken(String token, KeyPair keyPair) {
 
+        if (StringUtils.isEmpty(token)) {
+            throw new JwtException("JWT token is empty");
+        }
+
         this.tokenValue = token;
         this.keyPair = keyPair;
     }
@@ -44,10 +48,6 @@ public class JwtToken {
     public void validateToken() {
 
         Date now = new Date();
-
-        if (StringUtils.isEmpty(this.tokenValue)) {
-            throw new JwtException("JWT token is empty");
-        }
 
         Jws<Claims> claimsJws = Jwts.parser()
             .verifyWith(this.getKeyPair().getPublic()).build()

@@ -4,7 +4,6 @@ import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.auth.service.AuthService;
-import com.eod.sitree.auth.ui.dto.TokenDto;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
@@ -48,22 +47,17 @@ public class MemberService {
 
         Member registeredNewMember = memberRepository.save(new Member(memberSignDto));
 
-        return createTokens(registeredNewMember);
+        return new MemberTokensResponseDto(registeredNewMember);
     }
 
-    public MemberTokensResponseDto refreshToken(MemberClaim memberClaim) {
+    public MemberTokensResponseDto refreshToken(String token) {
 
-        Member member = memberRepository.findByAuthIdAndEmail(memberClaim.getAuthId(),
-            memberClaim.getEmail());
+        JwtToken refreshToken = new JwtToken(token, AuthService.jwtKeypair);
+        refreshToken.validateToken();
 
-        return createTokens(member);
-    }
+        MemberClaim memberClaim = refreshToken.getMemberClaim();
+        Member member = memberRepository.findByAuthIdAndEmail(memberClaim.getAuthId(), memberClaim.getEmail());
 
-    private MemberTokensResponseDto createTokens(Member member){
-
-        JwtToken accessToken = new JwtToken(member, JwtTokenType.ACCESS_TOKEN, authService.getJwtKeypair());
-        JwtToken refreshToken = new JwtToken(member, JwtTokenType.REFRESH_TOKEN, authService.getJwtKeypair());
-
-        return new MemberTokensResponseDto(member, new TokenDto(accessToken, refreshToken));
+        return new MemberTokensResponseDto(member);
     }
 }

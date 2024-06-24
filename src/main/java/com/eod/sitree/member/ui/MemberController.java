@@ -43,12 +43,8 @@ public class MemberController {
     public ResponseDto<MemberTokensResponseDto> refreshToken(HttpServletRequest request){
 
         String token = request.getHeader(JwtTokenType.REFRESH_TOKEN.getHeaderName());
-        JwtToken refreshToken = new JwtToken(token, authService.getJwtKeypair());
-        refreshToken.validateToken();
 
-        MemberClaim memberClaim = refreshToken.getMemberClaim();
-
-        return ResponseDto.ok(memberService.refreshToken(memberClaim));
+        return ResponseDto.ok(memberService.refreshToken(token));
 
     }
 }

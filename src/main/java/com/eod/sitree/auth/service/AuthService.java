@@ -12,13 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    private final KeyPair jwtKeypair;
+    public static final KeyPair jwtKeypair = generateKeyPair();
 
-    public AuthService() {
-        this.jwtKeypair = generateKeyPair();
-    }
-
-    private KeyPair generateKeyPair() {
+    private static KeyPair generateKeyPair() {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);

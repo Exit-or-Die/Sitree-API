@@ -24,7 +24,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         }
 
         String token = request.getHeader(JwtTokenType.ACCESS_TOKEN.getHeaderName());
-        JwtToken jwtToken = new JwtToken(token, authService.getJwtKeypair());
+        JwtToken jwtToken = new JwtToken(token, AuthService.jwtKeypair);
         jwtToken.validateToken();
 
         return HandlerInterceptor.super.preHandle(request, response, handler);

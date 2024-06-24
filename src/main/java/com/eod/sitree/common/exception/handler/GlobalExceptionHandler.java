@@ -38,6 +38,12 @@ public class GlobalExceptionHandler {
         return getResponse(HttpStatus.BAD_REQUEST, errors);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(IllegalArgumentException illegalArgumentException) {
+        log.info("{}\n{}", illegalArgumentException.getMessage(), illegalArgumentException.getStackTrace());
+        return getResponse(HttpStatus.BAD_REQUEST, illegalArgumentException.getMessage());
+    }
+
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ResponseDto<String>> handleJwtException(JwtException jwtException) {
         log.error("{}\n{}", jwtException.getMessage(), jwtException.getStackTrace());

@@ -19,7 +19,7 @@ public class MemberEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
+    private Long memberNo;
 
     @Column(unique = true, nullable = false)
     private String authId;
@@ -35,7 +35,7 @@ public class MemberEntity extends BaseEntity {
 
     public MemberEntity(Member member) {
 
-        this.memberId = member.getMemberId();
+        this.memberNo = member.getMemberNo();
         this.authId = member.getAuthId();
         this.nickname = member.getNickname();
         this.email = member.getEmail();

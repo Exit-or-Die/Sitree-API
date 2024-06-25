@@ -7,4 +7,8 @@ public interface MemberRepository {
 
     Optional<Member> findByAuthIdAndEmailOptional(String authId, String email);
 
+    Member findByAuthIdAndEmail(String authId, String email);
+
+    Member save(Member member);
+
 }

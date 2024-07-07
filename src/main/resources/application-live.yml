@@ -7,7 +7,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(f/HzYBFilX/dBrvFSyV+XqXkYyXOTweQ9IrbIVfwcz2jpBPHsjHbGVMdnEEmeuDAuOogFuLTCZa/k838RhQfyLkltFKvaJblGq2qZTO9ra7312MTc/B4tXwJQqgYv2sPUEpZQ9ufX9PxuwqdE48wY8fKIEWBzjW7fIelriUHC4kotRGXFLlcPHn92q6UKmY5EJuJ4gl9o1J305azLj1hAg==)
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: ENC(M0vQnIQbl326067P0kKYR0q3jt0wDxtY8tjZ+WgG5is1uOKOUTgzKeu0X7HSnAynF2Kh2Zwe2av6Uj0NzZRszhZUziV4Z8IhEYU/opT8XfVV5e8vWEk62badOwu3P0boYtTL2RaOfz+Ju95Shc1dx9T3G+yHbLsvoTPzEe0i8S77681d8/j2lbOQfoQZCF1U6f8ssWVToy0sygmv+FeJCg==)
     username: ENC(BapCeJf22I6LpmOL3YN6SFP3TaJLjQGSZOfOucZJIIbT7vSxpeoAm9UQAf4emXqe)
     password: ENC(WBeYUmCujwmPbNE565weug5eJ03/RGOZircahPb3aanpzPxEz3zXdHW0o3L6vQIC)

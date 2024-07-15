@@ -4,6 +4,7 @@ import com.eod.sitree.auth.AuthenticationInterceptor;
 import com.eod.sitree.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,5 +19,12 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new AuthenticationInterceptor(authService))
             .order(1)
             .addPathPatterns("/**");
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+            .allowedOrigins("*")
+            .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 }

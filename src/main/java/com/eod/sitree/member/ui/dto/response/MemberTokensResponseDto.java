@@ -17,14 +17,14 @@ public class MemberTokensResponseDto extends MemberSignDto {
     private String refreshToken;
 
     public MemberTokensResponseDto(Member member, String accessToken, String refreshToken) {
-        super(member.getAuthId(), member.getEmail(), member.getNickname(), member.getProfileImgUrl());
+        super(member.getProvider(), member.getEmail(), member.getNickname(), member.getProfileImgUrl());
         this.memberNo = member.getMemberNo();
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 
     public MemberTokensResponseDto(Member member) {
-        super(member.getAuthId(), member.getEmail(), member.getNickname(), member.getProfileImgUrl());
+        super(member.getProvider(), member.getEmail(), member.getNickname(), member.getProfileImgUrl());
 
         JwtToken accessToken = new JwtToken(member, JwtTokenType.ACCESS_TOKEN, AuthService.jwtKeypair);
         JwtToken refreshToken = new JwtToken(member, JwtTokenType.REFRESH_TOKEN, AuthService.jwtKeypair);

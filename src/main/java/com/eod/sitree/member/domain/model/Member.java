@@ -12,7 +12,7 @@ public class Member {
 
     private Long memberNo;
 
-    private String authId;
+    private Provider provider;
 
     private String nickname;
 
@@ -23,7 +23,7 @@ public class Member {
 
     public Member(MemberEntity memberEntity) {
         this.memberNo = memberEntity.getMemberNo();
-        this.authId = memberEntity.getAuthId();
+        this.provider = memberEntity.getProvider();
         this.nickname = memberEntity.getNickname();
         this.email = memberEntity.getEmail();
         this.profileImgUrl = memberEntity.getProfileImgUrl();
@@ -32,7 +32,7 @@ public class Member {
     public Member(MemberSignDto memberSignDto) {
 
         this.memberNo = null;
-        this.authId = memberSignDto.getAuthId();
+        this.provider = memberSignDto.getProvider();
         this.nickname = memberSignDto.getNickname();
         this.email = memberSignDto.getEmail();
         this.profileImgUrl = memberSignDto.getProfileImgUrl();

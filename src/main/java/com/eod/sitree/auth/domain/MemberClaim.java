@@ -1,6 +1,7 @@
 package com.eod.sitree.auth.domain;
 
 import com.eod.sitree.member.domain.model.Member;
+import com.eod.sitree.member.domain.model.Provider;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,17 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberClaim {
 
-    private String authId;
+    private Provider provider;
 
     private String email;
 
     public MemberClaim(Member member) {
-        this.authId = member.getAuthId();
+        this.provider = member.getProvider();
         this.email = member.getEmail();
     }
 
-    public MemberClaim(String authId, String email) {
-        this.authId = authId;
+    public MemberClaim(Provider provider, String email) {
+        this.provider = provider;
         this.email = email;
     }
 }

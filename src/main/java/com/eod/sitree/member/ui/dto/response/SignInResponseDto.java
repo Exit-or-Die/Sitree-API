@@ -4,6 +4,7 @@ import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.member.domain.model.Member;
+import com.eod.sitree.member.domain.model.Provider;
 import com.eod.sitree.member.ui.dto.common.MemberSignDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +20,8 @@ public class SignInResponseDto extends MemberSignDto {
 
 
     @Builder
-    private SignInResponseDto(String authId, String email, String nickname, String profileImgUrl, Boolean isNewMember, String accessToken, String refreshToken) {
-        super(authId, email, nickname, profileImgUrl);
+    private SignInResponseDto(Provider provider, String email, String nickname, String profileImgUrl, Boolean isNewMember, String accessToken, String refreshToken) {
+        super(provider, email, nickname, profileImgUrl);
         this.isNewMember = isNewMember;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
@@ -32,7 +33,7 @@ public class SignInResponseDto extends MemberSignDto {
 
             AuthService.jwtKeypair);
         return SignInResponseDto.builder()
-            .authId(member.getAuthId())
+            .provider(member.getProvider())
             .email(member.getEmail())
             .nickname(member.getNickname())
             .profileImgUrl(member.getProfileImgUrl())
@@ -44,7 +45,7 @@ public class SignInResponseDto extends MemberSignDto {
 
     public static SignInResponseDto ofNewMember(MemberSignDto memberSignDto) {
         return SignInResponseDto.builder()
-            .authId(memberSignDto.getAuthId())
+            .provider(memberSignDto.getProvider())
             .email(memberSignDto.getEmail())
             .nickname(memberSignDto.getNickname())
             .profileImgUrl(memberSignDto.getProfileImgUrl())

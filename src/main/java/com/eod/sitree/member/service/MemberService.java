@@ -1,7 +1,6 @@
 package com.eod.sitree.member.service;
 
 import com.eod.sitree.auth.domain.JwtToken;
-import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.common.exception.ApplicationErrorType;
@@ -25,8 +24,7 @@ public class MemberService {
 
     public SignInResponseDto signIn(MemberSignDto memberSignDto) {
 
-        Optional<Member> memberOptional = memberRepository.findByAuthIdAndEmailOptional(
-            memberSignDto.getAuthId(), memberSignDto.getEmail());
+        Optional<Member> memberOptional = memberRepository.findByProviderAndEmailOptional(memberSignDto.getProvider(), memberSignDto.getEmail());
 
         if (memberOptional.isPresent()) {
 
@@ -38,8 +36,8 @@ public class MemberService {
 
     public MemberTokensResponseDto signUp(MemberSignDto memberSignDto) {
 
-        Optional<Member> memberOptional = memberRepository.findByAuthIdAndEmailOptional(
-            memberSignDto.getAuthId(), memberSignDto.getEmail());
+        Optional<Member> memberOptional = memberRepository.findByProviderAndEmailOptional(
+            memberSignDto.getProvider(), memberSignDto.getEmail());
 
         if (memberOptional.isPresent()) {
 
@@ -57,7 +55,7 @@ public class MemberService {
         refreshToken.validateToken();
 
         MemberClaim memberClaim = refreshToken.getMemberClaim();
-        Member member = memberRepository.findByAuthIdAndEmail(memberClaim.getAuthId(), memberClaim.getEmail());
+        Member member = memberRepository.findByProviderAndEmail(memberClaim.getProvider(), memberClaim.getEmail());
 
         return new MemberTokensResponseDto(member);
     }

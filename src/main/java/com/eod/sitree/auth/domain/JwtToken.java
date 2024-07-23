@@ -1,7 +1,6 @@
 package com.eod.sitree.auth.domain;
 
 import com.eod.sitree.member.domain.model.Member;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -11,8 +10,6 @@ import io.jsonwebtoken.lang.Maps;
 import io.micrometer.common.util.StringUtils;
 import java.security.KeyPair;
 import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import lombok.Getter;
 
 @Getter

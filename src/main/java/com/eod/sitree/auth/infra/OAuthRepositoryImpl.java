@@ -1,6 +1,7 @@
 package com.eod.sitree.auth.infra;
 
 import com.eod.sitree.auth.domain.repository.OAuthRepository;
+import com.eod.sitree.auth.ui.dto.OAuthResponseDto;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -24,22 +25,22 @@ public class OAuthRepositoryImpl implements OAuthRepository {
     }
 
     @Override
-    public ResponseEntity<Map> validateGoogleToken(String googleToken) {
+    public ResponseEntity<OAuthResponseDto> validateGoogleToken(String googleToken) {
 
         return restClient.get()
             .uri(GOOGLE_AUTH_URI + "?access_token=" + googleToken)
             .retrieve()
-            .toEntity(Map.class);
+            .toEntity(OAuthResponseDto.class);
     }
 
     @Override
-    public ResponseEntity<Map> validateGithubToken(String githubToken) {
+    public ResponseEntity<OAuthResponseDto> validateGithubToken(String githubToken) {
 
         return restClient.get()
             .uri(GITHUB_AUTH_URI)
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + githubToken)
             .header(HttpHeaders.ACCEPT, "application/vnd.github.v3+json")
             .retrieve()
-            .toEntity(Map.class);
+            .toEntity(OAuthResponseDto.class);
     }
 }

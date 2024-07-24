@@ -24,6 +24,8 @@ public class MemberService {
 
     public SignInResponseDto signIn(MemberSignDto memberSignDto) {
 
+        authService.validateOauthToken(memberSignDto.getProvider(), memberSignDto.getOAuthToken(), memberSignDto.getEmail());
+
         Optional<Member> memberOptional = memberRepository.findByProviderAndEmailOptional(memberSignDto.getProvider(), memberSignDto.getEmail());
 
         if (memberOptional.isPresent()) {
@@ -36,8 +38,9 @@ public class MemberService {
 
     public MemberTokensResponseDto signUp(MemberSignDto memberSignDto) {
 
-        Optional<Member> memberOptional = memberRepository.findByProviderAndEmailOptional(
-            memberSignDto.getProvider(), memberSignDto.getEmail());
+        authService.validateOauthToken(memberSignDto.getProvider(), memberSignDto.getOAuthToken(), memberSignDto.getEmail());
+
+        Optional<Member> memberOptional = memberRepository.findByProviderAndEmailOptional(memberSignDto.getProvider(), memberSignDto.getEmail());
 
         if (memberOptional.isPresent()) {
 

@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Project {
     private final Head head;
-    private final String HealthCheckApi;
     private final List<Tag> tags;
     private final Overview overview;
     private final List<Techview> techviews;

@@ -11,8 +11,6 @@ import lombok.Getter;
 public class Overview {
     private final List<Image> images;
     private final ClientUrl clientUrl;
-    private final List<Long> participants; // 참여자
-    private String foreword; // 머릿말
-    private String manual; // 사용 방법
+    private final List<UserProfile> participants;
     private String detailDescription; // 상세 소개
 }

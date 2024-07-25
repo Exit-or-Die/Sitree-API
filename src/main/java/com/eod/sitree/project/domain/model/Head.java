@@ -10,18 +10,21 @@ public class Head {
     private String thumbnailImageUrl;
     private String title;
     private String shortDescription;
+    private String healthCheckUrl;
 
-    public Head(String thumbnailImageUrl, String title) {
-        validation(thumbnailImageUrl, title);
+    public Head(String thumbnailImageUrl, String title, String healthCheckUrl) {
+        validation(thumbnailImageUrl, title, healthCheckUrl);
         this.thumbnailImageUrl = thumbnailImageUrl;
         this.title = title;
+        this.healthCheckUrl = healthCheckUrl;
     }
 
-    public Head(String thumbnailImageUrl, String title, String shortDescription) {
-        validation(thumbnailImageUrl, title);
+    public Head(String thumbnailImageUrl, String title, String shortDescription, String healthCheckUrl) {
+        validation(thumbnailImageUrl, title, healthCheckUrl);
         this.thumbnailImageUrl = thumbnailImageUrl;
         this.title = title;
         this.shortDescription = shortDescription;
+        this.healthCheckUrl = healthCheckUrl;
     }
 
     public void changeThumbnailUrl(String thumbnailImageUrl) {
@@ -36,8 +39,12 @@ public class Head {
         this.shortDescription = shortDescription;
     }
 
-    public void validation(String thumbnailImageUrl, String title) {
-        if (thumbnailImageUrl == null || title == null) {
+    public void changeHealthCheckUrl(String healthCheckUrl) {
+        this.healthCheckUrl = healthCheckUrl;
+    }
+
+    public void validation(String thumbnailImageUrl, String title, String healthCheckUrl) {
+        if (thumbnailImageUrl == null || title == null || healthCheckUrl == null) {
             throw new ProjectException(CHECK_HEAD_REQUIRED_VALUE);
         }
     }

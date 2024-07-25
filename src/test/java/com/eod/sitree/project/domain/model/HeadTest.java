@@ -14,6 +14,7 @@ class HeadTest {
     private final String thumbnailImageUrl = "thumbnail Image Url";
     private final String title = "title";
     private final String shortDescription = "short description";
+    private final String healthCheckUrl = "health check url";
 
     @BeforeEach
     void init() {
@@ -28,14 +29,14 @@ class HeadTest {
     @Test
     void createHeadWithoutTitle() {
         Assertions.assertThrows(ProjectException.class, () -> {
-            new Head(thumbnailImageUrl, null);
+            new Head(thumbnailImageUrl, null, healthCheckUrl);
         });
     }
 
     @Test
     void createHeadWithoutThumbnailUrl() {
         Assertions.assertThrows(ProjectException.class, () -> {
-            new Head(null, title);
+            new Head(null, title, healthCheckUrl);
         });
     }
 

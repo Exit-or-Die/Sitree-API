@@ -1,7 +1,7 @@
 package com.eod.sitree.project.domain.model.type;
 
 public enum ImageType {
-    BACKGROUND, DETAIL,;
+    BACKGROUND, DETAIL, REPRESENT, ARCHITECTURE;
 
     public boolean isBackgroundImage() {
         return this.equals(BACKGROUND);

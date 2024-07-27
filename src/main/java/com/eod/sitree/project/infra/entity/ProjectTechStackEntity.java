@@ -24,4 +24,9 @@ public class ProjectTechStackEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TechStackType techStackType;
+
+    public ProjectTechStackEntity(Long techviewId, TechStackType techStackType) {
+        this.techviewId = techviewId;
+        this.techStackType = techStackType;
+    }
 }

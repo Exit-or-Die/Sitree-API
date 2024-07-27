@@ -1,14 +1,17 @@
 package com.eod.sitree.project.infra.entity;
 
+import com.eod.sitree.project.domain.model.FocusPoint;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "FOCUS_POINT")
+@NoArgsConstructor
 public class FocusPointEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +26,10 @@ public class FocusPointEntity {
 
     @Column(nullable = false)
     private String focusedOn;
+
+    public FocusPointEntity(Long techviewId, FocusPoint focusPoint) {
+        this.memberNo = focusPoint.getMemberNo();
+        this.techviewId = techviewId;
+        this.focusedOn = focusPoint.getFocusedOn();
+    }
 }

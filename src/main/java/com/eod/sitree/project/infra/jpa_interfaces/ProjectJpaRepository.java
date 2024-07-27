@@ -1,4 +1,4 @@
-package com.eod.sitree.project.infra;
+package com.eod.sitree.project.infra.jpa_interfaces;
 
 import com.eod.sitree.project.infra.entity.ProjectEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

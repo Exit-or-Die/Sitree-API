@@ -15,5 +15,5 @@ public class Techview {
     private List<TechStackType> techSTackTypes; // 사용 기술
     private Image architectureImage; // 아키텍쳐 이미지
     private String architectureDescription; // 아키텍쳐 구조 설명
-    private List<String> focusedPoints; // 핵심 기술 내용
+    private List<FocusPoint> focusedPoints; // 핵심 기술 내용
 }

@@ -13,8 +13,8 @@ import com.querydsl.core.types.dsl.PathInits;
 /**
  * QOverviewEntity is a Querydsl query type for OverviewEntity
  */
-@Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QOverviewEntity extends EntityPathBase<OverviewEntity> {
+@Generated("com.querydsl.codegen.DefaultEmbeddableSerializer")
+public class QOverviewEntity extends BeanPath<OverviewEntity> {
 
     private static final long serialVersionUID = -941523749L;
 
@@ -27,8 +27,6 @@ public class QOverviewEntity extends EntityPathBase<OverviewEntity> {
     public final StringPath detailDescription = createString("detailDescription");
 
     public final ListPath<com.eod.sitree.project.domain.model.Image, SimplePath<com.eod.sitree.project.domain.model.Image>> images = this.<com.eod.sitree.project.domain.model.Image, SimplePath<com.eod.sitree.project.domain.model.Image>>createList("images", com.eod.sitree.project.domain.model.Image.class, SimplePath.class, PathInits.DIRECT2);
-
-    public final NumberPath<Long> overviewId = createNumber("overviewId", Long.class);
 
     public final StringPath representImage = createString("representImage");
 

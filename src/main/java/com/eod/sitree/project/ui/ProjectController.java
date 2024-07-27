@@ -1,7 +1,12 @@
 package com.eod.sitree.project.ui;
 
+import com.eod.sitree.common.response.ResponseDto;
 import com.eod.sitree.project.service.ProjectService;
+import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,4 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProjectController {
     private final ProjectService projectService;
 
+    @PostMapping
+    public ResponseDto<?> createProject(@RequestBody ProjectCreateRequestDto projectCreateRequestDto) {
+        var result = projectService.createProject(projectCreateRequestDto);
+        return new ResponseDto<>(result);
+    }
 }

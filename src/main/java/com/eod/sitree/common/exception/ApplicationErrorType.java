@@ -25,6 +25,7 @@ public enum ApplicationErrorType {
     // Project Exception Code (50000~)
     CHECK_CLIENT_URL_REQUIRED_VALUE(50000, "LIVE_DOMAIN or DOWNLOAD_LINk is needed"),
     CHECK_HEAD_REQUIRED_VALUE(50001, "THUMBNAIL or TITLE is needed"),
+    NO_REPRESENT_IMAGE(50002, "NO REPRESENT IMAGE IN OVERVIEW"),
     ;
 
     private final int errorCode;

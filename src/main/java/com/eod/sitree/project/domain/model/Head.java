@@ -3,6 +3,7 @@ package com.eod.sitree.project.domain.model;
 import static com.eod.sitree.common.exception.ApplicationErrorType.CHECK_HEAD_REQUIRED_VALUE;
 
 import com.eod.sitree.project.exeption.ProjectException;
+import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto.HeadDto;
 import lombok.Getter;
 
 @Getter
@@ -25,6 +26,13 @@ public class Head {
         this.title = title;
         this.shortDescription = shortDescription;
         this.healthCheckUrl = healthCheckUrl;
+    }
+
+    public Head(HeadDto dto) { // NotNull verified dto
+        this.thumbnailImageUrl = dto.getThumbnailImageUrl();
+        this.title = dto.getTitle();
+        this.shortDescription = dto.getShortDescription();
+        this.healthCheckUrl = dto.getHealthCheckUrl();
     }
 
     public void changeThumbnailUrl(String thumbnailImageUrl) {

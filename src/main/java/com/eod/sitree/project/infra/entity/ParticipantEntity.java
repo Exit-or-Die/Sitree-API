@@ -6,9 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "PARTICIPANT")
+@NoArgsConstructor
 public class ParticipantEntity {
 
     @Id
@@ -21,4 +23,9 @@ public class ParticipantEntity {
 
     @Column(nullable = false)
     private Long projectId;
+
+    public ParticipantEntity(Long projectId, Long memberNo) {
+        this.memberNo = memberNo;
+        this.projectId = projectId;
+    }
 }

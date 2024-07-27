@@ -6,7 +6,7 @@ public interface ProjectRepository {
 
     Project getById(long projectId);
 
-    void save(Project project);
+    Long save(Project project);
 
     void update(long projectId, Project project);
 

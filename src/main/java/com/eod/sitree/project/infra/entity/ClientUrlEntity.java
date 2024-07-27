@@ -1,6 +1,7 @@
 package com.eod.sitree.project.infra.entity;
 
 import com.eod.sitree.common.converter.HashMapConverter;
+import com.eod.sitree.project.domain.model.ClientUrl;
 import com.eod.sitree.project.domain.model.type.PlatformType;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
@@ -16,5 +17,10 @@ public class ClientUrlEntity {
     private String liveWebDomain;
     @MapKeyEnumerated(EnumType.STRING)
     @Convert(converter = HashMapConverter.class)
-    private final HashMap<PlatformType, String> downloadMethods = new HashMap<>();
+    private HashMap<PlatformType, String> downloadMethods;
+
+    public ClientUrlEntity(ClientUrl clientUrl) {
+        this.liveWebDomain = clientUrl.getLiveWebDomain();
+        this.downloadMethods = clientUrl.getDownloadMethods();
+    }
 }

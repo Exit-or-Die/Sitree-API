@@ -1,6 +1,7 @@
 package com.eod.sitree.project.infra.entity;
 
 import com.eod.sitree.common.infra.entity.BaseEntity;
+import com.eod.sitree.project.domain.model.Project;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -27,12 +28,11 @@ public class ProjectEntity extends BaseEntity {
     @Embedded
     private HeadEntity head;
 
-//    @Embedded
-//    private List<TagEntity> tags;
-//
-//    @Embedded
-//    private OverviewEntity overview;
-//
-//    @Embedded
-//    private List<TechviewEntity> techviews;
+    @Embedded
+    private OverviewEntity overview;
+
+    public ProjectEntity(Project project) {
+        this.head = new HeadEntity(project.getHead());
+        this.overview = new OverviewEntity(project.getOverview());
+    }
 }

@@ -10,4 +10,7 @@ public enum ImageType {
     public boolean isDetailImage() {
         return this.equals(DETAIL);
     }
+    public boolean isRepresentImage() {
+        return this.equals(REPRESENT);
+    }
 }

@@ -5,6 +5,7 @@ import com.eod.sitree.project.domain.model.Image;
 import com.eod.sitree.project.domain.model.type.ImageType;
 import com.eod.sitree.project.domain.model.type.PlatformType;
 import com.eod.sitree.project.domain.model.type.TechStackType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -15,12 +16,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ProjectCreateRequestDto {
-    @NotNull
+    @NotNull @Valid
     private HeadDto headDto;
-    @NotNull
+    @NotNull @Valid
     private List<TagDto> tagDtoList;
-    @NotNull
+    @NotNull @Valid
     private OverviewDto overviewDto;
+    @Valid
     private List<TechviewDto> techviewDtoList;
 
     @Getter
@@ -44,7 +46,7 @@ public class ProjectCreateRequestDto {
 
     @Getter
     public static class OverviewDto{
-        @NotNull
+        @NotNull @Valid
         private List<ImageDto> images;
         @NotNull
         private ClientUrlDto clientUrl;
@@ -67,13 +69,17 @@ public class ProjectCreateRequestDto {
         @NotBlank
         private String gitRepositoryUrl; // 깃 링크
         private List<TechStackType> techSTackTypes; // 사용 기술
+        @Valid
         private ImageDto architectureImage; // 아키텍쳐 이미지
         private String architectureDescription; // 아키텍쳐 구조 설명
+        @Valid
         private List<FocusPointDto> focusedPoints; // 핵심 기술 내용
 
         @Getter
         public static class FocusPointDto{
+            @NotBlank
             private Long memberNo;
+            @NotBlank
             private String focusedOn;
         }
     }

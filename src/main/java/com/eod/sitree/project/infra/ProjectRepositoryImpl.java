@@ -61,7 +61,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             focusPointJpaRepository.saveAll(focusPointEntityList);
 
             // tech stack 저장
-            List<ProjectTechStackEntity> techStackEntityList = techview.getTechSTackTypes().stream()
+            List<ProjectTechStackEntity> techStackEntityList = techview.getTechStackTypes().stream()
                     .map(t -> new ProjectTechStackEntity(techviewId, t)).toList();
             techStackJpaRepository.saveAll(techStackEntityList);
         });

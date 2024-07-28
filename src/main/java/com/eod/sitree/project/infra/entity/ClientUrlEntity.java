@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class ClientUrlEntity {
 
     private String liveWebDomain;
+
     @MapKeyEnumerated(EnumType.STRING)
     @Convert(converter = HashMapConverter.class)
     private HashMap<PlatformType, String> downloadMethods;

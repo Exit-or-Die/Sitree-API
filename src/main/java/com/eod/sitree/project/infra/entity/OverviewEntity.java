@@ -1,21 +1,14 @@
 package com.eod.sitree.project.infra.entity;
 
-import com.eod.sitree.common.converter.HashMapConverter;
 import com.eod.sitree.common.converter.ListConverter;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Image;
 import com.eod.sitree.project.domain.model.Overview;
-import com.eod.sitree.project.domain.model.type.ImageType;
 import com.eod.sitree.project.exeption.ProjectException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import java.util.List;
 import lombok.NoArgsConstructor;
 
@@ -45,5 +38,4 @@ public class OverviewEntity {
         this.clientUrl = new ClientUrlEntity(overview.getClientUrl());
         this.detailDescription = overview.getDetailDescription();
     }
-
 }

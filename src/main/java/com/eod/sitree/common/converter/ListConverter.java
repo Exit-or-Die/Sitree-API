@@ -11,7 +11,7 @@ import java.util.List;
 @Converter
 public class ListConverter implements AttributeConverter<List<Image>, String> {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public String convertToDatabaseColumn(List<Image> imageList) {
@@ -24,9 +24,8 @@ public class ListConverter implements AttributeConverter<List<Image>, String> {
 
     @Override
     public List<Image> convertToEntityAttribute(String s) {
-        TypeReference<List<Image>> typeReference = new TypeReference<List<Image>>() {};
         try {
-            return objectMapper.readValue(s, typeReference);
+            return objectMapper.readValue(s, new TypeReference<List<Image>>() {});
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

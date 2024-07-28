@@ -43,6 +43,7 @@ public class OverviewEntity {
         this.representImage = representImage.getImageUrl();
         this.images = overview.getImages().stream().filter(i -> i.getImageType().isBackgroundImage()).toList();
         this.clientUrl = new ClientUrlEntity(overview.getClientUrl());
+        this.detailDescription = overview.getDetailDescription();
     }
 
 }

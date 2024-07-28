@@ -24,6 +24,8 @@ public class ProjectCreateRequestDto {
     private OverviewDto overviewDto;
     @Valid
     private List<TechviewDto> techviewDtoList;
+    @NotNull
+    private List<Long> participantIds;
 
     @Getter
     public static class HeadDto {
@@ -50,8 +52,6 @@ public class ProjectCreateRequestDto {
         private List<ImageDto> images;
         @NotNull
         private ClientUrlDto clientUrl;
-        @NotNull
-        private List<Long> participantIds;
         @NotBlank
         private String detailDescription; // 상세 소개
 
@@ -68,7 +68,7 @@ public class ProjectCreateRequestDto {
         private String techArea; // 개발 영역
         @NotBlank
         private String gitRepositoryUrl; // 깃 링크
-        private List<TechStackType> techSTackTypes; // 사용 기술
+        private List<TechStackType> techStackTypes; // 사용 기술
         @Valid
         private ImageDto architectureImage; // 아키텍쳐 이미지
         private String architectureDescription; // 아키텍쳐 구조 설명
@@ -77,7 +77,7 @@ public class ProjectCreateRequestDto {
 
         @Getter
         public static class FocusPointDto{
-            @NotBlank
+            @NotNull
             private Long memberNo;
             @NotBlank
             private String focusedOn;

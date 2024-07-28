@@ -14,7 +14,11 @@ public class Project {
     private final List<Techview> techviews;
     private final List<Long> participants;
 
-//    public Project(ProjectCreateRequestDto dto) {
-//        this.head = new Head()
-//    }
+    public Project(ProjectCreateRequestDto dto) {
+        this.head = new Head(dto.getHeadDto());
+        this.tags = dto.getTagDtoList().stream().map(Tag::new).toList();
+        this.overview = new Overview(dto.getOverviewDto());
+        this.techviews = dto.getTechviewDtoList().stream().map(Techview::new).toList();
+        this.participants = dto.getParticipantIds();
+    }
 }

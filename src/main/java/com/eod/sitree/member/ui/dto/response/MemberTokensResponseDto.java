@@ -4,8 +4,6 @@ import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.member.domain.model.Member;
-import com.eod.sitree.member.ui.dto.common.MemberSignDto;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter

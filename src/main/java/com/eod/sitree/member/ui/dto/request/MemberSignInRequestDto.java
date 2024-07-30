@@ -1,11 +1,11 @@
-package com.eod.sitree.member.ui.dto.common;
+package com.eod.sitree.member.ui.dto.request;
 
 import com.eod.sitree.member.domain.model.Provider;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class MemberSignDto {
+public class MemberSignInRequestDto {
 
     @NotNull
     private Provider provider;
@@ -16,18 +16,9 @@ public class MemberSignDto {
     @NotNull
     private String email;
 
-    @NotNull
-    private String nickname;
-
-    @NotNull
-    private String profileImgUrl;
-
-    public MemberSignDto(Provider provider, String oAuthToken, String email, String nickname, String profileImgUrl) {
+    public MemberSignInRequestDto(Provider provider, String oAuthToken, String email) {
         this.provider = provider;
         this.oAuthToken = oAuthToken;
         this.email = email;
-        this.nickname = nickname;
-        this.profileImgUrl = profileImgUrl;
     }
-
 }

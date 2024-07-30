@@ -44,11 +44,19 @@ public class MemberEntity extends BaseEntity {
     @Column(nullable = false)
     private String profileImgUrl;
 
+    @Column
+    private String thirdPartyProfileUrl;
+
+    @Column
+    private String belonging;
+
     public MemberEntity(Member member) {
         this.memberNo = member.getMemberNo();
         this.provider = member.getProvider();
         this.nickname = member.getNickname();
         this.email = member.getEmail();
         this.profileImgUrl = member.getProfileImgUrl();
+        this.thirdPartyProfileUrl = member.getThirdPartyProfileUrl();
+        this.belonging = member.getBelonging();
     }
 }

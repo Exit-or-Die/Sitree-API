@@ -38,21 +38,9 @@ public class AuthService {
 
     private void validateTokenResponse(String email, ResponseEntity<OAuthResponseDto> response) {
         if (response == null || !response.getStatusCode().is2xxSuccessful()
-            || response.getBody() == null || email.equals(response.getBody().getEmail())) {
+            || response.getBody() == null || !email.equals(response.getBody().getEmail())) {
 
             throw new AuthException(ApplicationErrorType.UNAUTHORIZED);
-        }
-    }
-
-    private static KeyPair generateKeyPair() {
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048);
-
-            return keyPairGenerator.generateKeyPair();
-        } catch (NoSuchAlgorithmException e) {
-
-            throw new AuthSettingException(ApplicationErrorType.AUTH_KEYPAIR_GENERATION_ERROR);
         }
     }
 
@@ -66,4 +54,16 @@ public class AuthService {
         return oAuthRepository.validateGithubToken(token);
     }
 
+
+    private static KeyPair generateKeyPair() {
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+
+            return keyPairGenerator.generateKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+
+            throw new AuthSettingException(ApplicationErrorType.AUTH_KEYPAIR_GENERATION_ERROR);
+        }
+    }
 }

@@ -5,7 +5,7 @@ import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.Provider;
-import com.eod.sitree.member.ui.dto.common.MemberSignDto;
+import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -53,12 +53,10 @@ public class SignInResponseDto {
             .build();
     }
 
-    public static SignInResponseDto ofNewMember(MemberSignDto memberSignDto) {
+    public static SignInResponseDto ofNewMember(MemberSignInRequestDto memberSignInRequestDto) {
         return SignInResponseDto.builder()
-            .provider(memberSignDto.getProvider())
-            .email(memberSignDto.getEmail())
-            .nickname(memberSignDto.getNickname())
-            .profileImgUrl(memberSignDto.getProfileImgUrl())
+            .provider(memberSignInRequestDto.getProvider())
+            .email(memberSignInRequestDto.getEmail())
             .isNewMember(true)
             .build();
     }

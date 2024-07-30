@@ -63,8 +63,7 @@ public class MemberService {
         refreshToken.validateToken();
 
         MemberClaim memberClaim = refreshToken.getMemberClaim();
-        Member member = memberRepository.findByProviderAndEmail(memberClaim.getProvider(),
-            memberClaim.getEmail());
+        Member member = memberRepository.findByProviderAndEmail(memberClaim.getProvider(), memberClaim.getEmail());
 
         return new MemberTokensResponseDto(member);
     }

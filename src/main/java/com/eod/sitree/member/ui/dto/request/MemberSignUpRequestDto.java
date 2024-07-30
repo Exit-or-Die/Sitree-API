@@ -17,7 +17,6 @@ public class MemberSignUpRequestDto {
     @NotNull
     private String email;
 
-
     @NotNull
     private String nickname;
 

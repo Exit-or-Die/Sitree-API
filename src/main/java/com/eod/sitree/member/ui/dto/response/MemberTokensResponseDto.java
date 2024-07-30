@@ -4,12 +4,15 @@ import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.member.domain.model.Member;
+import com.eod.sitree.member.domain.model.Provider;
 import lombok.Getter;
 
 @Getter
 public class MemberTokensResponseDto {
 
     private Long memberNo;
+
+    private Provider provider;
 
     private String email;
 
@@ -24,6 +27,7 @@ public class MemberTokensResponseDto {
     public MemberTokensResponseDto(Member member, String accessToken, String refreshToken) {
 
         this.memberNo = member.getMemberNo();
+        this.provider = member.getProvider();
         this.email = member.getEmail();
         this.nickname = member.getNickname();
         this.profileImgUrl = member.getProfileImgUrl();
@@ -37,6 +41,7 @@ public class MemberTokensResponseDto {
         JwtToken refreshToken = new JwtToken(member, JwtTokenType.REFRESH_TOKEN, AuthService.jwtKeypair);
 
         this.memberNo = member.getMemberNo();
+        this.provider = member.getProvider();
         this.email = member.getEmail();
         this.nickname = member.getNickname();
         this.profileImgUrl = member.getProfileImgUrl();

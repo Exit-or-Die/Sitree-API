@@ -2,10 +2,15 @@ package com.eod.sitree.auth;
 
 import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
+import com.eod.sitree.auth.domain.repository.OAuthRepository;
+import com.eod.sitree.auth.exception.AuthException;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.auth.support.AuthNotRequired;
+import com.eod.sitree.common.exception.ApplicationErrorType;
+import com.eod.sitree.member.domain.model.Provider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,7 +18,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
-    private final AuthService authService;
+    private final OAuthRepository oAuthRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,

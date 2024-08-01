@@ -2,6 +2,7 @@ package com.eod.sitree.member.infra;
 
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
+import com.eod.sitree.member.domain.model.Provider;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.infra.entity.MemberEntity;
@@ -23,18 +24,18 @@ public class JpaMemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByAuthIdAndEmailOptional(String authId, String email) {
+    public Optional<Member> findByProviderAndEmailOptional(Provider provider, String email) {
         Optional<MemberEntity> memberEntityOptional = Optional.ofNullable(
-            memberJpaRepository.findByAuthIdAndEmail(authId, email));
+            memberJpaRepository.findByProviderAndEmail(provider, email));
 
         return memberEntityOptional.map(Member::new);
     }
 
     @Override
-    public Member findByAuthIdAndEmail(String authId, String email) {
-        MemberEntity memberEntity = memberJpaRepository.findByAuthIdAndEmail(authId, email);
+    public Member findByProviderAndEmail(Provider provider, String email) {
+        MemberEntity memberEntity = memberJpaRepository.findByProviderAndEmail(provider, email);
 
-        if(Objects.isNull(memberEntity)){
+        if (Objects.isNull(memberEntity)) {
             throw new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
         }
 

@@ -13,3 +13,7 @@ spring:
         show_sql: true
         format_sql: true
 
+oauth:
+  url:
+    google: https://www.googleapis.com/oauth2/v3/tokeninfo
+    github: https://api.github.com/user

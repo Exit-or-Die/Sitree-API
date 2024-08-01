@@ -1,12 +1,11 @@
 package com.eod.sitree.member.ui;
 
-import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
-import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.auth.support.AuthNotRequired;
 import com.eod.sitree.member.service.MemberService;
-import com.eod.sitree.member.ui.dto.common.MemberSignDto;
+import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
+import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
@@ -29,16 +28,16 @@ public class MemberController {
 
     @AuthNotRequired
     @PostMapping("/sign-in")
-    public ResponseDto<SignInResponseDto> signIn(@Valid @RequestBody MemberSignDto memberSignDto){
+    public ResponseDto<SignInResponseDto> signIn(@Valid @RequestBody MemberSignInRequestDto memberSignInRequestDto){
 
-        return ResponseDto.ok(memberService.signIn(memberSignDto));
+        return ResponseDto.ok(memberService.signIn(memberSignInRequestDto));
     }
 
     @AuthNotRequired
     @PostMapping("/sign-up")
-    public ResponseDto<MemberTokensResponseDto> signUp(@Valid @RequestBody MemberSignDto memberSignDto){
+    public ResponseDto<MemberTokensResponseDto> signUp(@Valid @RequestBody MemberSignUpRequestDto memberSignUpRequestDto){
 
-        return ResponseDto.ok(memberService.signUp(memberSignDto));
+        return ResponseDto.ok(memberService.signUp(memberSignUpRequestDto));
     }
 
     @AuthNotRequired

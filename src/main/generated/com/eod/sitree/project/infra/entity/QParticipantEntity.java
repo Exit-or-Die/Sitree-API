@@ -23,6 +23,8 @@ public class QParticipantEntity extends EntityPathBase<ParticipantEntity> {
 
     public final NumberPath<Long> participantId = createNumber("participantId", Long.class);
 
+    public final StringPath position = createString("position");
+
     public final NumberPath<Long> projectId = createNumber("projectId", Long.class);
 
     public QParticipantEntity(String variable) {

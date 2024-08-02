@@ -25,7 +25,7 @@ public class ProjectCreateRequestDto {
     @Valid
     private List<TechviewDto> techviewDtoList;
     @NotNull
-    private List<Long> participantIds;
+    private List<ParticipantDto> participants;
 
     @Getter
     public static class HeadDto {
@@ -90,5 +90,13 @@ public class ProjectCreateRequestDto {
         private String imageUrl;
         @ValidEnum(enumClass = ImageType.class)
         private ImageType imageType;
+    }
+
+    @Getter
+    public static class ParticipantDto{
+        @NotNull
+        private Long memberNo;
+        @NotBlank
+        private String position;
     }
 }

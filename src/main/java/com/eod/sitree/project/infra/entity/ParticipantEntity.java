@@ -1,5 +1,6 @@
 package com.eod.sitree.project.infra.entity;
 
+import com.eod.sitree.project.domain.model.Participant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,8 +25,12 @@ public class ParticipantEntity {
     @Column(nullable = false)
     private Long projectId;
 
-    public ParticipantEntity(Long projectId, Long memberNo) {
-        this.memberNo = memberNo;
+    @Column(nullable = false)
+    private String position;
+
+    public ParticipantEntity(Long projectId, Participant participant) {
+        this.memberNo = participant.getMemberNo();
         this.projectId = projectId;
+        this.position = participant.getPosition();
     }
 }

@@ -1,7 +1,6 @@
 package com.eod.sitree.project.ui.dto.request;
 
 import com.eod.sitree.common.infra.validator.ValidEnum;
-import com.eod.sitree.project.domain.model.Image;
 import com.eod.sitree.project.domain.model.type.ImageType;
 import com.eod.sitree.project.domain.model.type.PlatformType;
 import com.eod.sitree.project.domain.model.type.TechStackType;
@@ -17,15 +16,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProjectCreateRequestDto {
     @NotNull @Valid
-    private HeadDto headDto;
+    private HeadDto head;
     @NotNull @Valid
-    private List<TagDto> tagDtoList;
+    private List<TagDto> tagList;
     @NotNull @Valid
-    private OverviewDto overviewDto;
+    private OverviewDto overview;
     @Valid
-    private List<TechviewDto> techviewDtoList;
+    private List<TechviewDto> techviewList;
     @NotNull
-    private List<ParticipantDto> participants;
+    private List<ParticipantDto> participantList;
 
     @Getter
     public static class HeadDto {

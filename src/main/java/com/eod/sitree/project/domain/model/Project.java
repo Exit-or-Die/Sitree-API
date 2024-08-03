@@ -18,11 +18,11 @@ public class Project {
     private final List<Participant> participants;
 
     public Project(ProjectCreateRequestDto dto) {
-        this.head = new Head(dto.getHeadDto());
-        this.tags = dto.getTagDtoList().stream().map(Tag::new).toList();
-        this.overview = new Overview(dto.getOverviewDto());
-        this.techviews = dto.getTechviewDtoList().stream().map(Techview::new).toList();
-        this.participants = dto.getParticipants().stream().map(Participant::new).toList();
+        this.head = new Head(dto.getHead());
+        this.tags = dto.getTagList().stream().map(Tag::new).toList();
+        this.overview = new Overview(dto.getOverview());
+        this.techviews = dto.getTechviewList().stream().map(Techview::new).toList();
+        this.participants = dto.getParticipantList().stream().map(Participant::new).toList();
     }
 
     public Project(

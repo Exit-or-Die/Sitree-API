@@ -1,5 +1,6 @@
 package com.eod.sitree.project.domain.model;
 
+import com.eod.sitree.project.infra.entity.OverviewEntity;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto.OverviewDto;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -18,5 +19,11 @@ public class Overview {
         this.images = dto.getImages().stream().map(Image::new).toList();
         this.clientUrl = new ClientUrl(dto.getClientUrl());
         this.detailDescription = dto.getDetailDescription();
+    }
+
+    public Overview(OverviewEntity entity) {
+        this.images = entity.getImages();
+        this.clientUrl = new ClientUrl(entity.getClientUrl());
+        this.detailDescription = entity.getDetailDescription();
     }
 }

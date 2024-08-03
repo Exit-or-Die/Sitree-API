@@ -26,13 +26,13 @@ public class ProjectEntity extends BaseEntity {
     private Long projectId;
 
     @Embedded
-    private HeadEntity head;
+    private HeadEntity headEntity;
 
     @Embedded
-    private OverviewEntity overview;
+    private OverviewEntity overviewEntity;
 
     public ProjectEntity(Project project) {
-        this.head = new HeadEntity(project.getHead());
-        this.overview = new OverviewEntity(project.getOverview());
+        this.headEntity = new HeadEntity(project.getHead());
+        this.overviewEntity = new OverviewEntity(project.getOverview());
     }
 }

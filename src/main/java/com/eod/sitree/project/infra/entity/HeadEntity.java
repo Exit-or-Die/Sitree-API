@@ -3,8 +3,10 @@ package com.eod.sitree.project.infra.entity;
 import com.eod.sitree.project.domain.model.Head;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Embeddable
 @NoArgsConstructor
 public class HeadEntity {

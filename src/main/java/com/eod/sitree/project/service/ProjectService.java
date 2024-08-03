@@ -4,6 +4,7 @@ import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +24,12 @@ public class ProjectService {
         return new ProjectCreateResponseDto(savedProjectId);
     }
 
-    public void updateProject(){
-
+    public ProjectDetailResponseDto getDeleteProject(long projectId){
+        Project project = projectRepository.getById(projectId);
+        return new ProjectDetailResponseDto(project);
     }
 
-    public void deleteProject(){
+    public void updateProject(){
 
     }
 

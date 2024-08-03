@@ -1,7 +1,10 @@
 package com.eod.sitree.project.infra;
 
+import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Project;
+import com.eod.sitree.project.domain.model.Techview;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
+import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.entity.FocusPointEntity;
 import com.eod.sitree.project.infra.entity.ParticipantEntity;
 import com.eod.sitree.project.infra.entity.ProjectEntity;
@@ -14,6 +17,7 @@ import com.eod.sitree.project.infra.jpa_interfaces.ProjectJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.TagJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -22,6 +26,8 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ProjectRepositoryImpl implements ProjectRepository {
 
+    private final JPAQueryFactory jpaQueryFactory;
+
     private final ProjectJpaRepository projectJpaRepository;
     private final TagJpaRepository tagJpaRepository;
     private final ParticipantJpaRepository participantJpaRepository;
@@ -29,9 +35,24 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private final FocusPointJpaRepository focusPointJpaRepository;
     private final ProjectTechStackJpaRepository techStackJpaRepository;
 
+
     @Override
     public Project getById(long projectId) {
-        return null;
+        ProjectEntity projectEntity = projectJpaRepository.findById(projectId).orElseThrow(
+                () -> new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID)
+        );
+        List<TagEntity> tagEntities = tagJpaRepository.findAllByProjectId(projectId);
+        List<ParticipantEntity> participantEntities = participantJpaRepository.findAllByProjectId(projectId);
+        List<TechviewEntity> techviewEntities = techviewJpaRepository.findAllByProjectId(projectId);
+        List<Techview> techviews = techviewEntities.stream().map((techviewEntity -> {
+            List<FocusPointEntity> focusPointEntities = focusPointJpaRepository.findAllByTechviewId(
+                    techviewEntity.getTechviewId());
+            List<ProjectTechStackEntity> techStackEntities = techStackJpaRepository.findAllByTechviewId(
+                    techviewEntity.getTechviewId());
+            return new Techview(techviewEntity, techStackEntities, focusPointEntities);
+        })).toList();
+
+        return new Project(projectEntity, tagEntities, techviews, participantEntities);
     }
 
     @Override
@@ -52,7 +73,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         // techview 저장
         project.getTechviews().forEach(techview -> {
-            TechviewEntity techviewEntity = techviewJpaRepository.save(new TechviewEntity(techview));
+            TechviewEntity techviewEntity = techviewJpaRepository.save(new TechviewEntity(projectId, techview));
             Long techviewId = techviewEntity.getTechviewId();
 
             // focus point 저장
@@ -70,6 +91,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public void update(long projectId, Project project) {
+
+    }
+
+    @Override
+    public void getListByParticipantId() {
 
     }
 }

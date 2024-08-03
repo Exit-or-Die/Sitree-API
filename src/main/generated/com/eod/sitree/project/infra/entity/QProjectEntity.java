@@ -27,12 +27,12 @@ public class QProjectEntity extends EntityPathBase<ProjectEntity> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final QHeadEntity head;
+    public final QHeadEntity headEntity;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
-    public final QOverviewEntity overview;
+    public final QOverviewEntity overviewEntity;
 
     public final NumberPath<Long> projectId = createNumber("projectId", Long.class);
 
@@ -54,8 +54,8 @@ public class QProjectEntity extends EntityPathBase<ProjectEntity> {
 
     public QProjectEntity(Class<? extends ProjectEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.head = inits.isInitialized("head") ? new QHeadEntity(forProperty("head")) : null;
-        this.overview = inits.isInitialized("overview") ? new QOverviewEntity(forProperty("overview"), inits.get("overview")) : null;
+        this.headEntity = inits.isInitialized("headEntity") ? new QHeadEntity(forProperty("headEntity")) : null;
+        this.overviewEntity = inits.isInitialized("overviewEntity") ? new QOverviewEntity(forProperty("overviewEntity"), inits.get("overviewEntity")) : null;
     }
 
 }

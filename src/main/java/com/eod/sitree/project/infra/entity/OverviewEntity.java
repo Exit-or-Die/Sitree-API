@@ -10,9 +10,11 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import java.util.List;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
+@Getter
 @Embeddable
 @NoArgsConstructor
 public class OverviewEntity {

@@ -3,11 +3,10 @@ package com.eod.sitree.project.ui;
 import com.eod.sitree.common.response.ResponseDto;
 import com.eod.sitree.project.service.ProjectService;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
-import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +26,9 @@ public class ProjectController {
         return new ResponseDto<>(result);
     }
 
-//    @GetMapping("/{projectId}")
-//    public ResponseDto<?> getProjectDetail(){
-//
-//    }
+    @GetMapping("/{projectId}")
+    public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId) {
+        var result = projectService.getDeleteProject(projectId);
+        return new ResponseDto<>(result);
+    }
 }

@@ -1,6 +1,10 @@
 package com.eod.sitree.project.domain.model;
 
+import com.eod.sitree.project.domain.model.type.ImageType;
 import com.eod.sitree.project.domain.model.type.TechStackType;
+import com.eod.sitree.project.infra.entity.FocusPointEntity;
+import com.eod.sitree.project.infra.entity.ProjectTechStackEntity;
+import com.eod.sitree.project.infra.entity.TechviewEntity;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto.TechviewDto;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -25,5 +29,14 @@ public class Techview {
         this.architectureImage = new Image(dto.getArchitectureImage());
         this.architectureDescription = dto.getArchitectureDescription();
         this.focusedPoints = dto.getFocusedPoints().stream().map(FocusPoint::new).toList();
+    }
+
+    public Techview(TechviewEntity entity, List<ProjectTechStackEntity> projectTechStackEntities, List<FocusPointEntity> focusPointEntities) {
+        this.techArea = entity.getTechArea();
+        this.gitRepositoryUrl = entity.getGitRepositoryUrl();
+        this.techStackTypes = projectTechStackEntities.stream().map(ProjectTechStackEntity::getTechStackType).toList();
+        this.architectureImage = new Image(entity.getArchitectureImageUrl(), ImageType.ARCHITECTURE);
+        this.architectureDescription = entity.getArchitectureDescription();
+        this.focusedPoints = focusPointEntities.stream().map(FocusPoint::new).toList();
     }
 }

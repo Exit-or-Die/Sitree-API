@@ -10,4 +10,5 @@ public interface ProjectRepository {
 
     void update(long projectId, Project project);
 
+    void getListByParticipantId();
 }

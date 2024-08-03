@@ -25,6 +25,8 @@ public class QTechviewEntity extends EntityPathBase<TechviewEntity> {
 
     public final StringPath gitRepositoryUrl = createString("gitRepositoryUrl");
 
+    public final NumberPath<Long> projectId = createNumber("projectId", Long.class);
+
     public final StringPath techArea = createString("techArea");
 
     public final NumberPath<Long> techviewId = createNumber("techviewId", Long.class);

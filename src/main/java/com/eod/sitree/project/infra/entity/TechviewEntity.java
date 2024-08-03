@@ -22,6 +22,9 @@ public class TechviewEntity {
     private Long techviewId;
 
     @Column(nullable = false)
+    private long projectId;
+
+    @Column(nullable = false)
     private String techArea;
 
     @Column(nullable = false)
@@ -32,8 +35,9 @@ public class TechviewEntity {
 
     private String architectureDescription;
 
-    public TechviewEntity(Techview techview) {
+    public TechviewEntity(Long projectId, Techview techview) {
         this.techArea = techview.getTechArea();
+        this.projectId = projectId;
         this.gitRepositoryUrl = techview.getGitRepositoryUrl();
         this.architectureImageUrl = techview.getArchitectureImage().getImageUrl();
         this.architectureDescription = techview.getArchitectureDescription();

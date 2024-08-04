@@ -2,17 +2,16 @@ package com.eod.sitree.config;
 
 import com.eod.sitree.auth.AuthenticationInterceptor;
 import com.eod.sitree.auth.domain.repository.OAuthRepository;
-import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.common.infra.resolver.UserInfoResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configurable
+@Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 

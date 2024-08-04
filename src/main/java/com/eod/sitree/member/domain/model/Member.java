@@ -6,9 +6,11 @@ import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Member {
 
     private Long memberNo;

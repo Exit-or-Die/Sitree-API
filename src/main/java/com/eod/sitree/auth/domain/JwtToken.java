@@ -43,7 +43,7 @@ public class JwtToken {
             throw new IllegalArgumentException("JWT token is empty");
         }
 
-        this.tokenValue = token;
+        this.tokenValue = stripBearer(token);
         this.keyPair = keyPair;
     }
 
@@ -72,5 +72,13 @@ public class JwtToken {
             .parseSignedClaims(this.getTokenValue())
             .getPayload()
             .get("memberClaim", MemberClaim.class);
+    }
+
+    private String stripBearer(String tokenValue) {
+        if (!StringUtils.isEmpty(tokenValue) && tokenValue.startsWith("Bearer")) {
+            return tokenValue.replace("Bearer ", "");
+        }
+
+        return tokenValue;
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UserInfoResolver implements HandlerMethodArgumentResolver {
+public class MemberPrincipalResolver implements HandlerMethodArgumentResolver {
 
     private final MemberService memberService;
     private Member localMember;
@@ -44,7 +44,7 @@ public class UserInfoResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
 
-        return parameter.hasParameterAnnotation(UserInfo.class) && parameter.getParameterType().equals(Member.class);
+        return parameter.hasParameterAnnotation(MemberPrincipal.class) && parameter.getParameterType().equals(Member.class);
     }
 
     @Override
@@ -75,9 +75,10 @@ public class UserInfoResolver implements HandlerMethodArgumentResolver {
                 ((ServletWebRequest) webRequest).getRequest().getRequestURI());
             log.info("UserInfoResolver Exception : {}", e.getStackTrace());
 
-            UserInfo userInfoAnnotation = parameter.getParameterAnnotation(UserInfo.class);
+            MemberPrincipal memberPrincipalAnnotation = parameter.getParameterAnnotation(
+                MemberPrincipal.class);
 
-            if (userInfoAnnotation != null) {
+            if (memberPrincipalAnnotation != null) {
 
                 throw new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
             }

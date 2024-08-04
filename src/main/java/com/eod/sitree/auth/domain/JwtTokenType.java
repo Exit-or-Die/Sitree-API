@@ -6,7 +6,7 @@ import org.springframework.http.HttpHeaders;
 @Getter
 public enum JwtTokenType {
     ACCESS_TOKEN(HttpHeaders.AUTHORIZATION, 1000L * 60L * 30L),
-    REFRESH_TOKEN("x-refresh-token", 1000L * 60L * 60L * 24L * 7L)
+    REFRESH_TOKEN(HttpHeaders.AUTHORIZATION, 1000L * 60L * 60L * 24L * 7L)
     ;
 
     private final String headerName;

@@ -2,18 +2,21 @@ package com.eod.sitree.config;
 
 import com.eod.sitree.auth.AuthenticationInterceptor;
 import com.eod.sitree.auth.domain.repository.OAuthRepository;
-import com.eod.sitree.auth.service.AuthService;
+import com.eod.sitree.common.infra.resolver.MemberPrincipalResolver;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configurable
+@Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
     private final OAuthRepository oAuthRepository;
+    private final MemberPrincipalResolver memberPrincipalResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -27,5 +30,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOrigins("*")
             .allowedMethods("GET", "POST", "PUT", "DELETE");
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(memberPrincipalResolver);
     }
 }

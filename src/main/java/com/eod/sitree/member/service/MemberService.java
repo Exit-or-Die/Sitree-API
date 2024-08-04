@@ -5,6 +5,7 @@ import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
+import com.eod.sitree.member.domain.model.Provider;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
@@ -66,5 +67,10 @@ public class MemberService {
         Member member = memberRepository.findByProviderAndEmail(memberClaim.getProvider(), memberClaim.getEmail());
 
         return new MemberTokensResponseDto(member);
+    }
+
+    public Member findMember(Provider provider, String email) {
+
+        return memberRepository.findByProviderAndEmail(provider, email);
     }
 }

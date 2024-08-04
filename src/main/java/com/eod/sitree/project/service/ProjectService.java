@@ -24,7 +24,7 @@ public class ProjectService {
         return new ProjectCreateResponseDto(savedProjectId);
     }
 
-    public ProjectDetailResponseDto getDeleteProject(long projectId){
+    public ProjectDetailResponseDto getProjectDetail(long projectId){
         Project project = projectRepository.getById(projectId);
         return new ProjectDetailResponseDto(project);
     }
@@ -35,5 +35,9 @@ public class ProjectService {
 
     public void exportProject(){
 
+    }
+
+    public Object getTotalProjects() {
+        return null;
     }
 }

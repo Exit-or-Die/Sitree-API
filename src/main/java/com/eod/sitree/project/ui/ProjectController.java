@@ -28,7 +28,13 @@ public class ProjectController {
 
     @GetMapping("/{projectId}")
     public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId) {
-        var result = projectService.getDeleteProject(projectId);
+        var result = projectService.getProjectDetail(projectId);
+        return new ResponseDto<>(result);
+    }
+
+    @GetMapping
+    public ResponseDto<?> getProjectList() {
+        var result = projectService.getTotalProjects();
         return new ResponseDto<>(result);
     }
 }

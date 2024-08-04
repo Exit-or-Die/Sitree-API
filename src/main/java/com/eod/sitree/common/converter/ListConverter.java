@@ -27,7 +27,7 @@ public class ListConverter implements AttributeConverter<List<Image>, String> {
         try {
             return objectMapper.readValue(s, new TypeReference<List<Image>>() {});
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Could not convert to List<Image>.", e);
         }
     }
 }

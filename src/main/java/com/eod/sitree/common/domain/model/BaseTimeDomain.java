@@ -10,7 +10,7 @@ public class BaseTimeDomain {
 
     private final LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+    private LocalDateTime modifiedAt;
 
 
 }

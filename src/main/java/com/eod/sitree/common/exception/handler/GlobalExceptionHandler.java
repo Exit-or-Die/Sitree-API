@@ -1,5 +1,6 @@
 package com.eod.sitree.common.exception.handler;
 
+import com.eod.sitree.auth.exception.AuthException;
 import com.eod.sitree.auth.exception.AuthSettingException;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.common.exception.CustomException;
@@ -48,6 +49,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDto<String>> handleJwtException(JwtException jwtException) {
         log.error("{}\n{}", jwtException.getMessage(), jwtException.getStackTrace());
         return getResponse(HttpStatus.UNAUTHORIZED, jwtException.getMessage());
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public <T> ResponseEntity<ResponseDto<T>> handleAuthException(AuthException authException) {
+        log.error("{}\n{}", authException.getErrorMessage(), authException.getStackTrace());
+        return getErrorResponse(authException);
     }
 
     @ExceptionHandler(AuthSettingException.class)

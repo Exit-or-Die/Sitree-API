@@ -10,6 +10,7 @@ import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
+import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
 import java.util.Optional;
@@ -67,6 +68,19 @@ public class MemberService {
         Member member = memberRepository.findByProviderAndEmail(memberClaim.getProvider(), memberClaim.getEmail());
 
         return new MemberTokensResponseDto(member);
+    }
+
+    public MemberTokensResponseDto getToken(MemberTokenRequestDto memberTokenRequestDto) {
+
+        Optional<Member> memberOptional = memberRepository.findByProviderAndEmailOptional(
+            memberTokenRequestDto.getProvider(), memberTokenRequestDto.getEmail());
+
+        if (memberOptional.isPresent()) {
+
+            return new MemberTokensResponseDto(memberOptional.get());
+        }
+
+        throw  new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
     }
 
     public Member findMember(Provider provider, String email) {

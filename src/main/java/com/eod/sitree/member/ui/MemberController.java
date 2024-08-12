@@ -3,9 +3,11 @@ package com.eod.sitree.member.ui;
 import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.auth.support.AuthNotRequired;
+import com.eod.sitree.auth.support.LocalOnly;
 import com.eod.sitree.member.service.MemberService;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
+import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
@@ -24,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
-    private final AuthService authService;
 
     @AuthNotRequired
     @PostMapping("/sign-in")
@@ -47,6 +48,15 @@ public class MemberController {
         String token = request.getHeader(JwtTokenType.REFRESH_TOKEN.getHeaderName());
 
         return ResponseDto.ok(memberService.refreshToken(token));
+
+    }
+
+    @AuthNotRequired
+    @LocalOnly
+    @PostMapping("/token")
+    public ResponseDto<MemberTokensResponseDto> getToken(@Valid @RequestBody MemberTokenRequestDto memberTokenRequestDto){
+
+        return ResponseDto.ok(memberService.getToken(memberTokenRequestDto));
 
     }
 }

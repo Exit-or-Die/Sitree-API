@@ -1,8 +1,9 @@
 package com.eod.sitree.config;
 
-import com.eod.sitree.auth.AuthenticationInterceptor;
+import com.eod.sitree.auth.support.AuthenticationInterceptor;
 import com.eod.sitree.auth.domain.repository.OAuthRepository;
 import com.eod.sitree.auth.infra.resolver.MemberPrincipalResolver;
+import com.eod.sitree.auth.support.LocalOnlyInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +21,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthenticationInterceptor(oAuthRepository))
+        registry.addInterceptor(new LocalOnlyInterceptor())
             .order(1)
+            .addPathPatterns("/**");
+
+        registry.addInterceptor(new AuthenticationInterceptor(oAuthRepository))
+            .order(2)
             .addPathPatterns("/**");
     }
 

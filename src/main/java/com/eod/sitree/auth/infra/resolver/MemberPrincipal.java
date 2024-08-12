@@ -1,4 +1,4 @@
-package com.eod.sitree.common.infra.resolver;
+package com.eod.sitree.auth.infra.resolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

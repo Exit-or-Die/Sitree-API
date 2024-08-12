@@ -2,7 +2,7 @@ package com.eod.sitree.config;
 
 import com.eod.sitree.auth.AuthenticationInterceptor;
 import com.eod.sitree.auth.domain.repository.OAuthRepository;
-import com.eod.sitree.common.infra.resolver.MemberPrincipalResolver;
+import com.eod.sitree.auth.infra.resolver.MemberPrincipalResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

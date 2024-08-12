@@ -1,4 +1,4 @@
-package com.eod.sitree.common.infra.resolver;
+package com.eod.sitree.auth.infra.resolver;
 
 import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
@@ -26,20 +26,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class MemberPrincipalResolver implements HandlerMethodArgumentResolver {
 
     private final MemberService memberService;
-    private Member localMember;
-
-    @PostConstruct
-    public void init() {
-        localMember = new Member(
-            1L,
-            Provider.GOOGLE,
-            "Jack",
-            "abc@naver.com",
-            "",
-            "",
-            ""
-        );
-    }
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -64,19 +50,13 @@ public class MemberPrincipalResolver implements HandlerMethodArgumentResolver {
 
         } catch (Exception e) {
 
-            if (Objects.equals(System.getProperty("spring.profiles.active"), "local")) {
-
-                return localMember;
-            }
-
             log.info("UserInfoResolver token : {}",
                 ((ServletWebRequest) webRequest).getRequest().getHeader(JwtTokenType.ACCESS_TOKEN.getHeaderName()));
             log.info("UserInfoResolver path : {}",
                 ((ServletWebRequest) webRequest).getRequest().getRequestURI());
             log.info("UserInfoResolver Exception : {}", e.getStackTrace());
 
-            MemberPrincipal memberPrincipalAnnotation = parameter.getParameterAnnotation(
-                MemberPrincipal.class);
+            MemberPrincipal memberPrincipalAnnotation = parameter.getParameterAnnotation(MemberPrincipal.class);
 
             if (memberPrincipalAnnotation != null) {
 

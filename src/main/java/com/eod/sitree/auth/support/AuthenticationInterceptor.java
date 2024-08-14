@@ -19,7 +19,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
 
-        if (checkAnnotation(handler, AuthNotRequired.class)) {
+        if (checkAnnotation(handler, AuthNotRequired.class) || request.getMethod().equals("OPTIONS")) {
             return true;
         }
 

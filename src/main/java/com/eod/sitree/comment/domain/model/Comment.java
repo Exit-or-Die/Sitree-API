@@ -16,15 +16,22 @@ public class Comment extends BaseTimeDomain {
 
     private final Long createMemberNo;
 
-    private List<Comment> childComments;
+    private final Comment parentComment;
+
+    private final List<Comment> childComments;
+
+    private final Boolean isChildComment;
 
     public Comment(LocalDateTime createdAt, LocalDateTime updatedAt, List<Comment> childComments,
-        Long createMemberNo, String contents, Long projectId, Long commentNo) {
+        Long createMemberNo, String contents, Long projectId, Long commentNo, Comment parentComment,
+        Boolean isChildComment) {
         super(createdAt, updatedAt);
         this.childComments = childComments;
         this.createMemberNo = createMemberNo;
         this.contents = contents;
         this.projectId = projectId;
         this.commentNo = commentNo;
+        this.parentComment = parentComment;
+        this.isChildComment = isChildComment;
     }
 }

@@ -5,6 +5,8 @@ import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.Provider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,6 +35,7 @@ public class MemberEntity extends BaseEntity {
     private Long memberNo;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Provider provider;
 
     @Column(nullable = false)

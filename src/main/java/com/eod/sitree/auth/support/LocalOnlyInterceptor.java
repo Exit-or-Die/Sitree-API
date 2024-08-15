@@ -1,36 +1,25 @@
-package com.eod.sitree.auth;
+package com.eod.sitree.auth.support;
 
-import com.eod.sitree.auth.domain.JwtToken;
-import com.eod.sitree.auth.domain.JwtTokenType;
-import com.eod.sitree.auth.domain.repository.OAuthRepository;
 import com.eod.sitree.auth.exception.AuthException;
-import com.eod.sitree.auth.service.AuthService;
-import com.eod.sitree.auth.support.AuthNotRequired;
 import com.eod.sitree.common.exception.ApplicationErrorType;
-import com.eod.sitree.member.domain.model.Provider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
+import java.util.Objects;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-@RequiredArgsConstructor
-public class AuthenticationInterceptor implements HandlerInterceptor {
 
-    private final OAuthRepository oAuthRepository;
+public class LocalOnlyInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
 
-        if (checkAnnotation(handler, AuthNotRequired.class)) {
-            return true;
-        }
+        if (checkAnnotation(handler, LocalOnly.class) && !Objects.equals(System.getProperty("spring.profiles.active"), "local")) {
 
-        String token = request.getHeader(JwtTokenType.ACCESS_TOKEN.getHeaderName());
-        JwtToken jwtToken = new JwtToken(token, AuthService.jwtKeypair);
-        jwtToken.validateToken();
+            throw new AuthException(ApplicationErrorType.FORBIDDEN, HttpStatus.FORBIDDEN);
+        }
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }

@@ -21,6 +21,8 @@ public enum ApplicationErrorType {
 
     AUTH_KEYPAIR_GENERATION_ERROR(30001, "AUTH KEYPAIR GENERATION ERROR"),
 
+    COMMENT_NOT_FOUND(40000, "COMMENT NOT FOUND"),
+
     ;
 
     private final int errorCode;

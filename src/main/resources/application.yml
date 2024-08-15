@@ -21,6 +21,17 @@ spring:
 server:
   forward-headers-strategy: native
 
+cloud:
+  aws:
+    s3:
+      bucket: sitree-s3
+    stack.auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      accessKey: pbJdvDAG+GTwVQMqUqJOTJBTrRHC1nwYBExJMbW3Fs/kDLiQ/Olm967CcCqE245LO6L+mu/OEKB8O0gzdWhCyA==
+      secretKey: qUTUEPZanX+vBpYEU09vDpHNInfAKpH4BLICoBGr6fuQdt4MnrjD2jnwCDhxaBZBLNV+IemheLp9dBgd5M48hxuPIqlBmUtD5jgLcT9KcbE=
+
 oauth:
   url:
     google: https://www.googleapis.com/oauth2/v3/tokeninfo

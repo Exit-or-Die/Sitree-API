@@ -21,7 +21,7 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
 
     public final com.eod.sitree.common.infra.entity.QBaseEntity _super = new com.eod.sitree.common.infra.entity.QBaseEntity(this);
 
-    public final StringPath authId = createString("authId");
+    public final StringPath belonging = createString("belonging");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -36,6 +36,10 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
     public final StringPath nickname = createString("nickname");
 
     public final StringPath profileImgUrl = createString("profileImgUrl");
+
+    public final EnumPath<com.eod.sitree.member.domain.model.Provider> provider = createEnum("provider", com.eod.sitree.member.domain.model.Provider.class);
+
+    public final StringPath thirdPartyProfileUrl = createString("thirdPartyProfileUrl");
 
     public QMemberEntity(String variable) {
         super(MemberEntity.class, forVariable(variable));

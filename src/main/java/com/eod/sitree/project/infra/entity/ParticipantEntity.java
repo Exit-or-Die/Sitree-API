@@ -30,9 +30,13 @@ public class ParticipantEntity {
     @Column(nullable = false)
     private String position;
 
+    @Column(nullable = false)
+    private boolean isLeader;
+
     public ParticipantEntity(Long projectId, Participant participant) {
         this.memberNo = participant.getMemberNo();
         this.projectId = projectId;
         this.position = participant.getPosition();
+        this.isLeader = participant.isLeader();
     }
 }

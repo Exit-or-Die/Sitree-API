@@ -97,5 +97,7 @@ public class ProjectCreateRequestDto {
         private Long memberNo;
         @NotBlank
         private String position;
+        @NotNull
+        private Boolean isLeader;
     }
 }

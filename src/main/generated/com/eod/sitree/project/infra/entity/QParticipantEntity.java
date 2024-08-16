@@ -19,6 +19,8 @@ public class QParticipantEntity extends EntityPathBase<ParticipantEntity> {
 
     public static final QParticipantEntity participantEntity = new QParticipantEntity("participantEntity");
 
+    public final BooleanPath isLeader = createBoolean("isLeader");
+
     public final NumberPath<Long> memberNo = createNumber("memberNo", Long.class);
 
     public final NumberPath<Long> participantId = createNumber("participantId", Long.class);

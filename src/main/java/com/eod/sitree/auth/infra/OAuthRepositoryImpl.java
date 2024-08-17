@@ -17,7 +17,7 @@ public class OAuthRepositoryImpl implements OAuthRepository {
     @Value("${oauth.url.google}")
     private String GOOGLE_AUTH_URI;
 
-    @Value("${oauth.url.google}")
+    @Value("${oauth.url.github}")
     private String GITHUB_AUTH_URI;
 
     private final RestClient restClient;

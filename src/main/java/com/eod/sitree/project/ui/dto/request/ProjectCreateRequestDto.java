@@ -33,7 +33,6 @@ public class ProjectCreateRequestDto {
         @NotBlank
         private String title;
         private String shortDescription;
-        @NotBlank
         private String healthCheckUrl;
 
     }

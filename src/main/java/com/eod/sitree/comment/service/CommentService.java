@@ -21,6 +21,7 @@ public class CommentService {
 
     public CommentCreateResponseDto createComment(CommentCreateRequestDto commentCreateRequestDto, Member member) {
 
+        // TODO: project 존재 validate
         Comment comment = new Comment(commentCreateRequestDto, member);
 
         if (commentCreateRequestDto.getIsChildComment()) {

@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +23,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "tb_comment")
 public class CommentEntity extends BaseEntity {
 
     @Id
@@ -36,10 +38,10 @@ public class CommentEntity extends BaseEntity {
     private String contents;
 
     @Column(nullable = false)
-    private Long createMemberNo;
+    private Long createMemberId;
 
     @ManyToOne
-    @JoinColumn(name = "parent_comment_no")
+    @JoinColumn(name = "parent_comment_id")
     private CommentEntity parentComment;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -48,12 +50,12 @@ public class CommentEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isChildComment;
 
-    public CommentEntity(Long commentId, Long projectId, String contents, Long createMemberNo,
+    public CommentEntity(Long commentId, Long projectId, String contents, Long createMemberId,
         CommentEntity parentComment, List<CommentEntity> childComments, Boolean isChildComment) {
         this.commentId = commentId;
         this.projectId = projectId;
         this.contents = contents;
-        this.createMemberNo = createMemberNo;
+        this.createMemberId = createMemberId;
         this.parentComment = parentComment;
         this.childComments = childComments;
         this.isChildComment = isChildComment;
@@ -63,8 +65,8 @@ public class CommentEntity extends BaseEntity {
         this.commentId = comment.getCommentId();
         this.projectId = comment.getProjectId();
         this.contents = comment.getContents();
-        this.createMemberNo = comment.getCreateMemberNo();
-        this.parentComment = new CommentEntity(comment.getParentComment());
+        this.createMemberId = comment.getCreateMemberId();
+        this.parentComment = Objects.isNull(comment.getParentComment()) ? null : new CommentEntity(comment.getParentComment());
         this.childComments = toChildCommentEntityList(comment.getChildComments());
         this.isChildComment = comment.getIsChildComment();
     }
@@ -74,7 +76,7 @@ public class CommentEntity extends BaseEntity {
             this.getCreatedAt(),
             this.getModifiedAt(),
             this.toChildCommentList(),
-            this.getCreateMemberNo(),
+            this.getCreateMemberId(),
             this.getContents(),
             this.getProjectId(),
             this.getCommentId(),

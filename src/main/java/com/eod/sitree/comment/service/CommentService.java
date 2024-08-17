@@ -3,7 +3,6 @@ package com.eod.sitree.comment.service;
 import com.eod.sitree.comment.domain.model.Comment;
 import com.eod.sitree.comment.domain.modelrepository.CommentRepository;
 import com.eod.sitree.comment.exception.CommentException;
-import com.eod.sitree.comment.infra.entity.CommentEntity;
 import com.eod.sitree.comment.ui.dto.CommentCreateRequestDto;
 import com.eod.sitree.comment.ui.dto.CommentCreateResponseDto;
 import com.eod.sitree.common.exception.ApplicationErrorType;
@@ -26,7 +25,7 @@ public class CommentService {
 
         if (commentCreateRequestDto.getIsChildComment()) {
 
-            Comment parentComment = Optional.ofNullable(commentRepository.findByCommentId(commentCreateRequestDto.getParentCommentNo()))
+            Comment parentComment = Optional.ofNullable(commentRepository.findByCommentId(commentCreateRequestDto.getParentCommentId()))
                 .orElseThrow(() -> new CommentException(ApplicationErrorType.COMMENT_NOT_FOUND, HttpStatus.BAD_REQUEST));
 
             comment = new Comment(comment, parentComment);

@@ -17,7 +17,7 @@ public class Comment extends BaseTimeDomain {
 
     private String contents;
 
-    private final Long createMemberNo;
+    private final Long createMemberId;
 
     private final Comment parentComment;
 
@@ -26,11 +26,11 @@ public class Comment extends BaseTimeDomain {
     private final Boolean isChildComment;
 
     public Comment(LocalDateTime createdAt, LocalDateTime updatedAt, List<Comment> childComments,
-        Long createMemberNo, String contents, Long projectId, Long commentId, Comment parentComment,
+        Long createMemberId, String contents, Long projectId, Long commentId, Comment parentComment,
         Boolean isChildComment) {
         super(createdAt, updatedAt);
         this.childComments = childComments;
-        this.createMemberNo = createMemberNo;
+        this.createMemberId = createMemberId;
         this.contents = contents;
         this.projectId = projectId;
         this.commentId = commentId;
@@ -44,7 +44,7 @@ public class Comment extends BaseTimeDomain {
         this.projectId = request.getProjectId();
         this.parentComment = null;
         this.contents = request.getContents();
-        this.createMemberNo = member.getMemberNo();
+        this.createMemberId = member.getMemberId();
         this.isChildComment = request.getIsChildComment();
         this.childComments = new ArrayList<>();
     }
@@ -55,7 +55,7 @@ public class Comment extends BaseTimeDomain {
         this.projectId = comment.getProjectId();
         this.parentComment = parentComment;
         this.contents = comment.getContents();
-        this.createMemberNo = comment.getCreateMemberNo();
+        this.createMemberId = comment.getCreateMemberId();
         this.isChildComment = comment.getIsChildComment();
         this.childComments = comment.getChildComments();
     }

@@ -1,6 +1,8 @@
 package com.eod.sitree.project.ui;
 
+import com.eod.sitree.auth.infra.resolver.MemberPrincipal;
 import com.eod.sitree.common.response.ResponseDto;
+import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.project.service.ProjectService;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import jakarta.validation.Valid;
@@ -27,8 +29,10 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}")
-    public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId) {
+    public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId,
+            @MemberPrincipal Member member) {
         var result = projectService.getProjectDetail(projectId);
+        projectService.addViewCount(projectId, member.getMemberNo());
         return new ResponseDto<>(result);
     }
 

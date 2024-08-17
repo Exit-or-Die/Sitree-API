@@ -36,6 +36,8 @@ public class QProjectEntity extends EntityPathBase<ProjectEntity> {
 
     public final NumberPath<Long> projectId = createNumber("projectId", Long.class);
 
+    public final NumberPath<Long> viewCount = createNumber("viewCount", Long.class);
+
     public QProjectEntity(String variable) {
         this(ProjectEntity.class, forVariable(variable), INITS);
     }

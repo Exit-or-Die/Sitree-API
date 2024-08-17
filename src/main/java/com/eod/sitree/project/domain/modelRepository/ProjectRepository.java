@@ -11,4 +11,6 @@ public interface ProjectRepository {
     void update(long projectId, Project project);
 
     void getListByParticipantId();
+
+    void plusViewCount(long projectId, long memberId);
 }

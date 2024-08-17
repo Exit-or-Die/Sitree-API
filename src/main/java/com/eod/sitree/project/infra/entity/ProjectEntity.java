@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Entity
@@ -30,6 +31,10 @@ public class ProjectEntity extends BaseEntity {
 
     @Embedded
     private OverviewEntity overviewEntity;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private long viewCount;
 
     public ProjectEntity(Project project) {
         this.headEntity = new HeadEntity(project.getHead());

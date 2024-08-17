@@ -1,5 +1,7 @@
 package com.eod.sitree.project.infra;
 
+import static com.eod.sitree.project.infra.entity.QProjectEntity.projectEntity;
+
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.model.Techview;
@@ -20,8 +22,11 @@ import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ProjectRepositoryImpl implements ProjectRepository {
@@ -97,5 +102,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public void getListByParticipantId() {
 
+    }
+
+    @Override
+    @Cacheable(value = "projectViewCount")
+    public void plusViewCount(long projectId, long memberId) {
+        jpaQueryFactory.update(projectEntity)
+                .where(projectEntity.projectId.eq(projectId))
+                .set(projectEntity.viewCount, projectEntity.viewCount.add(1))
+                .execute();
     }
 }

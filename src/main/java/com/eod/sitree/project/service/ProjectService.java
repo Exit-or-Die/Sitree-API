@@ -29,6 +29,11 @@ public class ProjectService {
         return new ProjectDetailResponseDto(project);
     }
 
+    @Transactional
+    public void addViewCount(long projectId, long memberId) {
+        projectRepository.plusViewCount(projectId, memberId);
+    }
+
     public void updateProject(){
 
     }

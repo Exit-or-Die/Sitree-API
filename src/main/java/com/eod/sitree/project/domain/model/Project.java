@@ -16,6 +16,7 @@ public class Project {
     private final Overview overview;
     private final List<Techview> techviews;
     private final List<Participant> participants;
+    private final Long viewCount;
 
     public Project(ProjectCreateRequestDto dto) {
         this.head = new Head(dto.getHead());
@@ -23,6 +24,7 @@ public class Project {
         this.overview = new Overview(dto.getOverview());
         this.techviews = dto.getTechviewList().stream().map(Techview::new).toList();
         this.participants = dto.getParticipantList().stream().map(Participant::new).toList();
+        this.viewCount = 0L;
     }
 
     public Project(
@@ -36,5 +38,6 @@ public class Project {
         this.overview = new Overview(projectEntity.getOverviewEntity());
         this.techviews = techviews;
         this.participants = participantEntities.stream().map(Participant::new).toList();
+        this.viewCount = projectEntity.getViewCount();
     }
 }

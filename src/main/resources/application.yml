@@ -12,6 +12,12 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+  jmx:
+    enabled: true
+
 
 oauth:
   url:

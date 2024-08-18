@@ -44,6 +44,10 @@ public class ClientUrl {
         this.downloadMethods.put(platformType, url);
     }
 
+    public void deleteDownloadMethod(PlatformType platformType) {
+        this.downloadMethods.remove(platformType);
+    }
+
     private void validation(String liveDomain, HashMap<PlatformType, String> downloadMethods){
         if (liveDomain == null && (downloadMethods == null || downloadMethods.isEmpty())) {
             throw new ProjectException(CHECK_CLIENT_URL_REQUIRED_VALUE);

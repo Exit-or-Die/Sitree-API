@@ -106,7 +106,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     @Cacheable(value = "projectViewCount")
-    public void plusViewCount(long projectId, long memberId) {
+    public void plusViewCount(long projectId, String userIp) {
         jpaQueryFactory.update(projectEntity)
                 .where(projectEntity.projectId.eq(projectId))
                 .set(projectEntity.viewCount, projectEntity.viewCount.add(1))

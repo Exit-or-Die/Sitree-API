@@ -33,8 +33,8 @@ public class ProjectService {
     }
 
     @Transactional
-    public void addViewCount(long projectId, long memberId) {
-        projectRepository.plusViewCount(projectId, memberId);
+    public void addViewCount(long projectId, String userIp) {
+        projectRepository.plusViewCount(projectId, userIp);
     }
 
     public void updateProject(){

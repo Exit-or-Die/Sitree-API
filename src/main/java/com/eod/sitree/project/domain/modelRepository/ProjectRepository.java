@@ -12,5 +12,5 @@ public interface ProjectRepository {
 
     void getListByParticipantId();
 
-    void plusViewCount(long projectId, long memberId);
+    void plusViewCount(long projectId, String userIp);
 }

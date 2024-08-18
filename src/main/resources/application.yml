@@ -18,6 +18,8 @@ spring:
   jmx:
     enabled: true
 
+server:
+  forward-headers-strategy: native
 
 oauth:
   url:

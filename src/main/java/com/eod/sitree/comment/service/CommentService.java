@@ -5,8 +5,10 @@ import com.eod.sitree.comment.domain.modelrepository.CommentRepository;
 import com.eod.sitree.comment.exception.CommentException;
 import com.eod.sitree.comment.ui.dto.CommentCreateRequestDto;
 import com.eod.sitree.comment.ui.dto.CommentCreateResponseDto;
+import com.eod.sitree.comment.ui.dto.CommentsResponseDto;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,5 +36,14 @@ public class CommentService {
         commentRepository.save(comment);
 
         return new CommentCreateResponseDto(true);
+    }
+
+    public List<CommentsResponseDto> findComment(Long projectId) {
+
+        // TODO: project 존재 validate
+        List<Comment> comments = commentRepository.findByProjectId(projectId);
+        return comments.stream()
+            .map(CommentsResponseDto::new)
+            .toList();
     }
 }

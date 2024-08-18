@@ -31,8 +31,8 @@ public class ProjectController {
     @GetMapping("/{projectId}")
     public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId,
             @MemberPrincipal Member member) {
-        var result = projectService.getProjectDetail(projectId);
         projectService.addViewCount(projectId, member.getMemberNo());
+        var result = projectService.getProjectDetail(projectId);
         return new ResponseDto<>(result);
     }
 

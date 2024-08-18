@@ -17,13 +17,15 @@ public class ProjectDetailResponseDto {
     private final List<Techview> techviewList;
     private final List<Participant> participantList;
     private final Long viewCount;
+    private final boolean isHealthy;
 
-    public ProjectDetailResponseDto(Project project) {
+    public ProjectDetailResponseDto(Project project, boolean isHealthy) {
         this.head = project.getHead();
         this.tagList = project.getTags();
         this.overview = project.getOverview();
         this.techviewList = project.getTechviews();
         this.participantList = project.getParticipants();
         this.viewCount = project.getViewCount();
+        this.isHealthy = isHealthy;
     }
 }

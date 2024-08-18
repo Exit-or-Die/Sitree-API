@@ -40,4 +40,8 @@ public class Project {
         this.participants = participantEntities.stream().map(Participant::new).toList();
         this.viewCount = projectEntity.getViewCount();
     }
+
+    public String getHealthCheckUrl() {
+        return this.head.getHealthCheckUrl();
+    }
 }

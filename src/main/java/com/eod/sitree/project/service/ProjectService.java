@@ -2,6 +2,7 @@ package com.eod.sitree.project.service;
 
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
+import com.eod.sitree.project.infra.ClientRequestServiceImpl;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final ClientRequestServiceImpl clientRequestService;
 
     @Transactional
     public ProjectCreateResponseDto createProject(ProjectCreateRequestDto projectCreateRequestDto) {
@@ -26,7 +28,8 @@ public class ProjectService {
 
     public ProjectDetailResponseDto getProjectDetail(long projectId){
         Project project = projectRepository.getById(projectId);
-        return new ProjectDetailResponseDto(project);
+        boolean healthy = clientRequestService.isHealthy(project.getHealthCheckUrl());
+        return new ProjectDetailResponseDto(project, healthy);
     }
 
     @Transactional

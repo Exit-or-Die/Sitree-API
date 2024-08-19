@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.ehcache.org/v3"
+  xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core.xsd">
+
+  <!-- User Cache Configuration -->
+  <cache alias="projectViewCount">
+    <expiry>
+      <ttl unit="seconds">600</ttl> <!-- 10 minutes -->
+    </expiry>
+    <heap unit="entries">200</heap>
+  </cache>
+
+  <!-- Client Health Check Request Configuration -->
+  <cache alias="isHealthy">
+    <expiry>
+      <ttl unit="seconds">21600</ttl> <!-- 6 hour -->
+    </expiry>
+    <heap unit="entries">200</heap>
+  </cache>
+</config>

@@ -8,18 +8,18 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class Participant {
-    private final Long memberNo;
+    private final Long memberId;
     private final String position;
     private final boolean isLeader;
 
     public Participant(ParticipantDto dto) {
-        this.memberNo = dto.getMemberNo();
+        this.memberId = dto.getMemberId();
         this.position = dto.getPosition();
         this.isLeader = dto.getIsLeader();
     }
 
     public Participant(ParticipantEntity entity){
-        this.memberNo = entity.getMemberNo();
+        this.memberId = entity.getMemberId();
         this.position = entity.getPosition();
         this.isLeader = entity.isLeader();
     }

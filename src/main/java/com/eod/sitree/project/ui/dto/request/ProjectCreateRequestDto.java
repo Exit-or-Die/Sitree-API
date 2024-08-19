@@ -76,7 +76,7 @@ public class ProjectCreateRequestDto {
         @Getter
         public static class FocusPointDto{
             @NotNull
-            private Long memberNo;
+            private Long memberId;
             @NotBlank
             private String focusedOn;
         }
@@ -93,7 +93,7 @@ public class ProjectCreateRequestDto {
     @Getter
     public static class ParticipantDto{
         @NotNull
-        private Long memberNo;
+        private Long memberId;
         @NotBlank
         private String position;
         @NotNull

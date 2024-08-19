@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public class MemberTokensResponseDto {
 
-    private Long memberNo;
+    private Long memberId;
 
     private Provider provider;
 
@@ -26,7 +26,7 @@ public class MemberTokensResponseDto {
 
     public MemberTokensResponseDto(Member member, String accessToken, String refreshToken) {
 
-        this.memberNo = member.getMemberNo();
+        this.memberId = member.getMemberId();
         this.provider = member.getProvider();
         this.email = member.getEmail();
         this.nickname = member.getNickname();
@@ -40,7 +40,7 @@ public class MemberTokensResponseDto {
         JwtToken accessToken = new JwtToken(member, JwtTokenType.ACCESS_TOKEN, AuthService.jwtKeypair);
         JwtToken refreshToken = new JwtToken(member, JwtTokenType.REFRESH_TOKEN, AuthService.jwtKeypair);
 
-        this.memberNo = member.getMemberNo();
+        this.memberId = member.getMemberId();
         this.provider = member.getProvider();
         this.email = member.getEmail();
         this.nickname = member.getNickname();

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Member {
 
-    private Long memberNo;
+    private Long memberId;
 
     private Provider provider;
 
@@ -31,7 +31,7 @@ public class Member {
 
 
     public Member(MemberEntity memberEntity) {
-        this.memberNo = memberEntity.getMemberNo();
+        this.memberId = memberEntity.getMemberId();
         this.provider = memberEntity.getProvider();
         this.nickname = memberEntity.getNickname();
         this.email = memberEntity.getEmail();
@@ -42,7 +42,7 @@ public class Member {
 
     public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
 
-        this.memberNo = null;
+        this.memberId = null;
         this.provider = memberSignUpRequestDto.getProvider();
         this.nickname = memberSignUpRequestDto.getNickname();
         this.email = memberSignUpRequestDto.getEmail();

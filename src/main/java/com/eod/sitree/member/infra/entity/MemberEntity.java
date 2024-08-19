@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,7 +31,7 @@ public class MemberEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberNo;
+    private Long memberId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -54,7 +53,7 @@ public class MemberEntity extends BaseEntity {
     private String belonging;
 
     public MemberEntity(Member member) {
-        this.memberNo = member.getMemberNo();
+        this.memberId = member.getMemberId();
         this.provider = member.getProvider();
         this.nickname = member.getNickname();
         this.email = member.getEmail();

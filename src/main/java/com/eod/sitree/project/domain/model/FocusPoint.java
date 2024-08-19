@@ -8,16 +8,16 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class FocusPoint {
-    private final long memberNo;
+    private final long memberId;
     private final String focusedOn;
 
     public FocusPoint(FocusPointDto dto) {
-        this.memberNo = dto.getMemberNo();
+        this.memberId = dto.getMemberId();
         this.focusedOn = dto.getFocusedOn();
     }
 
     public FocusPoint(FocusPointEntity entity) {
-        this.memberNo = entity.getMemberNo();
+        this.memberId = entity.getMemberId();
         this.focusedOn = entity.getFocusedOn();
     }
 }

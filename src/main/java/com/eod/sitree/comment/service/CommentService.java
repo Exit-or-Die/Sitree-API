@@ -13,16 +13,19 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final ProjectCommentService projectCommentService;
 
+    @Transactional
     public CommentCreateResponseDto createComment(CommentCreateRequestDto commentCreateRequestDto, Member member) {
 
-        // TODO: project 존재 validate
+        projectCommentService.validateProject(commentCreateRequestDto.getProjectId());
         Comment comment = new Comment(commentCreateRequestDto, member);
 
         if (commentCreateRequestDto.getIsChildComment()) {
@@ -40,7 +43,8 @@ public class CommentService {
 
     public List<CommentsResponseDto> findComment(Long projectId) {
 
-        // TODO: project 존재 validate
+        projectCommentService.validateProject(projectId);
+
         List<Comment> comments = commentRepository.findByProjectId(projectId);
         return comments.stream()
             .map(CommentsResponseDto::new)

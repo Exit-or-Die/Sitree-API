@@ -112,4 +112,9 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .set(projectEntity.viewCount, projectEntity.viewCount.add(1))
                 .execute();
     }
+
+    @Override
+    public boolean existsById(long projectId) {
+        return projectJpaRepository.existsById(projectId);
+    }
 }

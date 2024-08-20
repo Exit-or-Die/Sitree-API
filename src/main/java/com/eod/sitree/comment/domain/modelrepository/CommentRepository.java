@@ -10,4 +10,6 @@ public interface CommentRepository {
     Comment findByCommentId(Long commentId);
 
     List<Comment> findByProjectId(Long projectId);
+
+    Boolean existsByCommentId(Long commentId);
 }

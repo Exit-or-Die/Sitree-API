@@ -20,20 +20,20 @@ public class CommentsResponseDto {
 
     private Long createMemberId;
 
-    private CommentsResponseDto parentComment;
+    private Long parentCommentId;
 
     private List<CommentsResponseDto> childComments;
 
     private Boolean isChildComment;
 
     public CommentsResponseDto(Long commentId, Long projectId, String contents, Long createMemberId,
-        CommentsResponseDto parentComment, List<CommentsResponseDto> childComments,
+        Long parentCommentId, List<CommentsResponseDto> childComments,
         Boolean isChildComment) {
         this.commentId = commentId;
         this.projectId = projectId;
         this.contents = contents;
         this.createMemberId = createMemberId;
-        this.parentComment = parentComment;
+        this.parentCommentId = parentCommentId;
         this.childComments = childComments;
         this.isChildComment = isChildComment;
     }
@@ -43,7 +43,7 @@ public class CommentsResponseDto {
         this.projectId = comment.getProjectId();
         this.contents = comment.getContents();
         this.createMemberId = comment.getCreateMemberId();
-        this.parentComment = Objects.isNull(comment.getParentComment()) ? null : new CommentsResponseDto(comment.getParentComment());
+        this.parentCommentId = comment.getParentCommentId();
         this.childComments = childComments(comment.getChildComments());
         this.isChildComment = comment.getIsChildComment();
     }

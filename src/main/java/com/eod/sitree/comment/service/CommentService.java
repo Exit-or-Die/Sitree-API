@@ -5,6 +5,8 @@ import com.eod.sitree.comment.domain.modelrepository.CommentRepository;
 import com.eod.sitree.comment.exception.CommentException;
 import com.eod.sitree.comment.ui.dto.CommentCreateRequestDto;
 import com.eod.sitree.comment.ui.dto.CommentCreateResponseDto;
+import com.eod.sitree.comment.ui.dto.CommentUpdateRequestDto;
+import com.eod.sitree.comment.ui.dto.CommentUpdateResponseDto;
 import com.eod.sitree.comment.ui.dto.CommentsResponseDto;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
@@ -23,15 +25,16 @@ public class CommentService {
     private final ProjectCommentService projectCommentService;
 
     @Transactional
-    public CommentCreateResponseDto createComment(CommentCreateRequestDto commentCreateRequestDto, Member member) {
+    public CommentCreateResponseDto createComment(Long projectId, CommentCreateRequestDto commentCreateRequestDto, Member member) {
 
-        projectCommentService.validateProject(commentCreateRequestDto.getProjectId());
-        Comment comment = new Comment(commentCreateRequestDto, member);
+        projectCommentService.validateProject(projectId);
+        Comment comment = new Comment(projectId, commentCreateRequestDto, member);
 
         if (commentCreateRequestDto.getIsChildComment()) {
 
             Comment parentComment = Optional.ofNullable(commentRepository.findByCommentId(commentCreateRequestDto.getParentCommentId()))
                 .orElseThrow(() -> new CommentException(ApplicationErrorType.COMMENT_NOT_FOUND, HttpStatus.BAD_REQUEST));
+            parentComment.validateParent();
 
             comment = new Comment(comment, parentComment);
         }
@@ -49,5 +52,18 @@ public class CommentService {
         return comments.stream()
             .map(CommentsResponseDto::new)
             .toList();
+    }
+
+    @Transactional
+    public CommentUpdateResponseDto updateComment(Long projectId, CommentUpdateRequestDto commentUpdateRequestDto, Member member) {
+
+        projectCommentService.validateProject(projectId);
+        Comment comment = commentRepository.findByCommentId(commentUpdateRequestDto.getCommentId());
+        comment.validateCreateMember(member);
+
+        comment.updateContents(commentUpdateRequestDto.getContents());
+        commentRepository.save(comment);
+
+        return new CommentUpdateResponseDto(true);
     }
 }

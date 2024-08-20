@@ -19,8 +19,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment save(Comment comment) {
-
-        return commentJpaRepository.save(new CommentEntity(comment)).to();
+        return  commentJpaRepository.save(new CommentEntity(comment)).to();
     }
 
     @Override
@@ -34,9 +33,15 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public List<Comment> findByProjectId(Long projectId) {
 
-        return Optional.ofNullable(commentJpaRepository.findAllByProjectId(projectId))
+        return Optional.ofNullable(commentJpaRepository.findAllByProjectIdAndIsChildComment(projectId, false))
             .orElseGet(ArrayList::new)
             .stream().map(CommentEntity::to)
             .toList();
+    }
+
+    @Override
+    public Boolean existsByCommentId(Long commentId) {
+
+        return commentJpaRepository.existsById(commentId);
     }
 }

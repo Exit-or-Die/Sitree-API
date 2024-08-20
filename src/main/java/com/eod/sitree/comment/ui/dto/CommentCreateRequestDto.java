@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 public class CommentCreateRequestDto {
 
     @NotNull
-    private Long projectId;
-
-    @NotNull
     private String contents;
 
     @NotNull
@@ -19,9 +16,8 @@ public class CommentCreateRequestDto {
 
     private Long parentCommentId;
 
-    public CommentCreateRequestDto(Long projectId, String contents, Boolean isChildComment,
-        Long parentCommentId) {
-        this.projectId = projectId;
+
+    public CommentCreateRequestDto(String contents, Boolean isChildComment, Long parentCommentId) {
         this.contents = contents;
         this.isChildComment = isChildComment;
         this.parentCommentId = parentCommentId;

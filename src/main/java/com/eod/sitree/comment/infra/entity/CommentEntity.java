@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -40,23 +41,23 @@ public class CommentEntity extends BaseEntity {
     @Column(nullable = false)
     private Long createMemberId;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_comment_id")
-    private CommentEntity parentComment;
+    @Column(name = "parent_comment_id")
+    private Long parentCommentId;
 
-    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany
+    @JoinColumn(name = "parent_comment_id")
     private List<CommentEntity> childComments;
 
     @Column(nullable = false)
     private Boolean isChildComment;
 
     public CommentEntity(Long commentId, Long projectId, String contents, Long createMemberId,
-        CommentEntity parentComment, List<CommentEntity> childComments, Boolean isChildComment) {
+        Long parentCommentId, List<CommentEntity> childComments, Boolean isChildComment) {
         this.commentId = commentId;
         this.projectId = projectId;
         this.contents = contents;
         this.createMemberId = createMemberId;
-        this.parentComment = parentComment;
+        this.parentCommentId = parentCommentId;
         this.childComments = childComments;
         this.isChildComment = isChildComment;
     }
@@ -66,7 +67,7 @@ public class CommentEntity extends BaseEntity {
         this.projectId = comment.getProjectId();
         this.contents = comment.getContents();
         this.createMemberId = comment.getCreateMemberId();
-        this.parentComment = Objects.isNull(comment.getParentComment()) ? null : new CommentEntity(comment.getParentComment());
+        this.parentCommentId = comment.getParentCommentId();
         this.childComments = toChildCommentEntityList(comment.getChildComments());
         this.isChildComment = comment.getIsChildComment();
     }
@@ -75,12 +76,12 @@ public class CommentEntity extends BaseEntity {
         return new Comment(
             this.getCreatedAt(),
             this.getModifiedAt(),
-            this.toChildCommentList(),
+            this.isChildComment ? null : this.toChildCommentList(),
             this.getCreateMemberId(),
+            this.getParentCommentId(),
             this.getContents(),
             this.getProjectId(),
             this.getCommentId(),
-            Objects.isNull(this.getParentComment()) ? null : this.getParentComment().to(),
             this.getIsChildComment()
         );
     }
@@ -91,7 +92,7 @@ public class CommentEntity extends BaseEntity {
             .orElseGet(ArrayList::new)
             .stream()
             .map(CommentEntity::to)
-            .toList();
+            .collect(Collectors.toList());
     }
 
     private List<CommentEntity> toChildCommentEntityList(List<Comment> childComments) {

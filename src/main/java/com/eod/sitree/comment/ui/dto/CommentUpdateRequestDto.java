@@ -9,17 +9,13 @@ import lombok.NoArgsConstructor;
 public class CommentUpdateRequestDto {
 
     @NotNull
-    private Long projectId;
-
-    @NotNull
     private Long commentId;
 
     @NotNull
     private String contents;
 
 
-    public CommentUpdateRequestDto(Long projectId, Long commentId, String contents) {
-        this.projectId = projectId;
+    public CommentUpdateRequestDto(Long commentId, String contents) {
         this.commentId = commentId;
         this.contents = contents;
     }

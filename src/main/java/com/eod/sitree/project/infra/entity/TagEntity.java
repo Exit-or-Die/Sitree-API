@@ -30,4 +30,8 @@ public class TagEntity {
         this.name = tag.getName();
         this.projectId = projectId;
     }
+
+    public Tag toDomainModel() {
+        return new Tag(this.name);
+    }
 }

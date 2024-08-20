@@ -21,11 +21,6 @@ public class ClientUrl {
         this.downloadMethods = downloadMethods;
     }
 
-    public ClientUrl(ClientUrlEntity entity) {
-        this.liveWebDomain = entity.getLiveWebDomain();
-        this.downloadMethods = entity.getDownloadMethods();
-    }
-
     public ClientUrl(ClientUrlDto dto) {
         validation(dto.getLiveWebDomain(), dto.getDownloadMethods());
         this.liveWebDomain = dto.getLiveWebDomain();

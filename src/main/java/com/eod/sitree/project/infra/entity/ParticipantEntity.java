@@ -39,4 +39,8 @@ public class ParticipantEntity {
         this.position = participant.getPosition();
         this.isLeader = participant.isLeader();
     }
+
+    public Participant toDomainEntity() {
+        return new Participant(this.memberId, this.position, this.isLeader);
+    }
 }

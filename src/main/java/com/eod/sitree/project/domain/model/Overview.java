@@ -20,10 +20,4 @@ public class Overview {
         this.clientUrl = new ClientUrl(dto.getClientUrl());
         this.detailDescription = dto.getDetailDescription();
     }
-
-    public Overview(OverviewEntity entity) {
-        this.images = entity.getImages();
-        this.clientUrl = new ClientUrl(entity.getClientUrl());
-        this.detailDescription = entity.getDetailDescription();
-    }
 }

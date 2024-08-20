@@ -36,13 +36,6 @@ public class Head {
         this.healthCheckUrl = dto.getHealthCheckUrl();
     }
 
-    public Head(HeadEntity entity) {
-        this.thumbnailImageUrl = entity.getThumbnailImageUrl();
-        this.healthCheckUrl = entity.getHealthCheckUrl();
-        this.title = entity.getTitle();
-        this.shortDescription = entity.getShortDescription();
-    }
-
     public void changeThumbnailUrl(String thumbnailImageUrl) {
         this.thumbnailImageUrl = thumbnailImageUrl;
     }

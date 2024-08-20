@@ -15,9 +15,4 @@ public class FocusPoint {
         this.memberId = dto.getMemberId();
         this.focusedOn = dto.getFocusedOn();
     }
-
-    public FocusPoint(FocusPointEntity entity) {
-        this.memberId = entity.getMemberId();
-        this.focusedOn = entity.getFocusedOn();
-    }
 }

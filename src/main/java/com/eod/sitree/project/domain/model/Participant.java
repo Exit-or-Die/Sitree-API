@@ -17,10 +17,4 @@ public class Participant {
         this.position = dto.getPosition();
         this.isLeader = dto.getIsLeader();
     }
-
-    public Participant(ParticipantEntity entity){
-        this.memberId = entity.getMemberId();
-        this.position = entity.getPosition();
-        this.isLeader = entity.isLeader();
-    }
 }

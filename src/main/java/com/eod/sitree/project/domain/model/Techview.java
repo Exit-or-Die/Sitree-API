@@ -30,13 +30,4 @@ public class Techview {
         this.architectureDescription = dto.getArchitectureDescription();
         this.focusedPoints = dto.getFocusedPoints().stream().map(FocusPoint::new).toList();
     }
-
-    public Techview(TechviewEntity entity, List<ProjectTechStackEntity> projectTechStackEntities, List<FocusPointEntity> focusPointEntities) {
-        this.techArea = entity.getTechArea();
-        this.gitRepositoryUrl = entity.getGitRepositoryUrl();
-        this.techStackTypes = projectTechStackEntities.stream().map(ProjectTechStackEntity::getTechStackType).toList();
-        this.architectureImage = new Image(entity.getArchitectureImageUrl(), ImageType.ARCHITECTURE);
-        this.architectureDescription = entity.getArchitectureDescription();
-        this.focusedPoints = focusPointEntities.stream().map(FocusPoint::new).toList();
-    }
 }

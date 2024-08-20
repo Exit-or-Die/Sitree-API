@@ -27,20 +27,6 @@ public class Project {
         this.viewCount = 0L;
     }
 
-    public Project(
-            ProjectEntity projectEntity,
-            List<TagEntity> tagEntities,
-            List<Techview> techviews,
-            List<ParticipantEntity> participantEntities
-    ) {
-        this.head = new Head(projectEntity.getHeadEntity());
-        this.tags = tagEntities.stream().map(Tag::new).toList();
-        this.overview = new Overview(projectEntity.getOverviewEntity());
-        this.techviews = techviews;
-        this.participants = participantEntities.stream().map(Participant::new).toList();
-        this.viewCount = projectEntity.getViewCount();
-    }
-
     public String getHealthCheckUrl() {
         return this.head.getHealthCheckUrl();
     }

@@ -13,8 +13,4 @@ public class Tag {
     public Tag(TagDto dto) {
         this.name = dto.getName();
     }
-
-    public Tag(TagEntity entity) {
-        this.name = entity.getName();
-    }
 }

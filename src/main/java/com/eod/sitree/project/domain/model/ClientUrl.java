@@ -4,8 +4,6 @@ import static com.eod.sitree.common.exception.ApplicationErrorType.CHECK_CLIENT_
 
 import com.eod.sitree.project.domain.model.type.PlatformType;
 import com.eod.sitree.project.exeption.ProjectException;
-import com.eod.sitree.project.infra.entity.ClientUrlEntity;
-import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto.OverviewDto.ClientUrlDto;
 import java.util.HashMap;
 import lombok.Getter;
 
@@ -19,12 +17,6 @@ public class ClientUrl {
         validation(liveWebDomain, downloadMethods);
         this.liveWebDomain = liveWebDomain;
         this.downloadMethods = downloadMethods;
-    }
-
-    public ClientUrl(ClientUrlDto dto) {
-        validation(dto.getLiveWebDomain(), dto.getDownloadMethods());
-        this.liveWebDomain = dto.getLiveWebDomain();
-        this.downloadMethods = dto.getDownloadMethods();
     }
 
     public void changeLiveDomainUrl(String liveDomainUrl){

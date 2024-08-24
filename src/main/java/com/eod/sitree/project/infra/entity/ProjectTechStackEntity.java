@@ -33,4 +33,8 @@ public class ProjectTechStackEntity {
         this.techviewId = techviewId;
         this.techStackType = techStackType;
     }
+
+    public TechStackType toDomainModel() {
+        return this.techStackType;
+    }
 }

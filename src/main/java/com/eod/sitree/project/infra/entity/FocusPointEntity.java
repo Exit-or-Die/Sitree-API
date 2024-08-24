@@ -34,4 +34,8 @@ public class FocusPointEntity {
         this.techviewId = techviewId;
         this.focusedOn = focusPoint.getFocusedOn();
     }
+
+    public FocusPoint toDomainModel() {
+        return new FocusPoint(this.memberId, this.focusedOn);
+    }
 }

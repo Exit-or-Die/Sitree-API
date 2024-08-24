@@ -39,7 +39,10 @@ dependencies {
 	// Spring context support for caching
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	// EhCache dependency
-	implementation 'org.ehcache:ehcache:3.10.8:jakarta'
+    implementation 'org.ehcache:ehcache:3.10.8:jakarta'
+
+    // S3 Cloud
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {

@@ -23,7 +23,7 @@ public class QFocusPointEntity extends EntityPathBase<FocusPointEntity> {
 
     public final NumberPath<Long> focusPointId = createNumber("focusPointId", Long.class);
 
-    public final NumberPath<Long> memberNo = createNumber("memberNo", Long.class);
+    public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
     public final NumberPath<Long> techviewId = createNumber("techviewId", Long.class);
 

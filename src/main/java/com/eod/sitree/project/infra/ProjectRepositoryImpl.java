@@ -3,8 +3,12 @@ package com.eod.sitree.project.infra;
 import static com.eod.sitree.project.infra.entity.QProjectEntity.projectEntity;
 
 import com.eod.sitree.common.exception.ApplicationErrorType;
+import com.eod.sitree.project.domain.model.FocusPoint;
+import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.model.Project;
+import com.eod.sitree.project.domain.model.Tag;
 import com.eod.sitree.project.domain.model.Techview;
+import com.eod.sitree.project.domain.model.type.TechStackType;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
 import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.entity.FocusPointEntity;
@@ -43,21 +47,22 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public Project getById(long projectId) {
-        ProjectEntity projectEntity = projectJpaRepository.findById(projectId).orElseThrow(
-                () -> new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID)
-        );
-        List<TagEntity> tagEntities = tagJpaRepository.findAllByProjectId(projectId);
-        List<ParticipantEntity> participantEntities = participantJpaRepository.findAllByProjectId(projectId);
-        List<TechviewEntity> techviewEntities = techviewJpaRepository.findAllByProjectId(projectId);
-        List<Techview> techviews = techviewEntities.stream().map((techviewEntity -> {
-            List<FocusPointEntity> focusPointEntities = focusPointJpaRepository.findAllByTechviewId(
-                    techviewEntity.getTechviewId());
-            List<ProjectTechStackEntity> techStackEntities = techStackJpaRepository.findAllByTechviewId(
-                    techviewEntity.getTechviewId());
-            return new Techview(techviewEntity, techStackEntities, focusPointEntities);
-        })).toList();
+        ProjectEntity projectEntity = projectJpaRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID));
+        List<Tag> tags = tagJpaRepository.findAllByProjectId(projectId)
+                .stream().map(TagEntity::toDomainModel).toList();
+        List<Participant> participants = participantJpaRepository.findAllByProjectId(projectId)
+                .stream().map(ParticipantEntity::toDomainEntity).toList();
+        List<Techview> techviews = techviewJpaRepository.findAllByProjectId(projectId)
+                .stream().map((techviewEntity -> {
+                    List<FocusPoint> focusPoints = focusPointJpaRepository.findAllByTechviewId(techviewEntity.getTechviewId())
+                            .stream().map(FocusPointEntity::toDomainModel).toList();
+                    List<TechStackType> techStackTypes = techStackJpaRepository.findAllByTechviewId(techviewEntity.getTechviewId())
+                            .stream().map(ProjectTechStackEntity::toDomainModel).toList();
+                    return techviewEntity.toDomainModel(techStackTypes, focusPoints);
+                })).toList();
 
-        return new Project(projectEntity, tagEntities, techviews, participantEntities);
+        return projectEntity.toDomainModel(tags, techviews, participants);
     }
 
     @Override

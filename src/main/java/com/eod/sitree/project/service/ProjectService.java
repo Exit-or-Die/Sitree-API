@@ -21,7 +21,7 @@ public class ProjectService {
 
     @Transactional
     public ProjectCreateResponseDto createProject(ProjectCreateRequestDto projectCreateRequestDto) {
-        Project project = new Project(projectCreateRequestDto);
+        Project project = projectCreateRequestDto.toDomainModel();
         long savedProjectId = projectRepository.save(project);
         return new ProjectCreateResponseDto(savedProjectId);
     }

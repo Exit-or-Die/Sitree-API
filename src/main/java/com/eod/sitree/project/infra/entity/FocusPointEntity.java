@@ -21,7 +21,7 @@ public class FocusPointEntity {
     private Long focusPointId;
 
     @Column(nullable = false)
-    private Long memberNo;
+    private Long memberId;
 
     @Column(nullable = false)
     private Long techviewId;
@@ -30,8 +30,12 @@ public class FocusPointEntity {
     private String focusedOn;
 
     public FocusPointEntity(Long techviewId, FocusPoint focusPoint) {
-        this.memberNo = focusPoint.getMemberNo();
+        this.memberId = focusPoint.getMemberId();
         this.techviewId = techviewId;
         this.focusedOn = focusPoint.getFocusedOn();
+    }
+
+    public FocusPoint toDomainModel() {
+        return new FocusPoint(this.memberId, this.focusedOn);
     }
 }

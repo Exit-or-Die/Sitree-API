@@ -22,7 +22,7 @@ public class ParticipantEntity {
     private Long participantId;
 
     @Column(nullable = false)
-    private Long memberNo;
+    private Long memberId;
 
     @Column(nullable = false)
     private Long projectId;
@@ -34,9 +34,13 @@ public class ParticipantEntity {
     private boolean isLeader;
 
     public ParticipantEntity(Long projectId, Participant participant) {
-        this.memberNo = participant.getMemberNo();
+        this.memberId = participant.getMemberId();
         this.projectId = projectId;
         this.position = participant.getPosition();
         this.isLeader = participant.isLeader();
+    }
+
+    public Participant toDomainEntity() {
+        return new Participant(this.memberId, this.position, this.isLeader);
     }
 }

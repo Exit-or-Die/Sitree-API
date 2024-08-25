@@ -25,4 +25,9 @@ public class HeadEntity {
         this.shortDescription = head.getShortDescription();
         this.healthCheckUrl = head.getHealthCheckUrl();
     }
+
+    public Head toDomainModel() {
+        return new Head(this.thumbnailImageUrl, this.title, this.shortDescription,
+                this.healthCheckUrl);
+    }
 }

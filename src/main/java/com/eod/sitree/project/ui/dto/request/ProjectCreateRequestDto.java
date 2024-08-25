@@ -1,6 +1,15 @@
 package com.eod.sitree.project.ui.dto.request;
 
 import com.eod.sitree.common.infra.validator.ValidEnum;
+import com.eod.sitree.project.domain.model.ClientUrl;
+import com.eod.sitree.project.domain.model.FocusPoint;
+import com.eod.sitree.project.domain.model.Head;
+import com.eod.sitree.project.domain.model.Image;
+import com.eod.sitree.project.domain.model.Overview;
+import com.eod.sitree.project.domain.model.Participant;
+import com.eod.sitree.project.domain.model.Project;
+import com.eod.sitree.project.domain.model.Tag;
+import com.eod.sitree.project.domain.model.Techview;
 import com.eod.sitree.project.domain.model.type.ImageType;
 import com.eod.sitree.project.domain.model.type.PlatformType;
 import com.eod.sitree.project.domain.model.type.TechStackType;
@@ -26,6 +35,16 @@ public class ProjectCreateRequestDto {
     @NotNull
     private List<ParticipantDto> participantList;
 
+    public Project toDomainModel(){
+        Head headDomainModel = this.head.toDomainModel();
+        List<Tag> tagDomainModelList = this.tagList.stream().map(TagDto::toDomainModel).toList();
+        Overview overviewDomainModel = this.overview.toDomainModel();
+        List<Techview> techviewDomainModelList = techviewList.stream().map(TechviewDto::toDomainModel).toList();
+        List<Participant> participantDomainModelList = participantList.stream().map(ParticipantDto::toDomainModel).toList();
+        return new Project(headDomainModel, tagDomainModelList, overviewDomainModel,
+                techviewDomainModelList, participantDomainModelList);
+    }
+
     @Getter
     public static class HeadDto {
         @NotBlank
@@ -35,6 +54,10 @@ public class ProjectCreateRequestDto {
         private String shortDescription;
         private String healthCheckUrl;
 
+        private Head toDomainModel(){
+            return new Head(this.thumbnailImageUrl, this.title, this.shortDescription,
+                    this.healthCheckUrl);
+        }
     }
 
     @Getter
@@ -42,6 +65,10 @@ public class ProjectCreateRequestDto {
     public static class TagDto{
         @NotBlank
         private String name;
+
+        private Tag toDomainModel(){
+            return new Tag(this.name);
+        }
     }
 
     @Getter
@@ -53,10 +80,20 @@ public class ProjectCreateRequestDto {
         @NotBlank
         private String detailDescription; // 상세 소개
 
+        private Overview toDomainModel(){
+            List<Image> imageDomainModelList = images.stream().map(ImageDto::toDomainModel).toList();
+            ClientUrl clientUrlDomainModel = clientUrl.toDomainModel();
+            return new Overview(imageDomainModelList, clientUrlDomainModel, this.detailDescription);
+        }
+
         @Getter
         public static class ClientUrlDto{
             private String liveWebDomain;
             private HashMap<PlatformType, String> downloadMethods;
+
+            private ClientUrl toDomainModel(){
+                return new ClientUrl(this.liveWebDomain, this.downloadMethods);
+            }
         }
     }
 
@@ -73,12 +110,24 @@ public class ProjectCreateRequestDto {
         @Valid
         private List<FocusPointDto> focusedPoints; // 핵심 기술 내용
 
+        private Techview toDomainModel(){
+            Image imageDomainModel = architectureImage.toDomainModel();
+            List<FocusPoint> focusPointDomainModelList = this.focusedPoints.stream()
+                    .map(FocusPointDto::toDomainModel).toList();
+            return new Techview(this.techArea, this.gitRepositoryUrl, this.techStackTypes,
+                    imageDomainModel, this.architectureDescription, focusPointDomainModelList);
+        }
+
         @Getter
         public static class FocusPointDto{
             @NotNull
-            private Long memberNo;
+            private Long memberId;
             @NotBlank
             private String focusedOn;
+
+            private FocusPoint toDomainModel(){
+                return new FocusPoint(this.memberId, this.focusedOn);
+            }
         }
     }
 
@@ -88,15 +137,23 @@ public class ProjectCreateRequestDto {
         private String imageUrl;
         @ValidEnum(enumClass = ImageType.class)
         private ImageType imageType;
+
+        public Image toDomainModel(){
+            return new Image(imageUrl, imageType);
+        }
     }
 
     @Getter
     public static class ParticipantDto{
         @NotNull
-        private Long memberNo;
+        private Long memberId;
         @NotBlank
         private String position;
         @NotNull
         private Boolean isLeader;
+
+        private Participant toDomainModel(){
+            return new Participant(this.memberId, this.position, this.isLeader);
+        }
     }
 }

@@ -26,4 +26,8 @@ public class ClientUrlEntity {
         this.liveWebDomain = clientUrl.getLiveWebDomain();
         this.downloadMethods = clientUrl.getDownloadMethods();
     }
+
+    public ClientUrl toDomainModel(){
+        return new ClientUrl(this.liveWebDomain, this.downloadMethods);
+    }
 }

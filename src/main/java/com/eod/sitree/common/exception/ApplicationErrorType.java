@@ -16,11 +16,14 @@ public enum ApplicationErrorType {
 
     INTERNAL_ERROR(10000, "INTERNAL SERVER ERROR"),
 
-    // Member Exception Code
+    // Member Exception Code (30000~)
     MEMBER_NOT_FOUND(20000, "MEMBER NOT FOUND"),
     MEMBER_ALREADY_EXIST(20001, "MEMBER ALREADY EXIST"),
 
     AUTH_KEYPAIR_GENERATION_ERROR(30001, "AUTH KEYPAIR GENERATION ERROR"),
+
+    // Image Exception Code (40000~)
+    IMAGE_UPLOAD_FAIL(40001, "Image Upload Fail"),
 
     // Project Exception Code (50000~)
     CHECK_CLIENT_URL_REQUIRED_VALUE(50000, "LIVE_DOMAIN or DOWNLOAD_LINk is needed"),

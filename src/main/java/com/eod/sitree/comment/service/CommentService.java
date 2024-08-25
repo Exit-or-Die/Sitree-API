@@ -3,11 +3,12 @@ package com.eod.sitree.comment.service;
 import com.eod.sitree.comment.domain.model.Comment;
 import com.eod.sitree.comment.domain.modelrepository.CommentRepository;
 import com.eod.sitree.comment.exception.CommentException;
-import com.eod.sitree.comment.ui.dto.CommentCreateRequestDto;
-import com.eod.sitree.comment.ui.dto.CommentCreateResponseDto;
-import com.eod.sitree.comment.ui.dto.CommentUpdateRequestDto;
-import com.eod.sitree.comment.ui.dto.CommentUpdateResponseDto;
-import com.eod.sitree.comment.ui.dto.CommentsResponseDto;
+import com.eod.sitree.comment.ui.dto.request.CommentCreateRequestDto;
+import com.eod.sitree.comment.ui.dto.response.CommentCreateResponseDto;
+import com.eod.sitree.comment.ui.dto.request.CommentUpdateRequestDto;
+import com.eod.sitree.comment.ui.dto.response.CommentDeleteResponseDto;
+import com.eod.sitree.comment.ui.dto.response.CommentUpdateResponseDto;
+import com.eod.sitree.comment.ui.dto.response.CommentsResponseDto;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
 import java.util.List;
@@ -55,15 +56,25 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentUpdateResponseDto updateComment(Long projectId, CommentUpdateRequestDto commentUpdateRequestDto, Member member) {
+    public CommentUpdateResponseDto updateComment(Long commentId, CommentUpdateRequestDto commentUpdateRequestDto, Member member) {
 
-        projectCommentService.validateProject(projectId);
-        Comment comment = commentRepository.findByCommentId(commentUpdateRequestDto.getCommentId());
+        Comment comment = commentRepository.findByCommentId(commentId);
         comment.validateCreateMember(member);
 
         comment.updateContents(commentUpdateRequestDto.getContents());
         commentRepository.save(comment);
 
         return new CommentUpdateResponseDto(true);
+    }
+
+    @Transactional
+    public CommentDeleteResponseDto deleteComment(Long commentId, Member member) {
+
+        Comment comment = commentRepository.findByCommentId(commentId);
+        comment.validateCreateMember(member);
+        comment.delete();
+        commentRepository.save(comment);
+
+        return new CommentDeleteResponseDto(true);
     }
 }

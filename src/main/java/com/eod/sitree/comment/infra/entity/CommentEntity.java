@@ -51,8 +51,11 @@ public class CommentEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isChildComment;
 
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
     public CommentEntity(Long commentId, Long projectId, String contents, Long createMemberId,
-        Long parentCommentId, List<CommentEntity> childComments, Boolean isChildComment) {
+        Long parentCommentId, List<CommentEntity> childComments, Boolean isChildComment, Boolean isDeleted) {
         this.commentId = commentId;
         this.projectId = projectId;
         this.contents = contents;
@@ -60,6 +63,7 @@ public class CommentEntity extends BaseEntity {
         this.parentCommentId = parentCommentId;
         this.childComments = childComments;
         this.isChildComment = isChildComment;
+        this.isDeleted = isDeleted;
     }
 
     public CommentEntity(Comment comment) {
@@ -70,6 +74,7 @@ public class CommentEntity extends BaseEntity {
         this.parentCommentId = comment.getParentCommentId();
         this.childComments = toChildCommentEntityList(comment.getChildComments());
         this.isChildComment = comment.getIsChildComment();
+        this.isDeleted = comment.getIsDeleted();
     }
 
     public Comment to() {
@@ -82,7 +87,8 @@ public class CommentEntity extends BaseEntity {
             this.getContents(),
             this.getProjectId(),
             this.getCommentId(),
-            this.getIsChildComment()
+            this.getIsChildComment(),
+            this.getIsDeleted()
         );
     }
 

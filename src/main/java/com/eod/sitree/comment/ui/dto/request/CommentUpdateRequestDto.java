@@ -1,4 +1,4 @@
-package com.eod.sitree.comment.ui.dto;
+package com.eod.sitree.comment.ui.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -9,14 +9,10 @@ import lombok.NoArgsConstructor;
 public class CommentUpdateRequestDto {
 
     @NotNull
-    private Long commentId;
-
-    @NotNull
     private String contents;
 
 
-    public CommentUpdateRequestDto(Long commentId, String contents) {
-        this.commentId = commentId;
+    public CommentUpdateRequestDto(String contents) {
         this.contents = contents;
     }
 }

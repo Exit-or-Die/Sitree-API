@@ -1,7 +1,7 @@
 package com.eod.sitree.comment.domain.model;
 
 import com.eod.sitree.comment.exception.CommentException;
-import com.eod.sitree.comment.ui.dto.CommentCreateRequestDto;
+import com.eod.sitree.comment.ui.dto.request.CommentCreateRequestDto;
 import com.eod.sitree.common.domain.model.BaseTimeDomain;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import lombok.Getter;
 
 @Getter
@@ -29,9 +28,13 @@ public class Comment extends BaseTimeDomain {
 
     private final Boolean isChildComment;
 
+    private Boolean isDeleted = false;
+
+    public static String DELETED_COMMENT_CONTENTS = "This comment has been deleted";
+
     public Comment(LocalDateTime createdAt, LocalDateTime updatedAt, List<Comment> childComments,
         Long createMemberId, Long parentCommentId, String contents, Long projectId, Long commentId,
-        Boolean isChildComment) {
+        Boolean isChildComment, Boolean isDeleted) {
         super(createdAt, updatedAt);
         this.childComments = childComments;
         this.createMemberId = createMemberId;
@@ -40,6 +43,7 @@ public class Comment extends BaseTimeDomain {
         this.projectId = projectId;
         this.commentId = commentId;
         this.isChildComment = isChildComment;
+        this.isDeleted = isDeleted;
     }
 
     public Comment(Long projectId, CommentCreateRequestDto request, Member member) {
@@ -51,6 +55,7 @@ public class Comment extends BaseTimeDomain {
         this.parentCommentId = request.getParentCommentId();
         this.isChildComment = request.getIsChildComment();
         this.childComments = new ArrayList<>();
+        this.isDeleted = false;
     }
 
     public Comment(Comment comment, Comment parentComment) {
@@ -62,6 +67,7 @@ public class Comment extends BaseTimeDomain {
         this.createMemberId = comment.getCreateMemberId();
         this.isChildComment = comment.getIsChildComment();
         this.childComments = comment.getChildComments();
+        this.isDeleted = comment.getIsDeleted();
     }
 
     public void validateParent() {
@@ -74,6 +80,11 @@ public class Comment extends BaseTimeDomain {
 
     public void updateContents(String contents) {
         this.contents = contents;
+    }
+
+    public void delete() {
+        this.contents = DELETED_COMMENT_CONTENTS;
+        this.isDeleted = true;
     }
 
     public void validateCreateMember(Member member) {

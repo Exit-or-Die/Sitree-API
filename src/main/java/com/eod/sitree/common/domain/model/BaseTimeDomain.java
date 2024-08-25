@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class BaseTimeDomain {
 
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
 

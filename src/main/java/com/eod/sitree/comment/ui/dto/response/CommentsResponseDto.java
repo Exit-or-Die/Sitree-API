@@ -4,11 +4,13 @@ import com.eod.sitree.comment.domain.model.Comment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommentsResponseDto {
 
     private Long commentId;
@@ -27,18 +29,6 @@ public class CommentsResponseDto {
 
     private Boolean isDeleted;
 
-    public CommentsResponseDto(Long commentId, Long projectId, String contents, Long createMemberId,
-        Long parentCommentId, List<CommentsResponseDto> childComments,
-        Boolean isChildComment, Boolean isDeleted) {
-        this.commentId = commentId;
-        this.projectId = projectId;
-        this.contents = contents;
-        this.createMemberId = createMemberId;
-        this.parentCommentId = parentCommentId;
-        this.childComments = childComments;
-        this.isChildComment = isChildComment;
-        this.isDeleted = isDeleted;
-    }
 
     public CommentsResponseDto(Comment comment) {
         this.commentId = comment.getCommentId();

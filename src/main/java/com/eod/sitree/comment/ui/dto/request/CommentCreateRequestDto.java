@@ -1,11 +1,14 @@
 package com.eod.sitree.comment.ui.dto.request;
 
+import com.eod.sitree.comment.domain.model.Comment;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommentCreateRequestDto {
 
     @NotNull
@@ -16,10 +19,4 @@ public class CommentCreateRequestDto {
 
     private Long parentCommentId;
 
-
-    public CommentCreateRequestDto(String contents, Boolean isChildComment, Long parentCommentId) {
-        this.contents = contents;
-        this.isChildComment = isChildComment;
-        this.parentCommentId = parentCommentId;
-    }
 }

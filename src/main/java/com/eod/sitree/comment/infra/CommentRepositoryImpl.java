@@ -19,7 +19,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment save(Comment comment) {
-        return  commentJpaRepository.save(new CommentEntity(comment)).to();
+        return  commentJpaRepository.save(new CommentEntity(comment)).toDomainModel();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
         return Optional.ofNullable(commentJpaRepository.findByCommentId(commentId))
             .orElseThrow(() -> new CommentException(ApplicationErrorType.COMMENT_NOT_FOUND))
-            .to();
+            .toDomainModel();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
         return Optional.ofNullable(commentJpaRepository.findAllByProjectIdAndIsChildComment(projectId, false))
             .orElseGet(ArrayList::new)
-            .stream().map(CommentEntity::to)
+            .stream().map(CommentEntity::toDomainModel)
             .toList();
     }
 

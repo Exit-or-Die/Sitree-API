@@ -11,6 +11,7 @@ import com.eod.sitree.comment.ui.dto.response.CommentUpdateResponseDto;
 import com.eod.sitree.comment.ui.dto.response.CommentsResponseDto;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
+import com.eod.sitree.project.service.ProjectService;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,18 +24,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final ProjectCommentService projectCommentService;
+    private final ProjectService projectService;
 
     @Transactional
     public CommentCreateResponseDto createComment(Long projectId, CommentCreateRequestDto commentCreateRequestDto, Member member) {
 
-        projectCommentService.validateProject(projectId);
-        Comment comment = new Comment(projectId, commentCreateRequestDto, member);
+        projectService.validateProjectExist(projectId);
+        Comment comment = new Comment(
+            projectId,
+            commentCreateRequestDto.getContents(),
+            commentCreateRequestDto.getParentCommentId(),
+            commentCreateRequestDto.getIsChildComment(),
+            member
+        );
 
         if (commentCreateRequestDto.getIsChildComment()) {
 
-            Comment parentComment = Optional.ofNullable(commentRepository.findByCommentId(commentCreateRequestDto.getParentCommentId()))
-                .orElseThrow(() -> new CommentException(ApplicationErrorType.COMMENT_NOT_FOUND, HttpStatus.BAD_REQUEST));
+            Comment parentComment = commentRepository.findByCommentId(commentCreateRequestDto.getParentCommentId());
             parentComment.validateParent();
 
             comment = new Comment(comment, parentComment);
@@ -47,8 +53,6 @@ public class CommentService {
 
     public List<CommentsResponseDto> findComment(Long projectId) {
 
-        projectCommentService.validateProject(projectId);
-
         List<Comment> comments = commentRepository.findByProjectId(projectId);
         return comments.stream()
             .map(CommentsResponseDto::new)
@@ -59,9 +63,7 @@ public class CommentService {
     public CommentUpdateResponseDto updateComment(Long commentId, CommentUpdateRequestDto commentUpdateRequestDto, Member member) {
 
         Comment comment = commentRepository.findByCommentId(commentId);
-        comment.validateCreateMember(member);
-
-        comment.updateContents(commentUpdateRequestDto.getContents());
+        comment.updateContents(commentUpdateRequestDto.getContents(), member);
         commentRepository.save(comment);
 
         return new CommentUpdateResponseDto(true);
@@ -71,8 +73,7 @@ public class CommentService {
     public CommentDeleteResponseDto deleteComment(Long commentId, Member member) {
 
         Comment comment = commentRepository.findByCommentId(commentId);
-        comment.validateCreateMember(member);
-        comment.delete();
+        comment.delete(member);
         commentRepository.save(comment);
 
         return new CommentDeleteResponseDto(true);

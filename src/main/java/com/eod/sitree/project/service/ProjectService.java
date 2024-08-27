@@ -1,7 +1,9 @@
 package com.eod.sitree.project.service;
 
+import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
+import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.ClientRequestServiceImpl;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
@@ -47,5 +49,12 @@ public class ProjectService {
 
     public Object getTotalProjects() {
         return null;
+    }
+
+    public void validateProjectExist(Long projectId) {
+
+        if (!projectRepository.existsById(projectId)) {
+            throw new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID);
+        }
     }
 }

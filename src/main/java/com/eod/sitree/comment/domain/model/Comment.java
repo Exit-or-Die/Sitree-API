@@ -46,14 +46,14 @@ public class Comment extends BaseTimeDomain {
         this.isDeleted = isDeleted;
     }
 
-    public Comment(Long projectId, CommentCreateRequestDto request, Member member) {
+    public Comment(Long projectId, String contents, Long parentCommentId, Boolean isChildComment, Member member) {
         super(null, null);
         this.commentId = null;
         this.projectId = projectId;
-        this.contents = request.getContents();
+        this.contents = contents;
         this.createMemberId = member.getMemberId();
-        this.parentCommentId = request.getParentCommentId();
-        this.isChildComment = request.getIsChildComment();
+        this.parentCommentId = parentCommentId;
+        this.isChildComment = isChildComment;
         this.childComments = new ArrayList<>();
         this.isDeleted = false;
     }
@@ -78,11 +78,13 @@ public class Comment extends BaseTimeDomain {
         }
     }
 
-    public void updateContents(String contents) {
+    public void updateContents(String contents, Member member) {
+        validateCreateMember(member);
         this.contents = contents;
     }
 
-    public void delete() {
+    public void delete(Member member) {
+        validateCreateMember(member);
         this.contents = DELETED_COMMENT_CONTENTS;
         this.isDeleted = true;
     }

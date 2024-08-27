@@ -2,21 +2,19 @@ package com.eod.sitree.comment.infra.entity;
 
 import com.eod.sitree.comment.domain.model.Comment;
 import com.eod.sitree.common.infra.entity.BaseEntity;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -24,6 +22,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tb_comment")
 public class CommentEntity extends BaseEntity {
 
@@ -54,18 +53,6 @@ public class CommentEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isDeleted;
 
-    public CommentEntity(Long commentId, Long projectId, String contents, Long createMemberId,
-        Long parentCommentId, List<CommentEntity> childComments, Boolean isChildComment, Boolean isDeleted) {
-        this.commentId = commentId;
-        this.projectId = projectId;
-        this.contents = contents;
-        this.createMemberId = createMemberId;
-        this.parentCommentId = parentCommentId;
-        this.childComments = childComments;
-        this.isChildComment = isChildComment;
-        this.isDeleted = isDeleted;
-    }
-
     public CommentEntity(Comment comment) {
         this.commentId = comment.getCommentId();
         this.projectId = comment.getProjectId();
@@ -77,7 +64,7 @@ public class CommentEntity extends BaseEntity {
         this.isDeleted = comment.getIsDeleted();
     }
 
-    public Comment to() {
+    public Comment toDomainModel() {
         return new Comment(
             this.getCreatedAt(),
             this.getModifiedAt(),
@@ -97,7 +84,7 @@ public class CommentEntity extends BaseEntity {
         return Optional.ofNullable(this.childComments)
             .orElseGet(ArrayList::new)
             .stream()
-            .map(CommentEntity::to)
+            .map(CommentEntity::toDomainModel)
             .collect(Collectors.toList());
     }
 

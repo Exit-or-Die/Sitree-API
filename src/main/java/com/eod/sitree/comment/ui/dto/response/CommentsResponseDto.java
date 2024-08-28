@@ -1,6 +1,7 @@
 package com.eod.sitree.comment.ui.dto.response;
 
 import com.eod.sitree.comment.domain.model.Comment;
+import com.eod.sitree.comment.domain.model.CommentType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,9 @@ public class CommentsResponseDto {
 
     private Long commentId;
 
-    private Long projectId;
+    private CommentType commentType;
+
+    private Long targetId;
 
     private String contents;
 
@@ -32,7 +35,8 @@ public class CommentsResponseDto {
 
     public CommentsResponseDto(Comment comment) {
         this.commentId = comment.getCommentId();
-        this.projectId = comment.getTargetId();
+        this.commentType = comment.getCommentType();
+        this.targetId = comment.getTargetId();
         this.contents = comment.getContents();
         this.createMemberId = comment.getCreateMemberId();
         this.parentCommentId = comment.getParentCommentId();

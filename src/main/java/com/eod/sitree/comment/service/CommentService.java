@@ -1,21 +1,18 @@
 package com.eod.sitree.comment.service;
 
 import com.eod.sitree.comment.domain.model.Comment;
+import com.eod.sitree.comment.domain.model.CommentType;
 import com.eod.sitree.comment.domain.modelrepository.CommentRepository;
-import com.eod.sitree.comment.exception.CommentException;
 import com.eod.sitree.comment.ui.dto.request.CommentCreateRequestDto;
 import com.eod.sitree.comment.ui.dto.response.CommentCreateResponseDto;
 import com.eod.sitree.comment.ui.dto.request.CommentUpdateRequestDto;
 import com.eod.sitree.comment.ui.dto.response.CommentDeleteResponseDto;
 import com.eod.sitree.comment.ui.dto.response.CommentUpdateResponseDto;
 import com.eod.sitree.comment.ui.dto.response.CommentsResponseDto;
-import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.project.service.ProjectService;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +24,11 @@ public class CommentService {
     private final ProjectService projectService;
 
     @Transactional
-    public CommentCreateResponseDto createComment(Long projectId, CommentCreateRequestDto commentCreateRequestDto, Member member) {
+    public CommentCreateResponseDto createProjectComment(Long projectId, CommentCreateRequestDto commentCreateRequestDto, Member member) {
 
         projectService.validateProjectExist(projectId);
         Comment comment = new Comment(
+            CommentType.PROJECT,
             projectId,
             commentCreateRequestDto.getContents(),
             commentCreateRequestDto.getParentCommentId(),
@@ -41,7 +39,7 @@ public class CommentService {
         if (commentCreateRequestDto.getIsChildComment()) {
 
             Comment parentComment = commentRepository.findByCommentId(commentCreateRequestDto.getParentCommentId());
-            parentComment.validateParent();
+            parentComment.validateParent(comment.getCommentType());
 
             comment = new Comment(comment, parentComment);
         }
@@ -51,7 +49,7 @@ public class CommentService {
         return new CommentCreateResponseDto(true);
     }
 
-    public List<CommentsResponseDto> findComment(Long projectId) {
+    public List<CommentsResponseDto> findProjectComment(Long projectId) {
 
         List<Comment> comments = commentRepository.findByProjectId(projectId);
         return comments.stream()

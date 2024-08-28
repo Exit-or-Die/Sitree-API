@@ -32,7 +32,7 @@ public class CommentsResponseDto {
 
     public CommentsResponseDto(Comment comment) {
         this.commentId = comment.getCommentId();
-        this.projectId = comment.getProjectId();
+        this.projectId = comment.getTargetId();
         this.contents = comment.getContents();
         this.createMemberId = comment.getCreateMemberId();
         this.parentCommentId = comment.getParentCommentId();

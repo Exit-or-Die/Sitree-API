@@ -1,7 +1,6 @@
 package com.eod.sitree.comment.domain.model;
 
 import com.eod.sitree.comment.exception.CommentException;
-import com.eod.sitree.comment.ui.dto.request.CommentCreateRequestDto;
 import com.eod.sitree.common.domain.model.BaseTimeDomain;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
@@ -16,7 +15,9 @@ public class Comment extends BaseTimeDomain {
 
     private final Long commentId;
 
-    private final Long projectId;
+    private final CommentType commentType;
+
+    private final Long targetId;
 
     private String contents;
 
@@ -33,23 +34,25 @@ public class Comment extends BaseTimeDomain {
     public static String DELETED_COMMENT_CONTENTS = "This comment has been deleted";
 
     public Comment(LocalDateTime createdAt, LocalDateTime updatedAt, List<Comment> childComments,
-        Long createMemberId, Long parentCommentId, String contents, Long projectId, Long commentId,
-        Boolean isChildComment, Boolean isDeleted) {
+        Long createMemberId, Long parentCommentId, String contents, Long targetId, Long commentId,
+        Boolean isChildComment, Boolean isDeleted, CommentType commentType) {
         super(createdAt, updatedAt);
         this.childComments = childComments;
         this.createMemberId = createMemberId;
         this.parentCommentId = parentCommentId;
         this.contents = contents;
-        this.projectId = projectId;
+        this.targetId = targetId;
         this.commentId = commentId;
         this.isChildComment = isChildComment;
         this.isDeleted = isDeleted;
+        this.commentType = commentType;
     }
 
-    public Comment(Long projectId, String contents, Long parentCommentId, Boolean isChildComment, Member member) {
+    public Comment(CommentType commentType, Long targetId, String contents, Long parentCommentId, Boolean isChildComment, Member member) {
         super(null, null);
         this.commentId = null;
-        this.projectId = projectId;
+        this.commentType = commentType;
+        this.targetId = targetId;
         this.contents = contents;
         this.createMemberId = member.getMemberId();
         this.parentCommentId = parentCommentId;
@@ -60,8 +63,9 @@ public class Comment extends BaseTimeDomain {
 
     public Comment(Comment comment, Comment parentComment) {
         super(comment.getCreatedAt(), comment.getModifiedAt());
+        this.commentType = comment.getCommentType();
         this.commentId = comment.getCommentId();
-        this.projectId = comment.getProjectId();
+        this.targetId = comment.getTargetId();
         this.parentCommentId = parentComment.getCommentId();
         this.contents = comment.getContents();
         this.createMemberId = comment.getCreateMemberId();
@@ -70,9 +74,9 @@ public class Comment extends BaseTimeDomain {
         this.isDeleted = comment.getIsDeleted();
     }
 
-    public void validateParent() {
+    public void validateParent(CommentType childCommentType) {
 
-        if (this.isChildComment) {
+        if (this.isChildComment || this.commentType != childCommentType) {
 
             throw new CommentException(ApplicationErrorType.COMMENT_NOT_PARENT);
         }

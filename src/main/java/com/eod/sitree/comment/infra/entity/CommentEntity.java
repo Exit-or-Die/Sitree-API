@@ -1,9 +1,12 @@
 package com.eod.sitree.comment.infra.entity;
 
 import com.eod.sitree.comment.domain.model.Comment;
+import com.eod.sitree.comment.domain.model.CommentType;
 import com.eod.sitree.common.infra.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,8 +33,12 @@ public class CommentEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Long projectId;
+    private CommentType commentType;
+
+    @Column(nullable = false)
+    private Long targetId;
 
     @Column(nullable = false)
     @Length(min = 1, max = 1000)
@@ -54,8 +61,9 @@ public class CommentEntity extends BaseEntity {
     private Boolean isDeleted;
 
     public CommentEntity(Comment comment) {
+        this.commentType = comment.getCommentType();
         this.commentId = comment.getCommentId();
-        this.projectId = comment.getProjectId();
+        this.targetId = comment.getTargetId();
         this.contents = comment.getContents();
         this.createMemberId = comment.getCreateMemberId();
         this.parentCommentId = comment.getParentCommentId();
@@ -72,10 +80,11 @@ public class CommentEntity extends BaseEntity {
             this.getCreateMemberId(),
             this.getParentCommentId(),
             this.getContents(),
-            this.getProjectId(),
+            this.getTargetId(),
             this.getCommentId(),
             this.getIsChildComment(),
-            this.getIsDeleted()
+            this.getIsDeleted(),
+            this.getCommentType()
         );
     }
 

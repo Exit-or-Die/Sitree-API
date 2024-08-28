@@ -30,15 +30,15 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/project/{projectId}")
-    public ResponseDto<CommentCreateResponseDto> createComment(@PathVariable Long projectId, @Valid @RequestBody CommentCreateRequestDto commentCreateRequestDto, @MemberPrincipal Member member) {
+    public ResponseDto<CommentCreateResponseDto> createProjectComment(@PathVariable Long projectId, @Valid @RequestBody CommentCreateRequestDto commentCreateRequestDto, @MemberPrincipal Member member) {
 
-        return ResponseDto.ok(commentService.createComment(projectId, commentCreateRequestDto, member));
+        return ResponseDto.ok(commentService.createProjectComment(projectId, commentCreateRequestDto, member));
     }
 
     @GetMapping("/project/{projectId}")
-    public ResponseDto<List<CommentsResponseDto>> findComments(@PathVariable Long projectId) {
+    public ResponseDto<List<CommentsResponseDto>> findProjectComments(@PathVariable Long projectId) {
 
-        return ResponseDto.ok(commentService.findComment(projectId));
+        return ResponseDto.ok(commentService.findProjectComment(projectId));
     }
 
     @PutMapping("/{commentId}")

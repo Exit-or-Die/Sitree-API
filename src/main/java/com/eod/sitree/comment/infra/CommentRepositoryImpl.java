@@ -1,6 +1,7 @@
 package com.eod.sitree.comment.infra;
 
 import com.eod.sitree.comment.domain.model.Comment;
+import com.eod.sitree.comment.domain.model.CommentType;
 import com.eod.sitree.comment.domain.modelrepository.CommentRepository;
 import com.eod.sitree.comment.exception.CommentException;
 import com.eod.sitree.comment.infra.entity.CommentEntity;
@@ -19,7 +20,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment save(Comment comment) {
-        return  commentJpaRepository.save(new CommentEntity(comment)).toDomainModel();
+        return commentJpaRepository.save(new CommentEntity(comment)).toDomainModel();
     }
 
     @Override
@@ -33,7 +34,9 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public List<Comment> findByProjectId(Long projectId) {
 
-        return Optional.ofNullable(commentJpaRepository.findAllByProjectIdAndIsChildComment(projectId, false))
+        return Optional.ofNullable(
+                commentJpaRepository.findAllByCommentTypeAndTargetIdAndIsChildComment(
+                    CommentType.PROJECT, projectId, false))
             .orElseGet(ArrayList::new)
             .stream().map(CommentEntity::toDomainModel)
             .toList();

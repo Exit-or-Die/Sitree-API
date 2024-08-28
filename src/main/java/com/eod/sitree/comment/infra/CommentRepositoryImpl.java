@@ -1,5 +1,7 @@
 package com.eod.sitree.comment.infra;
 
+import static com.eod.sitree.comment.infra.entity.QCommentEntity.commentEntity;
+
 import com.eod.sitree.comment.domain.model.Comment;
 import com.eod.sitree.comment.domain.model.CommentType;
 import com.eod.sitree.comment.domain.modelrepository.CommentRepository;
@@ -29,6 +31,11 @@ public class CommentRepositoryImpl implements CommentRepository {
         return Optional.ofNullable(commentJpaRepository.findByCommentId(commentId))
             .orElseThrow(() -> new CommentException(ApplicationErrorType.COMMENT_NOT_FOUND))
             .toDomainModel();
+    }
+
+    @Override
+    public Boolean existParentByParentCommentId(Long parentCommentId, CommentType commentType) {
+        return commentJpaRepository.findByCommentIdAndIsChildCommentAndCommentType(parentCommentId, false, commentType) != null;
     }
 
     @Override

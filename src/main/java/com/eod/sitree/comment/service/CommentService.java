@@ -24,9 +24,11 @@ public class CommentService {
     private final ProjectService projectService;
 
     @Transactional
-    public CommentCreateResponseDto createProjectComment(Long projectId, CommentCreateRequestDto commentCreateRequestDto, Member member) {
+    public CommentCreateResponseDto createProjectComment(Long projectId,
+        CommentCreateRequestDto commentCreateRequestDto, Member member) {
 
         projectService.validateProjectExist(projectId);
+
         Comment comment = new Comment(
             CommentType.PROJECT,
             projectId,
@@ -36,13 +38,8 @@ public class CommentService {
             member
         );
 
-        if (commentCreateRequestDto.getIsChildComment()) {
-
-            Comment parentComment = commentRepository.findByCommentId(commentCreateRequestDto.getParentCommentId());
-            parentComment.validateParent(comment.getCommentType());
-
-            comment = new Comment(comment, parentComment);
-        }
+        comment.validateParent(commentRepository.existParentByParentCommentId(
+            commentCreateRequestDto.getParentCommentId(), CommentType.PROJECT));
 
         commentRepository.save(comment);
 

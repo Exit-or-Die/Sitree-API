@@ -74,11 +74,16 @@ public class Comment extends BaseTimeDomain {
         this.isDeleted = comment.getIsDeleted();
     }
 
-    public void validateParent(CommentType childCommentType) {
+    public void validateParent(Boolean parentCommentExist) {
 
-        if (this.isChildComment || this.commentType != childCommentType) {
+        if (this.isChildComment && !parentCommentExist) {
 
-            throw new CommentException(ApplicationErrorType.COMMENT_NOT_PARENT);
+            throw new CommentException(ApplicationErrorType.PARENT_COMMENT_NOT_FOUND);
+        }
+
+        if (!this.isChildComment && parentCommentExist){
+
+            throw new CommentException(ApplicationErrorType.PARENT_COMMENT_CANNOT_HAVE_PARENT);
         }
     }
 

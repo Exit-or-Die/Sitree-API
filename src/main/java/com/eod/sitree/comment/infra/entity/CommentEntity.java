@@ -76,10 +76,10 @@ public class CommentEntity extends BaseEntity {
         return new Comment(
             this.getCreatedAt(),
             this.getModifiedAt(),
-            this.isChildComment ? null : this.toChildCommentList(),
+            this.getIsChildComment() ? null : this.toChildCommentList(),
             this.getCreateMemberId(),
             this.getParentCommentId(),
-            this.getContents(),
+            this.getIsDeleted() ? Comment.DELETED_COMMENT_CONTENTS : this.getContents(),
             this.getTargetId(),
             this.getCommentId(),
             this.getIsChildComment(),

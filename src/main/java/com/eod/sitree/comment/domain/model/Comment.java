@@ -94,7 +94,6 @@ public class Comment extends BaseTimeDomain {
 
     public void delete(Member member) {
         validateCreateMember(member);
-        this.contents = DELETED_COMMENT_CONTENTS;
         this.isDeleted = true;
     }
 

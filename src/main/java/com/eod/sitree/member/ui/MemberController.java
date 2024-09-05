@@ -1,13 +1,14 @@
 package com.eod.sitree.member.ui;
 
 import com.eod.sitree.auth.domain.JwtTokenType;
-import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.auth.support.AuthNotRequired;
 import com.eod.sitree.auth.support.LocalOnly;
 import com.eod.sitree.member.service.MemberService;
+import com.eod.sitree.member.ui.dto.request.MemberNicknameExistRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
+import com.eod.sitree.member.ui.dto.response.MemberNicknameExistResponseDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
@@ -48,6 +49,14 @@ public class MemberController {
         String token = request.getHeader(JwtTokenType.REFRESH_TOKEN.getHeaderName());
 
         return ResponseDto.ok(memberService.refreshToken(token));
+
+    }
+
+    @AuthNotRequired
+    @GetMapping("/nickname/exist")
+    public ResponseDto<MemberNicknameExistResponseDto> checkExistNickname(@Valid MemberNicknameExistRequestDto memberNicknameExistRequestDto){
+
+        return ResponseDto.ok(memberService.checkExistNickname(memberNicknameExistRequestDto));
 
     }
 

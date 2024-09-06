@@ -11,6 +11,7 @@ import com.eod.sitree.project.infra.entity.CategoryEntity;
 import com.eod.sitree.project.infra.entity.CategoryUsageEntity;
 import com.eod.sitree.project.infra.jpa_interfaces.CategoryJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.CategoryUsageJpaRepository;
+import com.eod.sitree.project.ui.dto.response.CategoryGetResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -27,15 +28,15 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
     @Override
     public List<Category> findAllByProjectId(long projectId) {
-        return jpaQueryFactory
-                .select(Projections.fields(Category.class,
-                        categoryEntity.name.as("name")
-                ))
+
+        List<CategoryEntity> categoryEntities = jpaQueryFactory
+                .select(categoryEntity)
                 .from(categoryUsageEntity)
                 .join(categoryEntity)
                     .on(categoryUsageEntity.categoryId.eq(categoryEntity.categoryId))
                 .where(categoryUsageEntity.projectId.eq(projectId))
                 .fetch();
+        return categoryEntities.stream().map(CategoryEntity::toDomainModel).toList();
     }
 
     @Override
@@ -48,5 +49,30 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         List<CategoryUsageEntity> categoryUsageEntities = categoryEntities.stream()
                 .map(c -> new CategoryUsageEntity(projectId, c.getCategoryId())).toList();
         categoryUsageJpaRepository.saveAll(categoryUsageEntities);
+    }
+
+    @Override
+    public List<CategoryGetResponseDto> getAllCategories() {
+        return jpaQueryFactory
+                .select(Projections.fields(CategoryGetResponseDto.class,
+                        categoryEntity.categoryId.as("categoryId"),
+                        categoryEntity.name.as("categoryName")
+                ))
+                .from(categoryEntity)
+                .fetch();
+    }
+
+    @Override
+    public List<CategoryGetResponseDto> getAllUsingCategories() {
+        return jpaQueryFactory
+                .select(Projections.fields(CategoryGetResponseDto.class,
+                        categoryEntity.categoryId.as("categoryId"),
+                        categoryEntity.name.as("categoryName")
+                ))
+                .from(categoryEntity)
+                .join(categoryUsageEntity)
+                    .on(categoryEntity.categoryId.eq(categoryUsageEntity.categoryId))
+                .groupBy(categoryEntity.categoryId)
+                .fetch();
     }
 }

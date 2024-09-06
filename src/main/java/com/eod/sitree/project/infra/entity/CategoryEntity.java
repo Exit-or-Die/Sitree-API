@@ -1,6 +1,6 @@
 package com.eod.sitree.project.infra.entity;
 
-import com.eod.sitree.project.domain.model.Tag;
+import com.eod.sitree.project.domain.model.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,26 +12,18 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "TAG")
+@Table(name = "CATEGORY")
 @NoArgsConstructor
-public class TagEntity {
+public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long tagId;
+    private Long categoryId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
-    private Long projectId;
-
-    public TagEntity(Long projectId, Tag tag) {
-        this.name = tag.getName();
-        this.projectId = projectId;
-    }
-
-    public Tag toDomainModel() {
-        return new Tag(this.name);
+    public Category toDomainModel(){
+        return new Category(this.name);
     }
 }

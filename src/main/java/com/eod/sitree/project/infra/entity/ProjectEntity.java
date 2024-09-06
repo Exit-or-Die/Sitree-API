@@ -1,11 +1,11 @@
 package com.eod.sitree.project.infra.entity;
 
 import com.eod.sitree.common.infra.entity.BaseEntity;
+import com.eod.sitree.project.domain.model.Category;
 import com.eod.sitree.project.domain.model.Head;
 import com.eod.sitree.project.domain.model.Overview;
 import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.model.Project;
-import com.eod.sitree.project.domain.model.Tag;
 import com.eod.sitree.project.domain.model.Techview;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -47,9 +47,9 @@ public class ProjectEntity extends BaseEntity {
         this.overviewEntity = new OverviewEntity(project.getOverview());
     }
 
-    public Project toDomainModel(List<Tag> tagList, List<Techview> techviewList, List<Participant> participantList) {
+    public Project toDomainModel(List<Category> categoryList, List<Techview> techviewList, List<Participant> participantList) {
         Head head = this.headEntity.toDomainModel();
         Overview overview = this.overviewEntity.toDomainModel();
-        return new Project(head, tagList, overview, techviewList, participantList, this.viewCount);
+        return new Project(head, categoryList, overview, techviewList, participantList, this.viewCount);
     }
 }

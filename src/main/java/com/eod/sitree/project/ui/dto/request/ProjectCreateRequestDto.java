@@ -1,6 +1,7 @@
 package com.eod.sitree.project.ui.dto.request;
 
 import com.eod.sitree.common.infra.validator.ValidEnum;
+import com.eod.sitree.project.domain.model.Category;
 import com.eod.sitree.project.domain.model.ClientUrl;
 import com.eod.sitree.project.domain.model.FocusPoint;
 import com.eod.sitree.project.domain.model.Head;
@@ -8,7 +9,6 @@ import com.eod.sitree.project.domain.model.Image;
 import com.eod.sitree.project.domain.model.Overview;
 import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.model.Project;
-import com.eod.sitree.project.domain.model.Tag;
 import com.eod.sitree.project.domain.model.Techview;
 import com.eod.sitree.project.domain.model.type.ImageType;
 import com.eod.sitree.project.domain.model.type.PlatformType;
@@ -27,7 +27,7 @@ public class ProjectCreateRequestDto {
     @NotNull @Valid
     private HeadDto head;
     @NotNull @Valid
-    private List<TagDto> tagList;
+    private List<CategoryDto> categoryDtoList;
     @NotNull @Valid
     private OverviewDto overview;
     @Valid
@@ -37,11 +37,11 @@ public class ProjectCreateRequestDto {
 
     public Project toDomainModel(){
         Head headDomainModel = this.head.toDomainModel();
-        List<Tag> tagDomainModelList = this.tagList.stream().map(TagDto::toDomainModel).toList();
+        List<Category> categoryDomainModelList = this.categoryDtoList.stream().map(CategoryDto::toDomainModel).toList();
         Overview overviewDomainModel = this.overview.toDomainModel();
         List<Techview> techviewDomainModelList = techviewList.stream().map(TechviewDto::toDomainModel).toList();
         List<Participant> participantDomainModelList = participantList.stream().map(ParticipantDto::toDomainModel).toList();
-        return new Project(headDomainModel, tagDomainModelList, overviewDomainModel,
+        return new Project(headDomainModel, categoryDomainModelList, overviewDomainModel,
                 techviewDomainModelList, participantDomainModelList);
     }
 
@@ -62,12 +62,12 @@ public class ProjectCreateRequestDto {
 
     @Getter
     @NoArgsConstructor
-    public static class TagDto{
+    public static class CategoryDto {
         @NotBlank
         private String name;
 
-        private Tag toDomainModel(){
-            return new Tag(this.name);
+        private Category toDomainModel(){
+            return new Category(this.name);
         }
     }
 

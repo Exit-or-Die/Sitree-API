@@ -62,16 +62,16 @@ public class MemberEntity extends BaseEntity {
         this.belonging = member.getBelonging();
     }
 
-    public static Member toDomain(MemberEntity memberEntity) {
+    public Member toDomainModel() {
 
         return new Member(
-            memberEntity.getMemberId(),
-            memberEntity.getProvider(),
-            memberEntity.getNickname(),
-            memberEntity.getEmail(),
-            memberEntity.getProfileImgUrl(),
-            memberEntity.getThirdPartyProfileUrl(),
-            memberEntity.getBelonging()
+            this.memberId,
+            this.provider,
+            this.nickname,
+            this.email,
+            this.profileImgUrl,
+            this.thirdPartyProfileUrl,
+            this.belonging
         );
     }
 }

@@ -87,9 +87,7 @@ public class MemberService {
 
     public MemberNicknameExistResponseDto checkExistNickname(MemberNicknameExistRequestDto memberNicknameExistRequestDto) {
 
-        Optional<Member> memberOptional = memberRepository.findByNicknameOptional(memberNicknameExistRequestDto.getNickname());
-
-        return new MemberNicknameExistResponseDto(memberOptional.isPresent());
+        return new MemberNicknameExistResponseDto(memberRepository.isNicknameExist(memberNicknameExistRequestDto.getNickname()));
     }
 
     public Member findMember(Provider provider, String email) {

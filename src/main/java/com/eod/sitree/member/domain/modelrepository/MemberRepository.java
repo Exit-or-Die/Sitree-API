@@ -13,4 +13,6 @@ public interface MemberRepository {
     Member save(Member member);
 
     Optional<Member> findByNicknameOptional(String nickname);
+
+    Boolean isNicknameExist(String nickname);
 }

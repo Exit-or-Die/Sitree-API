@@ -53,6 +53,12 @@ public class JpaMemberRepositoryImpl implements MemberRepository {
     public Optional<Member> findByNicknameOptional(String nickname) {
 
         return Optional.ofNullable(memberJpaRepository.findByNickname(nickname))
-            .map(MemberEntity::toDomain);
+            .map(MemberEntity::toDomainModel);
+    }
+
+    @Override
+    public Boolean isNicknameExist(String nickname) {
+
+        return findByNicknameOptional(nickname).isPresent();
     }
 }

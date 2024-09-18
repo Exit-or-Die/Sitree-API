@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +44,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(IllegalArgumentException illegalArgumentException) {
         log.info("{}\n{}", illegalArgumentException.getMessage(), illegalArgumentException.getStackTrace());
         return getResponse(HttpStatus.BAD_REQUEST, illegalArgumentException.getMessage());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(
+        HttpMessageNotReadableException httpMessageNotReadableException) {
+        log.info("{}\n{}", httpMessageNotReadableException.getMessage(), httpMessageNotReadableException.getStackTrace());
+        return getResponse(HttpStatus.BAD_REQUEST, httpMessageNotReadableException.getMessage());
     }
 
     @ExceptionHandler(JwtException.class)

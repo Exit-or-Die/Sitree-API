@@ -54,7 +54,7 @@ public class MemberPrincipalResolver implements HandlerMethodArgumentResolver {
                 ((ServletWebRequest) webRequest).getRequest().getHeader(JwtTokenType.ACCESS_TOKEN.getHeaderName()));
             log.info("UserInfoResolver path : {}",
                 ((ServletWebRequest) webRequest).getRequest().getRequestURI());
-            log.info("UserInfoResolver Exception : {}", e.getStackTrace());
+            log.info("UserInfoResolver Exception : ", e);
 
             MemberPrincipal memberPrincipalAnnotation = parameter.getParameterAnnotation(MemberPrincipal.class);
 

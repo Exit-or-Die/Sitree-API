@@ -71,7 +71,9 @@ public class MemberEntity extends BaseEntity {
             this.email,
             this.profileImgUrl,
             this.thirdPartyProfileUrl,
-            this.belonging
+            this.belonging,
+            this.getCreatedAt(),
+            this.getModifiedAt()
         );
     }
 }

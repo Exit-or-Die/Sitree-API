@@ -13,4 +13,6 @@ public interface ProjectRepository {
     void getListByParticipantId();
 
     void plusViewCount(long projectId, String userIp);
+
+    boolean existsById(long projectId);
 }

@@ -51,4 +51,16 @@ public class Member extends BaseTimeDomain {
         this.thirdPartyProfileUrl = memberSignUpRequestDto.getThirdPartyProfileUrl();
         this.belonging = memberSignUpRequestDto.getBelonging();
     }
+
+    public Member(Long memberId, Provider provider, String nickname, String email, String profileImgUrl, @Nullable String thirdPartyProfileUrl,
+        @Nullable String belonging, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        super(createdAt, modifiedAt);
+        this.memberId = memberId;
+        this.provider = provider;
+        this.nickname = nickname;
+        this.email = email;
+        this.profileImgUrl = profileImgUrl;
+        this.thirdPartyProfileUrl = thirdPartyProfileUrl;
+        this.belonging = belonging;
+    }
 }

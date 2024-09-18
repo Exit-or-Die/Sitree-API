@@ -54,9 +54,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public List<CategoryGetResponseDto> getAllCategories() {
         return jpaQueryFactory
-                .select(Projections.fields(CategoryGetResponseDto.class,
-                        categoryEntity.categoryId.as("categoryId"),
-                        categoryEntity.name.as("categoryName")
+                .select(Projections.constructor(CategoryGetResponseDto.class,
+                        categoryEntity.categoryId,
+                        categoryEntity.name
                 ))
                 .from(categoryEntity)
                 .fetch();
@@ -65,9 +65,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public List<CategoryGetResponseDto> getAllUsingCategories() {
         return jpaQueryFactory
-                .select(Projections.fields(CategoryGetResponseDto.class,
-                        categoryEntity.categoryId.as("categoryId"),
-                        categoryEntity.name.as("categoryName")
+                .select(Projections.constructor(CategoryGetResponseDto.class,
+                        categoryEntity.categoryId,
+                        categoryEntity.name
                 ))
                 .from(categoryEntity)
                 .join(categoryUsageEntity)

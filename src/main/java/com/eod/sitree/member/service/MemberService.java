@@ -8,9 +8,11 @@ import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.Provider;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
+import com.eod.sitree.member.ui.dto.request.MemberNicknameExistRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
+import com.eod.sitree.member.ui.dto.response.MemberNicknameExistResponseDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
 import java.util.Optional;
@@ -81,6 +83,11 @@ public class MemberService {
         }
 
         throw  new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
+    }
+
+    public MemberNicknameExistResponseDto checkExistNickname(MemberNicknameExistRequestDto memberNicknameExistRequestDto) {
+
+        return new MemberNicknameExistResponseDto(memberRepository.isNicknameExist(memberNicknameExistRequestDto.getNickname()));
     }
 
     public Member findMember(Provider provider, String email) {

@@ -61,4 +61,17 @@ public class MemberEntity extends BaseEntity {
         this.thirdPartyProfileUrl = member.getThirdPartyProfileUrl();
         this.belonging = member.getBelonging();
     }
+
+    public Member toDomainModel() {
+
+        return new Member(
+            this.memberId,
+            this.provider,
+            this.nickname,
+            this.email,
+            this.profileImgUrl,
+            this.thirdPartyProfileUrl,
+            this.belonging
+        );
+    }
 }

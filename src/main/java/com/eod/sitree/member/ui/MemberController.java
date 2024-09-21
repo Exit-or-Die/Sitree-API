@@ -71,7 +71,7 @@ public class MemberController {
 
     // TODO: live시 제거 필요
     @AuthNotRequired
-    @GetMapping("/token/expired")
+    @PostMapping("/token/expired")
     public ResponseDto<MemberTokensResponseDto> getExpiredToken(@Valid @RequestBody MemberTokenRequestDto memberTokenRequestDto){
 
         return ResponseDto.ok(memberService.getExpiredToken(memberTokenRequestDto));

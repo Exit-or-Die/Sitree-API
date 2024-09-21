@@ -5,9 +5,11 @@ import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.Provider;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class MemberTokensResponseDto {
 
     private Long memberId;
@@ -48,6 +50,22 @@ public class MemberTokensResponseDto {
         this.accessToken = accessToken.getTokenValue();
         this.refreshToken = refreshToken.getTokenValue();
 
+    }
+
+    public static MemberTokensResponseDto expired(Member member) {
+
+        JwtToken expired = JwtToken.expired(member, JwtTokenType.ACCESS_TOKEN, AuthService.jwtKeypair);
+        JwtToken refreshToken = new JwtToken(member, JwtTokenType.REFRESH_TOKEN, AuthService.jwtKeypair);
+
+        return new MemberTokensResponseDto(
+            member.getMemberId(),
+            member.getProvider(),
+            member.getEmail(),
+            member.getNickname(),
+            member.getProfileImgUrl(),
+            expired.getTokenValue(),
+            refreshToken.getTokenValue()
+        );
     }
 
 }

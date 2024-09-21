@@ -9,6 +9,7 @@ import io.jsonwebtoken.jackson.io.JacksonDeserializer;
 import io.jsonwebtoken.lang.Maps;
 import io.micrometer.common.util.StringUtils;
 import java.security.KeyPair;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.Getter;
 
@@ -35,6 +36,23 @@ public class JwtToken {
             .subject(member.getEmail())
             .compact();
         this.keyPair = keyPair;
+    }
+
+    public static JwtToken expired(Member member, JwtTokenType jwtTokenType, KeyPair keyPair) {
+        Date now = new Date();
+        Date expiresIn = new Date(now.getTime() - jwtTokenType.getExpireInMilliSecond());
+        MemberClaim memberClaim = new MemberClaim(member);
+
+        String tokenValue = Jwts.builder()
+            .claim("memberClaim", memberClaim)
+            .issuedAt(now)
+            .expiration(expiresIn)
+            .signWith(keyPair.getPrivate())
+            .issuer(JWT_ISSUER)
+            .subject(member.getEmail())
+            .compact();
+
+        return new JwtToken(tokenValue, keyPair);
     }
 
     public JwtToken(String token, KeyPair keyPair) {

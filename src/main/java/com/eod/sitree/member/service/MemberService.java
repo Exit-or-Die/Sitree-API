@@ -92,9 +92,7 @@ public class MemberService {
             memberTokenRequestDto.getProvider(), memberTokenRequestDto.getEmail());
 
         if (memberOptional.isPresent()) {
-
-
-
+            
             return MemberTokensResponseDto.expired(memberOptional.get());
         }
 

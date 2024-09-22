@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,6 +45,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(IllegalArgumentException illegalArgumentException) {
         log.info("{}\n{}", illegalArgumentException.getMessage(), illegalArgumentException.getStackTrace());
         return getResponse(HttpStatus.BAD_REQUEST, illegalArgumentException.getMessage());
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(HttpRequestMethodNotSupportedException httpRequestMethodNotSupportedException) {
+        log.info("{}\n{}", httpRequestMethodNotSupportedException.getMessage(), httpRequestMethodNotSupportedException.getStackTrace());
+        return getResponse(HttpStatus.BAD_REQUEST, httpRequestMethodNotSupportedException.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

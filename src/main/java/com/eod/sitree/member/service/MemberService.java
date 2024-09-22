@@ -1,6 +1,7 @@
 package com.eod.sitree.member.service;
 
 import com.eod.sitree.auth.domain.JwtToken;
+import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.common.exception.ApplicationErrorType;
@@ -80,6 +81,19 @@ public class MemberService {
         if (memberOptional.isPresent()) {
 
             return new MemberTokensResponseDto(memberOptional.get());
+        }
+
+        throw  new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
+    }
+
+    public MemberTokensResponseDto getExpiredToken(MemberTokenRequestDto memberTokenRequestDto) {
+
+        Optional<Member> memberOptional = memberRepository.findByProviderAndEmailOptional(
+            memberTokenRequestDto.getProvider(), memberTokenRequestDto.getEmail());
+
+        if (memberOptional.isPresent()) {
+            
+            return MemberTokensResponseDto.expired(memberOptional.get());
         }
 
         throw  new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);

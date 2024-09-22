@@ -3,25 +3,24 @@ package com.eod.sitree.project.infra;
 import static com.eod.sitree.project.infra.entity.QProjectEntity.projectEntity;
 
 import com.eod.sitree.common.exception.ApplicationErrorType;
+import com.eod.sitree.project.domain.model.Category;
 import com.eod.sitree.project.domain.model.FocusPoint;
 import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.model.Project;
-import com.eod.sitree.project.domain.model.Tag;
 import com.eod.sitree.project.domain.model.Techview;
 import com.eod.sitree.project.domain.model.type.TechStackType;
+import com.eod.sitree.project.domain.modelRepository.CategoryRepository;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
 import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.entity.FocusPointEntity;
 import com.eod.sitree.project.infra.entity.ParticipantEntity;
 import com.eod.sitree.project.infra.entity.ProjectEntity;
 import com.eod.sitree.project.infra.entity.ProjectTechStackEntity;
-import com.eod.sitree.project.infra.entity.TagEntity;
 import com.eod.sitree.project.infra.entity.TechviewEntity;
 import com.eod.sitree.project.infra.jpa_interfaces.FocusPointJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ParticipantJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository;
-import com.eod.sitree.project.infra.jpa_interfaces.TagJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -38,7 +37,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     private final ProjectJpaRepository projectJpaRepository;
-    private final TagJpaRepository tagJpaRepository;
+    private final CategoryRepository categoryRepository;
     private final ParticipantJpaRepository participantJpaRepository;
     private final TechviewJpaRepository techviewJpaRepository;
     private final FocusPointJpaRepository focusPointJpaRepository;
@@ -49,8 +48,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public Project getById(long projectId) {
         ProjectEntity projectEntity = projectJpaRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID));
-        List<Tag> tags = tagJpaRepository.findAllByProjectId(projectId)
-                .stream().map(TagEntity::toDomainModel).toList();
+        List<Category> categories = categoryRepository.findAllByProjectId(projectId);
         List<Participant> participants = participantJpaRepository.findAllByProjectId(projectId)
                 .stream().map(ParticipantEntity::toDomainEntity).toList();
         List<Techview> techviews = techviewJpaRepository.findAllByProjectId(projectId)
@@ -62,7 +60,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                     return techviewEntity.toDomainModel(techStackTypes, focusPoints);
                 })).toList();
 
-        return projectEntity.toDomainModel(tags, techviews, participants);
+        return projectEntity.toDomainModel(categories, techviews, participants);
     }
 
     @Override
@@ -71,10 +69,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         ProjectEntity projectEntity = projectJpaRepository.save(new ProjectEntity(project));
         Long projectId = projectEntity.getProjectId();
 
-        // 태그 저장
-        List<TagEntity> tagEntityList = project.getTags().stream().map(t -> new TagEntity(projectId, t))
-                .toList();
-        tagJpaRepository.saveAll(tagEntityList);
+        // 카테고리 저장
+        categoryRepository.saveAllProjectCategoryIds(projectId, project.getCategories());
 
         // 참여자 저장
         List<ParticipantEntity> participantEntityList = project.getParticipants().stream()

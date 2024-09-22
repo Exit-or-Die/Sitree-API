@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Project {
     private final Head head;
-    private final List<Tag> tags;
+    private final List<Category> categories;
     private final Overview overview;
     private final List<Techview> techviews;
     private final List<Participant> participants;

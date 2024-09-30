@@ -16,18 +16,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ClientUrlEntity {
 
-    private String liveWebDomain;
-
     @MapKeyEnumerated(EnumType.STRING)
     @Convert(converter = HashMapConverter.class)
-    private HashMap<PlatformType, String> downloadMethods;
+    private HashMap<PlatformType, String> clientUrls;
 
     public ClientUrlEntity(ClientUrl clientUrl) {
-        this.liveWebDomain = clientUrl.getLiveWebDomain();
-        this.downloadMethods = clientUrl.getDownloadMethods();
+        this.clientUrls = clientUrl.getClientUrls();
     }
 
     public ClientUrl toDomainModel(){
-        return new ClientUrl(this.liveWebDomain, this.downloadMethods);
+        return new ClientUrl(this.clientUrls);
     }
 }

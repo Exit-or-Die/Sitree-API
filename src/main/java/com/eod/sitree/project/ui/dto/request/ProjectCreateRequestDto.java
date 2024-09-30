@@ -51,6 +51,7 @@ public class ProjectCreateRequestDto {
         private String thumbnailImageUrl;
         @NotBlank
         private String title;
+        @NotBlank
         private String shortDescription;
         private String healthCheckUrl;
 
@@ -88,11 +89,10 @@ public class ProjectCreateRequestDto {
 
         @Getter
         public static class ClientUrlDto{
-            private String liveWebDomain;
-            private HashMap<PlatformType, String> downloadMethods;
+            private HashMap<PlatformType, String> clientUrls;
 
             private ClientUrl toDomainModel(){
-                return new ClientUrl(this.liveWebDomain, this.downloadMethods);
+                return new ClientUrl(this.clientUrls);
             }
         }
     }

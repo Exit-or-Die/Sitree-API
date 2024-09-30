@@ -15,11 +15,13 @@ import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.entity.FocusPointEntity;
 import com.eod.sitree.project.infra.entity.ParticipantEntity;
 import com.eod.sitree.project.infra.entity.ProjectEntity;
+import com.eod.sitree.project.infra.entity.ProjectLikesEntity;
 import com.eod.sitree.project.infra.entity.ProjectTechStackEntity;
 import com.eod.sitree.project.infra.entity.TechviewEntity;
 import com.eod.sitree.project.infra.jpa_interfaces.FocusPointJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ParticipantJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectJpaRepository;
+import com.eod.sitree.project.infra.jpa_interfaces.ProjectLikesRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -42,6 +44,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private final TechviewJpaRepository techviewJpaRepository;
     private final FocusPointJpaRepository focusPointJpaRepository;
     private final ProjectTechStackJpaRepository techStackJpaRepository;
+    private final ProjectLikesRepository projectLikesRepository;
 
 
     @Override
@@ -117,5 +120,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public boolean existsById(long projectId) {
         return projectJpaRepository.existsById(projectId);
+    }
+
+    @Override
+    public boolean toggleLike(long projectId, long memberId) {
+        ProjectLikesEntity projectLikes = projectLikesRepository.findByProjectIdAndMemberId(
+                projectId, memberId).orElseGet(() -> new ProjectLikesEntity(projectId, memberId));
+        projectLikes.toggleLike();
+        ProjectLikesEntity save = projectLikesRepository.save(projectLikes);
+        return save.getIsLiked();
     }
 }

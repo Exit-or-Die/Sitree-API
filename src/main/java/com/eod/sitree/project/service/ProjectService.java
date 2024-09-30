@@ -8,6 +8,7 @@ import com.eod.sitree.project.infra.ClientRequestServiceImpl;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,12 @@ public class ProjectService {
 
     public void exportProject(){
 
+    }
+
+    @Transactional
+    public ProjectLikesResponseDto toggleProjectLikes(Long projectId, Long memberId){
+        boolean isLiked = projectRepository.toggleLike(projectId, memberId);
+        return new ProjectLikesResponseDto(isLiked);
     }
 
     public Object getTotalProjects() {

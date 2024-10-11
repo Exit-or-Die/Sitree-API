@@ -19,9 +19,7 @@ public class QClientUrlEntity extends BeanPath<ClientUrlEntity> {
 
     public static final QClientUrlEntity clientUrlEntity = new QClientUrlEntity("clientUrlEntity");
 
-    public final MapPath<com.eod.sitree.project.domain.model.type.PlatformType, String, StringPath> downloadMethods = this.<com.eod.sitree.project.domain.model.type.PlatformType, String, StringPath>createMap("downloadMethods", com.eod.sitree.project.domain.model.type.PlatformType.class, String.class, StringPath.class);
-
-    public final StringPath liveWebDomain = createString("liveWebDomain");
+    public final MapPath<com.eod.sitree.project.domain.model.type.PlatformType, String, StringPath> clientUrls = this.<com.eod.sitree.project.domain.model.type.PlatformType, String, StringPath>createMap("clientUrls", com.eod.sitree.project.domain.model.type.PlatformType.class, String.class, StringPath.class);
 
     public QClientUrlEntity(String variable) {
         super(ClientUrlEntity.class, forVariable(variable));

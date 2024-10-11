@@ -1,7 +1,9 @@
 package com.eod.sitree.project.ui;
 
+import com.eod.sitree.auth.infra.resolver.MemberPrincipal;
 import com.eod.sitree.auth.support.AuthNotRequired;
 import com.eod.sitree.common.response.ResponseDto;
+import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.project.service.ProjectService;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,6 +42,12 @@ public class ProjectController {
     @GetMapping
     public ResponseDto<?> getProjectList() {
         var result = projectService.getTotalProjects();
+        return new ResponseDto<>(result);
+    }
+
+    @PostMapping("{projectId}/likes")
+    public ResponseDto<?> toggleProjectLikes(@PathVariable Long projectId, @MemberPrincipal Member member){
+        var result = projectService.toggleProjectLikes(projectId, member.getMemberId());
         return new ResponseDto<>(result);
     }
 }

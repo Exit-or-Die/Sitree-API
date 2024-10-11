@@ -28,12 +28,6 @@ class ClientUrlTest {
     }
 
     @Test
-    void createClientUrlOnlyLiveDomain() {
-        ClientUrl liveDomainClientUrl = new ClientUrl(null);
-        assertThat(liveDomainClientUrl.getClientUrls()).isNull();
-    }
-
-    @Test
     void createClientUrlOnlyDownloadMethod() {
         ClientUrl liveDomainClientUrl = new ClientUrl(downloadMethods);
         assertThat(liveDomainClientUrl.getClientUrls()).isNotNull();

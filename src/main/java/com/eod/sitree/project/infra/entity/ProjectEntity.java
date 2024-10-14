@@ -1,6 +1,7 @@
 package com.eod.sitree.project.infra.entity;
 
 import com.eod.sitree.common.infra.entity.BaseEntity;
+import com.eod.sitree.project.domain.model.Architecture;
 import com.eod.sitree.project.domain.model.Category;
 import com.eod.sitree.project.domain.model.Head;
 import com.eod.sitree.project.domain.model.Overview;
@@ -47,9 +48,9 @@ public class ProjectEntity extends BaseEntity {
         this.overviewEntity = new OverviewEntity(project.getOverview());
     }
 
-    public Project toDomainModel(List<Category> categoryList, List<Techview> techviewList, List<Participant> participantList) {
+    public Project toDomainModel(List<Category> categoryList, List<Techview> techviewList, List<Architecture> architectureList, List<Participant> participantList) {
         Head head = this.headEntity.toDomainModel();
         Overview overview = this.overviewEntity.toDomainModel();
-        return new Project(head, categoryList, overview, techviewList, participantList, this.viewCount);
+        return new Project(head, categoryList, overview, techviewList, architectureList, participantList, this.viewCount);
     }
 }

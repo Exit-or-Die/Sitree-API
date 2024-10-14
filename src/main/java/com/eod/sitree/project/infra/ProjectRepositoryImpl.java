@@ -3,23 +3,22 @@ package com.eod.sitree.project.infra;
 import static com.eod.sitree.project.infra.entity.QProjectEntity.projectEntity;
 
 import com.eod.sitree.common.exception.ApplicationErrorType;
+import com.eod.sitree.project.domain.model.Architecture;
 import com.eod.sitree.project.domain.model.Category;
-import com.eod.sitree.project.domain.model.FocusPoint;
 import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.model.Techview;
 import com.eod.sitree.project.domain.model.type.TechStackType;
 import com.eod.sitree.project.domain.modelRepository.CategoryRepository;
+import com.eod.sitree.project.domain.modelRepository.ParticipantRepository;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
 import com.eod.sitree.project.exeption.ProjectException;
-import com.eod.sitree.project.infra.entity.FocusPointEntity;
-import com.eod.sitree.project.infra.entity.ParticipantEntity;
+import com.eod.sitree.project.infra.entity.ArchitectureEntity;
 import com.eod.sitree.project.infra.entity.ProjectEntity;
 import com.eod.sitree.project.infra.entity.ProjectLikesEntity;
 import com.eod.sitree.project.infra.entity.ProjectTechStackEntity;
 import com.eod.sitree.project.infra.entity.TechviewEntity;
-import com.eod.sitree.project.infra.jpa_interfaces.FocusPointJpaRepository;
-import com.eod.sitree.project.infra.jpa_interfaces.ParticipantJpaRepository;
+import com.eod.sitree.project.infra.jpa_interfaces.ArchitectureJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectLikesRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository;
@@ -38,13 +37,13 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+    private final ParticipantRepository participantRepository;
     private final ProjectJpaRepository projectJpaRepository;
     private final CategoryRepository categoryRepository;
-    private final ParticipantJpaRepository participantJpaRepository;
     private final TechviewJpaRepository techviewJpaRepository;
-    private final FocusPointJpaRepository focusPointJpaRepository;
     private final ProjectTechStackJpaRepository techStackJpaRepository;
     private final ProjectLikesRepository projectLikesRepository;
+    private final ArchitectureJpaRepository architectureJpaRepository;
 
 
     @Override
@@ -52,18 +51,16 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         ProjectEntity projectEntity = projectJpaRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID));
         List<Category> categories = categoryRepository.findAllByProjectId(projectId);
-        List<Participant> participants = participantJpaRepository.findAllByProjectId(projectId)
-                .stream().map(ParticipantEntity::toDomainEntity).toList();
+        List<Participant> participants = participantRepository.findAllByProjectId(projectId);
         List<Techview> techviews = techviewJpaRepository.findAllByProjectId(projectId)
                 .stream().map((techviewEntity -> {
-                    List<FocusPoint> focusPoints = focusPointJpaRepository.findAllByTechviewId(techviewEntity.getTechviewId())
-                            .stream().map(FocusPointEntity::toDomainModel).toList();
                     List<TechStackType> techStackTypes = techStackJpaRepository.findAllByTechviewId(techviewEntity.getTechviewId())
                             .stream().map(ProjectTechStackEntity::toDomainModel).toList();
-                    return techviewEntity.toDomainModel(techStackTypes, focusPoints);
+                    return techviewEntity.toDomainModel(techStackTypes);
                 })).toList();
-
-        return projectEntity.toDomainModel(categories, techviews, participants);
+        List<Architecture> architectures = architectureJpaRepository.findAllByProjectId(projectId).stream()
+                .map(ArchitectureEntity::toDomainModel).toList();
+        return projectEntity.toDomainModel(categories, techviews, architectures, participants);
     }
 
     @Override
@@ -76,25 +73,23 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         categoryRepository.saveAllProjectCategoryIds(projectId, project.getCategories());
 
         // 참여자 저장
-        List<ParticipantEntity> participantEntityList = project.getParticipants().stream()
-                .map(p -> new ParticipantEntity(projectId, p)).toList();
-        participantJpaRepository.saveAll(participantEntityList);
+        participantRepository.saveAll(project.getParticipants(), projectId);
 
         // techview 저장
         project.getTechviews().forEach(techview -> {
             TechviewEntity techviewEntity = techviewJpaRepository.save(new TechviewEntity(projectId, techview));
             Long techviewId = techviewEntity.getTechviewId();
 
-            // focus point 저장
-            List<FocusPointEntity> focusPointEntityList = techview.getFocusedPoints().stream()
-                    .map(f -> new FocusPointEntity(techviewId, f)).toList();
-            focusPointJpaRepository.saveAll(focusPointEntityList);
-
             // tech stack 저장
             List<ProjectTechStackEntity> techStackEntityList = techview.getTechStackTypes().stream()
                     .map(t -> new ProjectTechStackEntity(techviewId, t)).toList();
             techStackJpaRepository.saveAll(techStackEntityList);
         });
+
+        // architecture 저장
+        List<ArchitectureEntity> architectureEntities = project.getArchitectures().stream()
+                .map(a -> new ArchitectureEntity(a, projectId)).toList();
+        architectureJpaRepository.saveAll(architectureEntities);
         return projectId;
     }
 

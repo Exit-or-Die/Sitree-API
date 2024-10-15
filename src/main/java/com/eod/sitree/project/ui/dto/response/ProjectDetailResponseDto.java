@@ -2,11 +2,15 @@ package com.eod.sitree.project.ui.dto.response;
 
 import com.eod.sitree.project.domain.model.Architecture;
 import com.eod.sitree.project.domain.model.Category;
+import com.eod.sitree.project.domain.model.ClientUrl;
 import com.eod.sitree.project.domain.model.Head;
+import com.eod.sitree.project.domain.model.Image;
 import com.eod.sitree.project.domain.model.Overview;
 import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.model.Techview;
+import com.eod.sitree.project.domain.model.type.PlatformType;
+import java.util.HashMap;
 import java.util.List;
 import lombok.Getter;
 
@@ -14,7 +18,7 @@ import lombok.Getter;
 public class ProjectDetailResponseDto {
     private final Head head;
     private final List<Category> categories;
-    private final Overview overview;
+    private final OverviewDto overview;
     private final List<Techview> techviewList;
     private final List<Architecture> architectureList;
     private final List<ParticipantDto> participantList;
@@ -25,12 +29,25 @@ public class ProjectDetailResponseDto {
 
         this.head = project.getHead();
         this.categories = project.getCategories();
-        this.overview = project.getOverview();
+        this.overview = new OverviewDto(project.getOverview());
         this.techviewList = project.getTechviews();
         this.architectureList = project.getArchitectures();
         this.participantList = project.getParticipants().stream().map(ParticipantDto::new).toList();
         this.viewCount = project.getViewCount();
         this.isHealthy = isHealthy;
+    }
+
+    @Getter
+    private static class OverviewDto{
+        private final List<Image> images;
+        private final HashMap<PlatformType, String> clientUrl;
+        private final String detailDescription;
+
+        public OverviewDto(Overview overview) {
+            this.images = overview.getImages();
+            this.clientUrl = overview.getClientUrl().getClientUrls();
+            this.detailDescription = overview.getDetailDescription();
+        }
     }
 
     @Getter

@@ -10,33 +10,27 @@ import lombok.Getter;
 @Getter
 public class ClientUrl {
 
-    private String liveWebDomain;
-    private final HashMap<PlatformType, String> downloadMethods;
+    private final HashMap<PlatformType, String> clientUrls;
 
-    public ClientUrl(String liveWebDomain, HashMap<PlatformType, String> downloadMethods) {
-        validation(liveWebDomain, downloadMethods);
-        this.liveWebDomain = liveWebDomain;
-        this.downloadMethods = downloadMethods;
-    }
-
-    public void changeLiveDomainUrl(String liveDomainUrl){
-        this.liveWebDomain = liveDomainUrl;
+    public ClientUrl(HashMap<PlatformType, String> clientUrls) {
+        validation(clientUrls);
+        this.clientUrls = clientUrls;
     }
 
     public void changeDownloadMethod(PlatformType platformType, String url) {
-        this.downloadMethods.put(platformType, url);
+        this.clientUrls.put(platformType, url);
     }
 
     public void addDownloadMethod(PlatformType platformType, String url) {
-        this.downloadMethods.put(platformType, url);
+        this.clientUrls.put(platformType, url);
     }
 
     public void deleteDownloadMethod(PlatformType platformType) {
-        this.downloadMethods.remove(platformType);
+        this.clientUrls.remove(platformType);
     }
 
-    private void validation(String liveDomain, HashMap<PlatformType, String> downloadMethods){
-        if (liveDomain == null && (downloadMethods == null || downloadMethods.isEmpty())) {
+    private void validation(HashMap<PlatformType, String> downloadMethods){
+        if (downloadMethods == null || downloadMethods.isEmpty()) {
             throw new ProjectException(CHECK_CLIENT_URL_REQUIRED_VALUE);
         }
     }

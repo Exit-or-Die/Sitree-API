@@ -15,4 +15,6 @@ public interface ProjectRepository {
     void plusViewCount(long projectId, String userIp);
 
     boolean existsById(long projectId);
+
+    boolean toggleLike(long projectId, long memberId);
 }

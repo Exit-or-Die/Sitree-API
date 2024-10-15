@@ -13,6 +13,7 @@ public class Project {
     private final List<Category> categories;
     private final Overview overview;
     private final List<Techview> techviews;
+    private final List<Architecture> architectures;
     private final List<Participant> participants;
     private Long viewCount = 0L;
 

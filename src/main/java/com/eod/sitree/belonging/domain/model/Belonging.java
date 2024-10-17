@@ -1,6 +1,8 @@
 package com.eod.sitree.belonging.domain.model;
 
+import lombok.Getter;
 
+@Getter
 public class Belonging {
 
     private final Long belongingId;

@@ -6,6 +6,7 @@ import com.eod.sitree.belonging.infra.entity.BelongingEntity;
 import com.eod.sitree.belonging.infra.entity.QBelongingEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -25,5 +26,12 @@ public class BelongingRepositoryImpl implements BelongingRepository {
             .where(belongingEntity.name.like("%" + name + "%"))
             .fetch().stream()
             .map(BelongingEntity::toDomainModel).toList();
+    }
+
+    @Override
+    public Optional<Belonging> findById(Long id) {
+
+        return belongingJpaRepository.findById(id)
+            .map(BelongingEntity::toDomainModel);
     }
 }

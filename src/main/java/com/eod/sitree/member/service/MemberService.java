@@ -4,6 +4,8 @@ import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.auth.service.AuthService;
+import com.eod.sitree.belonging.domain.modelRepository.BelongingRepository;
+import com.eod.sitree.belonging.exception.BelongingException;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.Provider;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BelongingRepository belongingRepository;
     private final AuthService authService;
 
 
@@ -57,6 +60,12 @@ public class MemberService {
             throw new MemberException(ApplicationErrorType.MEMBER_ALREADY_EXIST);
         }
 
+        if (memberSignUpRequestDto.validateBelongingIncluded() && belongingRepository.findById(
+            memberSignUpRequestDto.getBelongingId()).isEmpty()) {
+
+            throw new BelongingException(ApplicationErrorType.BELONGING_NOT_FOUND);
+        }
+
         Member registeredNewMember = memberRepository.save(new Member(memberSignUpRequestDto));
 
         return new MemberTokensResponseDto(registeredNewMember);
@@ -68,7 +77,8 @@ public class MemberService {
         refreshToken.validateToken();
 
         MemberClaim memberClaim = refreshToken.getMemberClaim();
-        Member member = memberRepository.findByProviderAndEmail(memberClaim.getProvider(), memberClaim.getEmail());
+        Member member = memberRepository.findByProviderAndEmail(memberClaim.getProvider(),
+            memberClaim.getEmail());
 
         return new MemberTokensResponseDto(member);
     }
@@ -83,7 +93,7 @@ public class MemberService {
             return new MemberTokensResponseDto(memberOptional.get());
         }
 
-        throw  new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
+        throw new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
     }
 
     public MemberTokensResponseDto getExpiredToken(MemberTokenRequestDto memberTokenRequestDto) {
@@ -92,16 +102,18 @@ public class MemberService {
             memberTokenRequestDto.getProvider(), memberTokenRequestDto.getEmail());
 
         if (memberOptional.isPresent()) {
-            
+
             return MemberTokensResponseDto.expired(memberOptional.get());
         }
 
-        throw  new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
+        throw new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
     }
 
-    public MemberNicknameExistResponseDto checkExistNickname(MemberNicknameExistRequestDto memberNicknameExistRequestDto) {
+    public MemberNicknameExistResponseDto checkExistNickname(
+        MemberNicknameExistRequestDto memberNicknameExistRequestDto) {
 
-        return new MemberNicknameExistResponseDto(memberRepository.isNicknameExist(memberNicknameExistRequestDto.getNickname()));
+        return new MemberNicknameExistResponseDto(
+            memberRepository.isNicknameExist(memberNicknameExistRequestDto.getNickname()));
     }
 
     public Member findMember(Provider provider, String email) {

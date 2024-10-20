@@ -12,7 +12,6 @@ public class Participant {
     private final FocusPoint focusPoint;
 
     public boolean isEmptyFocusPoint(){
-        return focusPoint == null || focusPoint.getMemberId() == 0
-                || focusPoint.getFocusedOn() == null;
+        return focusPoint == null || focusPoint.isEmpty();
     }
 }

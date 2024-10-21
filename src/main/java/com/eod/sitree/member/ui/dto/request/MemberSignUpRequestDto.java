@@ -1,8 +1,10 @@
 package com.eod.sitree.member.ui.dto.request;
 
+import com.eod.sitree.belonging.domain.model.Belonging;
 import com.eod.sitree.member.domain.model.Provider;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.Getter;
 
 @Getter
@@ -25,17 +27,22 @@ public class MemberSignUpRequestDto {
 
     private String thirdPartyProfileUrl;
 
-    private String belonging;
+    private Long belongingId;
 
 
     public MemberSignUpRequestDto(Provider provider, String oAuthToken, String email,
-        String thirdPartyProfileUrl, String belonging, String nickname, String profileImgUrl) {
+        String thirdPartyProfileUrl, Long belongingId, String nickname, String profileImgUrl) {
         this.provider = provider;
         this.oAuthToken = oAuthToken;
         this.email = email;
         this.thirdPartyProfileUrl = thirdPartyProfileUrl;
-        this.belonging = belonging;
+        this.belongingId = belongingId;
         this.nickname = nickname;
         this.profileImgUrl = profileImgUrl;
+    }
+
+    public boolean validateBelongingIncluded() {
+
+        return Objects.isNull(belongingId);
     }
 }

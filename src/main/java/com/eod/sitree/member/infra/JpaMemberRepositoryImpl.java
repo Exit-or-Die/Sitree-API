@@ -61,4 +61,10 @@ public class JpaMemberRepositoryImpl implements MemberRepository {
 
         return findByNicknameOptional(nickname).isPresent();
     }
+
+    @Override
+    public Optional<Member> findByMemberId(Long memberId) {
+        return memberJpaRepository.findById(memberId)
+            .map(MemberEntity::toDomainModel);
+    }
 }

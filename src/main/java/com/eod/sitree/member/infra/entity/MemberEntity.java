@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -50,7 +51,7 @@ public class MemberEntity extends BaseEntity {
     private String thirdPartyProfileUrl;
 
     @Column
-    private String belonging;
+    private Long belonging;
 
     public MemberEntity(Member member) {
         this.memberId = member.getMemberId();

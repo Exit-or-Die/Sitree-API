@@ -118,4 +118,9 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public boolean existsById(long projectId) {
         return projectJpaRepository.existsById(projectId);
     }
+
+    @Override
+    public List<Project> findAll() {
+        return List.of();
+    }
 }

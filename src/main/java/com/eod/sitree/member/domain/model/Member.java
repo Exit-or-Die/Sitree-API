@@ -27,7 +27,7 @@ public class Member extends BaseTimeDomain {
     private String thirdPartyProfileUrl;
 
     @Nullable
-    private String belonging;
+    private Long belonging;
 
 
     public Member(MemberEntity memberEntity) {
@@ -49,11 +49,11 @@ public class Member extends BaseTimeDomain {
         this.email = memberSignUpRequestDto.getEmail();
         this.profileImgUrl = memberSignUpRequestDto.getProfileImgUrl();
         this.thirdPartyProfileUrl = memberSignUpRequestDto.getThirdPartyProfileUrl();
-        this.belonging = memberSignUpRequestDto.getBelonging();
+        this.belonging = memberSignUpRequestDto.getBelongingId();
     }
 
     public Member(Long memberId, Provider provider, String nickname, String email, String profileImgUrl, @Nullable String thirdPartyProfileUrl,
-        @Nullable String belonging, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        @Nullable Long belonging, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         super(createdAt, modifiedAt);
         this.memberId = memberId;
         this.provider = provider;

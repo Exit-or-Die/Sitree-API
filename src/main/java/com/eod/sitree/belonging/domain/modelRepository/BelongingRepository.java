@@ -9,4 +9,6 @@ public interface BelongingRepository {
     List<Belonging> searchByName(String name);
 
     Optional<Belonging> findById(Long id);
+
+    List<Belonging> findAll();
 }

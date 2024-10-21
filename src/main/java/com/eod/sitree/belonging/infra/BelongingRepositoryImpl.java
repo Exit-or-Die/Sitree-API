@@ -34,4 +34,13 @@ public class BelongingRepositoryImpl implements BelongingRepository {
         return belongingJpaRepository.findById(id)
             .map(BelongingEntity::toDomainModel);
     }
+
+    @Override
+    public List<Belonging> findAll() {
+
+        return belongingJpaRepository.findAll()
+            .stream()
+            .map(BelongingEntity::toDomainModel)
+            .toList();
+    }
 }

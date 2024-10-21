@@ -1,6 +1,7 @@
 package com.eod.sitree.project.domain.modelRepository;
 
 import com.eod.sitree.project.domain.model.Project;
+import java.util.List;
 
 public interface ProjectRepository {
 
@@ -15,4 +16,6 @@ public interface ProjectRepository {
     void plusViewCount(long projectId, String userIp);
 
     boolean existsById(long projectId);
+
+    List<Project> findAll();
 }

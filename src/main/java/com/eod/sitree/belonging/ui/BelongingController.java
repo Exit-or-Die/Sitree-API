@@ -1,6 +1,7 @@
 package com.eod.sitree.belonging.ui;
 
 import com.eod.sitree.belonging.domain.model.Belonging;
+import com.eod.sitree.belonging.domain.model.BelongingWithPoint;
 import com.eod.sitree.belonging.service.BelongingService;
 import com.eod.sitree.common.response.ResponseDto;
 import java.util.List;
@@ -21,5 +22,11 @@ public class BelongingController {
     public ResponseDto<List<Belonging>> searchByName(@RequestParam String name) {
 
         return ResponseDto.ok(belongingService.searchByName(name));
+    }
+
+    @GetMapping("/ranking")
+    public ResponseDto<List<BelongingWithPoint>> rankBelongings() {
+
+        return ResponseDto.ok(belongingService.calculateBelongingPoints());
     }
 }

@@ -1,15 +1,16 @@
 package com.eod.sitree.project.ui.dto.request;
 
 import com.eod.sitree.common.infra.validator.ValidEnum;
+import com.eod.sitree.project.domain.model.Architecture;
 import com.eod.sitree.project.domain.model.Category;
 import com.eod.sitree.project.domain.model.ClientUrl;
-import com.eod.sitree.project.domain.model.FocusPoint;
 import com.eod.sitree.project.domain.model.Head;
 import com.eod.sitree.project.domain.model.Image;
 import com.eod.sitree.project.domain.model.Overview;
 import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.model.Techview;
+import com.eod.sitree.project.domain.model.type.ArchitectureType;
 import com.eod.sitree.project.domain.model.type.ImageType;
 import com.eod.sitree.project.domain.model.type.PlatformType;
 import com.eod.sitree.project.domain.model.type.TechStackType;
@@ -27,22 +28,24 @@ public class ProjectCreateRequestDto {
     @NotNull @Valid
     private HeadDto head;
     @NotNull @Valid
-    private List<CategoryDto> categoryDtoList;
+    private List<ProjectTagDto> projectTagList; // Domain Model 에서는 Category 로 사용됨
     @NotNull @Valid
     private OverviewDto overview;
     @Valid
     private List<TechviewDto> techviewList;
+    private List<ArchitectureDto> architectureList;
     @NotNull
     private List<ParticipantDto> participantList;
 
     public Project toDomainModel(){
         Head headDomainModel = this.head.toDomainModel();
-        List<Category> categoryDomainModelList = this.categoryDtoList.stream().map(CategoryDto::toDomainModel).toList();
+        List<Category> categoryDomainModelList = this.projectTagList.stream().map(ProjectTagDto::toDomainModel).toList();
         Overview overviewDomainModel = this.overview.toDomainModel();
         List<Techview> techviewDomainModelList = techviewList.stream().map(TechviewDto::toDomainModel).toList();
+        List<Architecture> architectureDomainModelList = architectureList.stream().map(ArchitectureDto::toDomainModel).toList();
         List<Participant> participantDomainModelList = participantList.stream().map(ParticipantDto::toDomainModel).toList();
         return new Project(headDomainModel, categoryDomainModelList, overviewDomainModel,
-                techviewDomainModelList, participantDomainModelList);
+                techviewDomainModelList,architectureDomainModelList, participantDomainModelList);
     }
 
     @Getter
@@ -51,6 +54,7 @@ public class ProjectCreateRequestDto {
         private String thumbnailImageUrl;
         @NotBlank
         private String title;
+        @NotBlank
         private String shortDescription;
         private String healthCheckUrl;
 
@@ -62,7 +66,7 @@ public class ProjectCreateRequestDto {
 
     @Getter
     @NoArgsConstructor
-    public static class CategoryDto {
+    public static class ProjectTagDto {
         @NotBlank
         private String name;
 
@@ -76,58 +80,39 @@ public class ProjectCreateRequestDto {
         @NotNull @Valid
         private List<ImageDto> images;
         @NotNull
-        private ClientUrlDto clientUrl;
+        private HashMap<PlatformType, String> clientUrl;
         @NotBlank
         private String detailDescription; // 상세 소개
 
         private Overview toDomainModel(){
             List<Image> imageDomainModelList = images.stream().map(ImageDto::toDomainModel).toList();
-            ClientUrl clientUrlDomainModel = clientUrl.toDomainModel();
+            ClientUrl clientUrlDomainModel = new ClientUrl(clientUrl);
             return new Overview(imageDomainModelList, clientUrlDomainModel, this.detailDescription);
-        }
-
-        @Getter
-        public static class ClientUrlDto{
-            private String liveWebDomain;
-            private HashMap<PlatformType, String> downloadMethods;
-
-            private ClientUrl toDomainModel(){
-                return new ClientUrl(this.liveWebDomain, this.downloadMethods);
-            }
         }
     }
 
     @Getter
     public static class TechviewDto{
         @NotBlank
-        private String techArea; // 개발 영역
+        private String techTitle; // 개발 영역
         @NotBlank
         private String gitRepositoryUrl; // 깃 링크
-        private List<TechStackType> techStackTypes; // 사용 기술
-        @Valid
-        private ImageDto architectureImage; // 아키텍쳐 이미지
-        private String architectureDescription; // 아키텍쳐 구조 설명
-        @Valid
-        private List<FocusPointDto> focusedPoints; // 핵심 기술 내용
+        private List<TechStackType> techTagList; // 사용 기술
+        private String techDesc; // 개발 상세
 
         private Techview toDomainModel(){
-            Image imageDomainModel = architectureImage.toDomainModel();
-            List<FocusPoint> focusPointDomainModelList = this.focusedPoints.stream()
-                    .map(FocusPointDto::toDomainModel).toList();
-            return new Techview(this.techArea, this.gitRepositoryUrl, this.techStackTypes,
-                    imageDomainModel, this.architectureDescription, focusPointDomainModelList);
+            return new Techview(this.techTitle, this.gitRepositoryUrl, this.techTagList, this.techDesc);
         }
+    }
 
-        @Getter
-        public static class FocusPointDto{
-            @NotNull
-            private Long memberId;
-            @NotBlank
-            private String focusedOn;
+    @Getter
+    public static class ArchitectureDto{
+        private ArchitectureType architectureType;
+        private String architectureDesc;
+        private ImageDto architectureImage;
 
-            private FocusPoint toDomainModel(){
-                return new FocusPoint(this.memberId, this.focusedOn);
-            }
+        private Architecture toDomainModel(){
+            return new Architecture(this.architectureType, this.architectureDesc, this.architectureImage.toDomainModel());
         }
     }
 
@@ -153,7 +138,7 @@ public class ProjectCreateRequestDto {
         private Boolean isLeader;
 
         private Participant toDomainModel(){
-            return new Participant(this.memberId, this.position, this.isLeader);
+            return new Participant(this.memberId, this.position, this.isLeader, null);
         }
     }
 }

@@ -2,7 +2,7 @@ package com.eod.sitree.project.domain.model.type;
 
 public enum PlatformType {
 
-    IOS, ANDROID, WINDOWS, MAC_OS
+    IOS, ANDROID, WINDOWS, MAC_OS, WEB
     ;
 
     public boolean isIos() {
@@ -19,5 +19,9 @@ public enum PlatformType {
 
     public boolean isMacOs() {
         return this.equals(MAC_OS);
+    }
+
+    public boolean isWeb() {
+        return this.equals(WEB);
     }
 }

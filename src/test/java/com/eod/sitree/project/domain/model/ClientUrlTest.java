@@ -1,16 +1,13 @@
 package com.eod.sitree.project.domain.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.eod.sitree.project.domain.model.type.PlatformType;
 import com.eod.sitree.project.exeption.ProjectException;
 import java.util.HashMap;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.util.Platform;
 
 class ClientUrlTest {
 
@@ -26,51 +23,35 @@ class ClientUrlTest {
 
     @Test
     void createClientUrl() {
-        ClientUrl clientUrl = new ClientUrl("liveDomain", downloadMethods);
+        ClientUrl clientUrl = new ClientUrl(downloadMethods);
         assertThat(clientUrl).isNotNull();
     }
 
     @Test
-    void createClientUrlOnlyLiveDomain() {
-        ClientUrl liveDomainClientUrl = new ClientUrl("liveDomain", null);
-        assertThat(liveDomainClientUrl.getLiveWebDomain()).isNotNull();
-        assertThat(liveDomainClientUrl.getDownloadMethods()).isNull();
-    }
-
-    @Test
     void createClientUrlOnlyDownloadMethod() {
-        ClientUrl liveDomainClientUrl = new ClientUrl(null, downloadMethods);
-        assertThat(liveDomainClientUrl.getLiveWebDomain()).isNull();
-        assertThat(liveDomainClientUrl.getDownloadMethods()).isNotNull();
+        ClientUrl liveDomainClientUrl = new ClientUrl(downloadMethods);
+        assertThat(liveDomainClientUrl.getClientUrls()).isNotNull();
     }
 
     @Test
     void createClientUrlError() {
         Assertions.assertThrows(ProjectException.class, () -> {
-            new ClientUrl(null, null);
+            new ClientUrl(null);
         });
-    }
-
-    @Test
-    void changeLiveDomainUrl() {
-        String changeLiveDomainUrl = "changed LiveDomainUrl";
-        ClientUrl clientUrl = new ClientUrl("liveDomain", downloadMethods);
-        clientUrl.changeLiveDomainUrl(changeLiveDomainUrl);
-        assertThat(clientUrl.getLiveWebDomain()).isEqualTo(changeLiveDomainUrl);
     }
 
     @Test
     void changeDownloadMethod() {
         String changeIosDownloadUrl = "This is Changed Live Domain Url";
-        ClientUrl clientUrl = new ClientUrl("liveDomain", downloadMethods);
+        ClientUrl clientUrl = new ClientUrl(downloadMethods);
         clientUrl.changeDownloadMethod(PlatformType.IOS, changeIosDownloadUrl);
-        assertThat(clientUrl.getDownloadMethods().get(PlatformType.IOS)).isEqualTo(changeIosDownloadUrl);
+        assertThat(clientUrl.getClientUrls().get(PlatformType.IOS)).isEqualTo(changeIosDownloadUrl);
     }
 
     @Test
     void addDownloadMethod() {
-        ClientUrl clientUrl = new ClientUrl("liveDomain", downloadMethods);
+        ClientUrl clientUrl = new ClientUrl(downloadMethods);
         clientUrl.addDownloadMethod(PlatformType.ANDROID, "new Android DownloadUrl");
-        assertThat(clientUrl.getDownloadMethods().size()).isEqualTo(3);
+        assertThat(clientUrl.getClientUrls().size()).isEqualTo(3);
     }
 }

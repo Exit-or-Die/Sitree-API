@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ParticipantJpaRepository extends JpaRepository<ParticipantEntity, Long> {
 
     List<ParticipantEntity> findAllByProjectId(long projectId);
+
 }

@@ -9,9 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class ImageService {
 
+    private final static String IMAGE_DOMAIN_URL = "https://image.si-tree.com";
+
     private final ImageRepository imageRepository;
 
     public String uploadImage(MultipartFile multipartFile){
-        return imageRepository.uploadImage(multipartFile);
+        return IMAGE_DOMAIN_URL + "/" + imageRepository.uploadImage(multipartFile);
     }
 }

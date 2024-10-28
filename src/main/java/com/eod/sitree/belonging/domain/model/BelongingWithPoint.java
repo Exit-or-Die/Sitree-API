@@ -5,25 +5,34 @@ import lombok.Getter;
 @Getter
 public class BelongingWithPoint extends Belonging{
 
+    private long count;
     private long point;
 
-    public BelongingWithPoint(Belonging belonging) {
+    private static final long BASE_POINT = 10L;
+    private static final long ADDITIONAL_POINT_WEIGHT = 2L;
 
-        super(
-            belonging.getBelongingId(),
-            belonging.getType(),
-            belonging.getName(),
-            belonging.getImageUrl()
-        );
+
+    public BelongingWithPoint(Long belongingId, BelongingType type, String name, String imageUrl,
+        long count) {
+
+        super(belongingId, type, name, imageUrl);
+        this.count = count;
         this.point = 0L;
     }
 
-    public void addPointByBelongingCount(long belongingCount) {
+    public void calculatePointByBelongingCount() {
 
-        if (belongingCount <= 0) {
+        if (this.count <= 0) {
             return;
         }
 
-        this.point += 10 + (belongingCount - 1) * 2;
+        this.point += BASE_POINT + (this.count - 1) * ADDITIONAL_POINT_WEIGHT;
+    }
+
+    public BelongingWithPoint calculatePointAndReturn() {
+
+        calculatePointByBelongingCount();
+
+        return this;
     }
 }

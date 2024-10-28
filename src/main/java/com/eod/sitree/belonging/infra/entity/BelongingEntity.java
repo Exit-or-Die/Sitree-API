@@ -10,10 +10,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
+@Table(name = "BELONGING")
 public class BelongingEntity extends BaseEntity {
 
     @Id

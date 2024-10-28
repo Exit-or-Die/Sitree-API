@@ -1,6 +1,8 @@
 package com.eod.sitree.project.infra;
 
+import static com.eod.sitree.comment.infra.entity.QCommentEntity.commentEntity;
 import static com.eod.sitree.project.infra.entity.QProjectEntity.projectEntity;
+import static com.eod.sitree.project.infra.entity.QProjectLikesEntity.projectLikesEntity;
 
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Architecture;
@@ -23,11 +25,20 @@ import com.eod.sitree.project.infra.jpa_interfaces.ProjectJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectLikesRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
+import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
+import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Slf4j
@@ -104,6 +115,42 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
+    public Page<ProjectDisplayElement> getListBySearchType(Pageable pageable, SortType type) {
+        List<OrderSpecifier<?>> orders = getOrderSpecifiers(type);
+        List<ProjectDisplayElement> listResult = jpaQueryFactory.select(
+                        Projections.constructor(ProjectDisplayElement.class,
+                                projectEntity.headEntity.title,
+                                projectEntity.headEntity.thumbnailImageUrl,
+                                projectEntity.headEntity.shortDescription,
+                                projectEntity.overviewEntity.representImage,
+                                commentEntity.commentId.count(),
+                                projectLikesEntity.likesId.count(),
+                                projectEntity.viewCount,
+                                projectEntity.modifiedAt
+                        ))
+                .from(projectEntity)
+                .leftJoin(commentEntity)
+                    .on(projectEntity.projectId.eq(commentEntity.targetId).and(commentEntity.isDeleted.eq(false)))
+                .leftJoin(projectLikesEntity)
+                    .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
+                .groupBy(projectEntity.projectId)
+                .orderBy(orders.toArray(new OrderSpecifier[0]))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long listCount = jpaQueryFactory.select(projectEntity.projectId.count())
+                .from(projectEntity)
+                .leftJoin(commentEntity).on(projectEntity.projectId.eq(commentEntity.targetId))
+                .leftJoin(projectLikesEntity)
+                .on(projectEntity.projectId.eq(projectLikesEntity.projectId))
+                .where(commentEntity.isDeleted.eq(false).and(projectLikesEntity.isLiked.eq(true)))
+                .groupBy(projectEntity.projectId).fetchOne();
+
+        return new PageImpl<>(listResult, pageable, listCount != null ? listCount : 0); // 반환값 null 방어
+    }
+
+    @Override
     @Cacheable(value = "projectViewCount")
     public void plusViewCount(long projectId, String userIp) {
         jpaQueryFactory.update(projectEntity)
@@ -124,5 +171,13 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         projectLikes.toggleLike();
         ProjectLikesEntity save = projectLikesRepository.save(projectLikes);
         return save.getIsLiked();
+    }
+
+    private List<OrderSpecifier<?>> getOrderSpecifiers(SortType type) {
+        List<OrderSpecifier<?>> orders = new ArrayList<>();
+
+        orders.add(new OrderSpecifier(Order.DESC, type.getTClass()));
+        orders.add(new OrderSpecifier(Order.DESC, projectEntity.createdAt));
+        return orders;
     }
 }

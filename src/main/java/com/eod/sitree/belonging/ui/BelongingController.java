@@ -1,5 +1,6 @@
 package com.eod.sitree.belonging.ui;
 
+import com.eod.sitree.auth.support.AuthNotRequired;
 import com.eod.sitree.belonging.domain.model.Belonging;
 import com.eod.sitree.belonging.domain.model.BelongingWithPoint;
 import com.eod.sitree.belonging.service.BelongingService;
@@ -18,12 +19,14 @@ public class BelongingController {
 
     private final BelongingService belongingService;
 
+    @AuthNotRequired
     @GetMapping("/search")
-    public ResponseDto<List<Belonging>> searchByName(@RequestParam String name) {
+    public ResponseDto<List<Belonging>> searchByName(@RequestParam(defaultValue = "") String name) {
 
         return ResponseDto.ok(belongingService.searchByName(name));
     }
 
+    @AuthNotRequired
     @GetMapping("/ranking")
     public ResponseDto<List<BelongingWithPoint>> rankBelongings() {
 

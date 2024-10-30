@@ -17,8 +17,8 @@ public class ProjectListRequestDto {
     @Getter
     public enum SortType {
         LATEST(projectEntity.modifiedAt),
-        LIKES(projectLikesEntity.likesId.count()),
-        COMMENTS(commentEntity.commentId.count()),
+        LIKES(projectLikesEntity.likesId.countDistinct()),
+        COMMENTS(commentEntity.commentId.countDistinct()),
         VIEWS(projectEntity.viewCount);
 
         private final Expression<?> tClass;

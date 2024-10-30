@@ -123,8 +123,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                                 projectEntity.headEntity.thumbnailImageUrl,
                                 projectEntity.headEntity.shortDescription,
                                 projectEntity.overviewEntity.representImage,
-                                commentEntity.commentId.count(),
-                                projectLikesEntity.likesId.count(),
+                                commentEntity.commentId.countDistinct(),
+                                projectLikesEntity.likesId.countDistinct(),
                                 projectEntity.viewCount,
                                 projectEntity.modifiedAt
                         ))

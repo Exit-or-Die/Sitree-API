@@ -27,9 +27,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDto<Map<String, String>>> handleMethodArgumentNotValidException(
-        MethodArgumentNotValidException methodArgumentNotValidException) {
+        MethodArgumentNotValidException e) {
 
-        Map<String, String> errors = methodArgumentNotValidException.getBindingResult()
+        Map<String, String> errors = e.getBindingResult()
             .getAllErrors()
             .stream()
             .collect(Collectors.toMap(
@@ -37,50 +37,58 @@ public class GlobalExceptionHandler {
                 error ->  Optional.ofNullable(error.getDefaultMessage()).orElse(Strings.EMPTY)
             ));
 
-        log.info("{}\n{}", methodArgumentNotValidException.getMessage(), methodArgumentNotValidException.getStackTrace());
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
         return getResponse(HttpStatus.BAD_REQUEST, errors);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(IllegalArgumentException illegalArgumentException) {
-        log.info("{}\n{}", illegalArgumentException.getMessage(), illegalArgumentException.getStackTrace());
-        return getResponse(HttpStatus.BAD_REQUEST, illegalArgumentException.getMessage());
+    public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
+        return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(HttpRequestMethodNotSupportedException httpRequestMethodNotSupportedException) {
-        log.info("{}\n{}", httpRequestMethodNotSupportedException.getMessage(), httpRequestMethodNotSupportedException.getStackTrace());
-        return getResponse(HttpStatus.BAD_REQUEST, httpRequestMethodNotSupportedException.getMessage());
+    public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(HttpRequestMethodNotSupportedException e) {
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
+        return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(
-        HttpMessageNotReadableException httpMessageNotReadableException) {
-        log.info("{}\n{}", httpMessageNotReadableException.getMessage(), httpMessageNotReadableException.getStackTrace());
-        return getResponse(HttpStatus.BAD_REQUEST, httpMessageNotReadableException.getMessage());
+        HttpMessageNotReadableException e) {
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
+        return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(JwtException.class)
-    public ResponseEntity<ResponseDto<String>> handleJwtException(JwtException jwtException) {
-        log.error("{}\n{}", jwtException.getMessage(), jwtException.getStackTrace());
-        return getResponse(HttpStatus.UNAUTHORIZED, jwtException.getMessage());
+    public ResponseEntity<ResponseDto<String>> handleJwtException(JwtException e) {
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
+        return getResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     @ExceptionHandler(AuthException.class)
-    public <T> ResponseEntity<ResponseDto<T>> handleAuthException(AuthException authException) {
-        log.error("{}\n{}", authException.getErrorMessage(), authException.getStackTrace());
-        return getErrorResponse(authException);
+    public <T> ResponseEntity<ResponseDto<T>> handleAuthException(AuthException e) {
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
+        return getErrorResponse(e);
     }
 
     @ExceptionHandler(AuthSettingException.class)
-    public void handleAuthSettingException(AuthSettingException authSettingException) {
-        log.error("{}\n{}", authSettingException.getErrorMessage(), authSettingException.getStackTrace());
+    public void handleAuthSettingException(AuthSettingException e) {
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
     }
 
     @ExceptionHandler(CustomException.class)
-    public <T> ResponseEntity<ResponseDto<T>> handleCustomException(CustomException customException) {
-        log.info("{}\n{}", customException.getErrorMessage(), customException.getStackTrace());
-        return getErrorResponse(customException);
+    public <T> ResponseEntity<ResponseDto<T>> handleCustomException(CustomException e) {
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
+        return getErrorResponse(e);
     }
 
     /**
@@ -90,7 +98,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public <T> ResponseDto<T> handleUnexpectedException(Exception e) {
         log.error(e.getMessage());
-        e.printStackTrace();
+        e.printStackTrace(System.err);
         return ResponseDto.error(ApplicationErrorType.INTERNAL_ERROR);
     }
 

@@ -6,8 +6,16 @@ import com.eod.sitree.member.domain.model.Provider;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.infra.entity.MemberEntity;
+import com.eod.sitree.member.infra.entity.QMemberEntity;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
 
@@ -15,11 +23,17 @@ import org.springframework.stereotype.Repository;
  * JPA repository를 사용하기 위한 Adaptor
  */
 @Repository
-public class JpaMemberRepositoryImpl implements MemberRepository {
+public class JpaMemberRepositoryImpl extends QuerydslRepositorySupport implements MemberRepository {
 
+    private final JPAQueryFactory jpaQueryFactory;
     private final MemberJpaRepository memberJpaRepository;
 
-    public JpaMemberRepositoryImpl(MemberJpaRepository memberJpaRepository) {
+    private final static QMemberEntity qMemberEntity = QMemberEntity.memberEntity;
+
+    public JpaMemberRepositoryImpl(JPAQueryFactory jpaQueryFactory, MemberJpaRepository memberJpaRepository) {
+
+        super(MemberEntity.class);
+        this.jpaQueryFactory = jpaQueryFactory;
         this.memberJpaRepository = memberJpaRepository;
     }
 
@@ -60,5 +74,24 @@ public class JpaMemberRepositoryImpl implements MemberRepository {
     public Boolean isNicknameExist(String nickname) {
 
         return findByNicknameOptional(nickname).isPresent();
+    }
+
+    @Override
+    public Page<Member> searchMembers(String q, Pageable pageable) {
+
+        JPQLQuery<MemberEntity> query = getQuerydsl().applyPagination(
+            pageable,
+            jpaQueryFactory.selectFrom(qMemberEntity)
+                .where(
+                    qMemberEntity.nickname.like(q + "%"),
+                    qMemberEntity.email.like(q + "%")
+                )
+        );
+
+        return new PageImpl<>(
+            query.fetch().stream().map(MemberEntity::toDomainModel).toList(),
+            pageable,
+            query.fetchCount()
+        );
     }
 }

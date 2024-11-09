@@ -17,5 +17,4 @@ public interface ProjectRepository {
 
     boolean existsById(long projectId);
 
-    List<Project> findAll();
 }

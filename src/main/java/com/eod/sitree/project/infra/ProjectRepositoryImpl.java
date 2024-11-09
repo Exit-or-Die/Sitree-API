@@ -119,8 +119,4 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         return projectJpaRepository.existsById(projectId);
     }
 
-    @Override
-    public List<Project> findAll() {
-        return List.of();
-    }
 }

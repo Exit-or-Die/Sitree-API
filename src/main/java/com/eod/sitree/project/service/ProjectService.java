@@ -11,6 +11,7 @@ import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectSearchResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,5 +68,10 @@ public class ProjectService {
         if (!projectRepository.existsById(projectId)) {
             throw new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID);
         }
+    }
+
+    public ProjectSearchResponseDto searchProjectsByName(Pageable pageable, String searchWord) {
+        var projectSearchDisplayElementsPage = projectRepository.searchProjectsByName(pageable, searchWord);
+        return new ProjectSearchResponseDto(projectSearchDisplayElementsPage);
     }
 }

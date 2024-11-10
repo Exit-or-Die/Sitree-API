@@ -3,6 +3,7 @@ package com.eod.sitree.project.domain.modelRepository;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
+import com.eod.sitree.project.ui.dto.response.ProjectSearchResponseDto.ProjectSearchDisplayElement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,4 +24,6 @@ public interface ProjectRepository {
     boolean existsById(long projectId);
 
     boolean toggleLike(long projectId, long memberId);
+
+    Page<ProjectSearchDisplayElement> searchProjectsByName(Pageable pageable, String searchWord);
 }

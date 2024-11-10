@@ -7,6 +7,7 @@ import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.project.service.ProjectService;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
+import com.eod.sitree.project.ui.dto.request.ProjectSearchRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,14 @@ public class ProjectController {
     public ResponseDto<?> getProjectList(ProjectListRequestDto dto) {
         Pageable pageable = dto.getPageableParam();
         var result = projectService.getProjectList(pageable, dto.getSortType());
+        return new ResponseDto<>(result);
+    }
+
+    @GetMapping("/search")
+    @AuthNotRequired
+    public ResponseDto<?> searchProjectsByName(ProjectSearchRequestDto dto) {
+        Pageable pageable = dto.getPageableParam();
+        var result = projectService.searchProjectsByName(pageable, dto.getName());
         return new ResponseDto<>(result);
     }
 

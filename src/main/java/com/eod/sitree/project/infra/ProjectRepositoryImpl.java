@@ -27,9 +27,11 @@ import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository
 import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
+import com.eod.sitree.project.ui.dto.response.ProjectSearchResponseDto.ProjectSearchDisplayElement;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -171,6 +173,30 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         projectLikes.toggleLike();
         ProjectLikesEntity save = projectLikesRepository.save(projectLikes);
         return save.getIsLiked();
+    }
+
+    @Override
+    public Page<ProjectSearchDisplayElement> searchProjectsByName(Pageable pageable, String searchWord) {
+
+        JPAQuery<?> query = jpaQueryFactory
+                .from(projectEntity)
+                .where(projectEntity.headEntity.title.likeIgnoreCase("%" + searchWord + "%"));
+
+        List<ProjectSearchDisplayElement> result = query.
+                select(
+                        Projections.constructor(ProjectSearchDisplayElement.class, 
+                                projectEntity.headEntity.thumbnailImageUrl,
+                                projectEntity.headEntity.title,
+                                projectEntity.headEntity.shortDescription
+                ))
+                .orderBy(projectEntity.modifiedAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long totalCount = query.select(projectEntity.count()).fetchOne();
+
+        return new PageImpl<>(result, pageable, totalCount != null ? totalCount : 0);
     }
 
     private List<OrderSpecifier<?>> getOrderSpecifiers(SortType type) {

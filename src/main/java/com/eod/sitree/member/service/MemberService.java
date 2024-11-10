@@ -10,10 +10,12 @@ import com.eod.sitree.member.domain.model.Provider;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.ui.dto.request.MemberNicknameExistRequestDto;
+import com.eod.sitree.member.ui.dto.request.MemberSearchPageRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
 import com.eod.sitree.member.ui.dto.response.MemberNicknameExistResponseDto;
+import com.eod.sitree.member.ui.dto.response.MemberSearchPageResponse;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
 import java.util.Optional;
@@ -107,5 +109,10 @@ public class MemberService {
     public Member findMember(Provider provider, String email) {
 
         return memberRepository.findByProviderAndEmail(provider, email);
+    }
+
+    public MemberSearchPageResponse searchMembers(MemberSearchPageRequestDto request) {
+
+        return new MemberSearchPageResponse(memberRepository.searchMembers(request.getQ(), request.getPageable()));
     }
 }

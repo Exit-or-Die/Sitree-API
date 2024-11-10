@@ -139,7 +139,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long listCount = jpaQueryFactory.select(projectEntity.projectId.count())
+        Long totalCount = jpaQueryFactory.select(projectEntity.projectId.count())
                 .from(projectEntity)
                 .leftJoin(commentEntity).on(projectEntity.projectId.eq(commentEntity.targetId))
                 .leftJoin(projectLikesEntity)
@@ -147,7 +147,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .where(commentEntity.isDeleted.eq(false).and(projectLikesEntity.isLiked.eq(true)))
                 .groupBy(projectEntity.projectId).fetchOne();
 
-        return new PageImpl<>(listResult, pageable, listCount != null ? listCount : 0); // 반환값 null 방어
+        return new PageImpl<>(listResult, pageable, totalCount != null ? totalCount : 0); // 반환값 null 방어
     }
 
     @Override

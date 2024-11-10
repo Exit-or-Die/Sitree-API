@@ -10,8 +10,8 @@ import org.springframework.data.domain.Pageable;
 @Setter
 @NoArgsConstructor
 public class PageRequestDto {
-    private int pageNo = 1;
-    private int size = 100;
+    private int pageNo = 0;
+    private int size = 10;
 
     public Pageable getPageableParam() {
         return PageRequest.of(this.pageNo, this.size);

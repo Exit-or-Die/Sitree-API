@@ -50,7 +50,7 @@ public class MemberEntity extends BaseEntity {
     private String thirdPartyProfileUrl;
 
     @Column
-    private String belonging;
+    private Long belongingId;
 
     public MemberEntity(Member member) {
         this.memberId = member.getMemberId();
@@ -59,7 +59,7 @@ public class MemberEntity extends BaseEntity {
         this.email = member.getEmail();
         this.profileImgUrl = member.getProfileImgUrl();
         this.thirdPartyProfileUrl = member.getThirdPartyProfileUrl();
-        this.belonging = member.getBelonging();
+        this.belongingId = member.getBelongingId();
     }
 
     public Member toDomainModel() {
@@ -71,7 +71,7 @@ public class MemberEntity extends BaseEntity {
             this.email,
             this.profileImgUrl,
             this.thirdPartyProfileUrl,
-            this.belonging,
+            this.belongingId,
             this.getCreatedAt(),
             this.getModifiedAt()
         );

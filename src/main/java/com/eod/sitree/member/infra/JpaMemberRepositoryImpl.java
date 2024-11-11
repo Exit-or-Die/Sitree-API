@@ -94,4 +94,10 @@ public class JpaMemberRepositoryImpl extends QuerydslRepositorySupport implement
             query.fetchCount()
         );
     }
+
+    @Override
+    public Optional<Member> findByMemberId(Long memberId) {
+        return memberJpaRepository.findById(memberId)
+            .map(MemberEntity::toDomainModel);
+    }
 }

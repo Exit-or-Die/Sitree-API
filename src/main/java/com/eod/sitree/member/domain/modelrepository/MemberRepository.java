@@ -19,4 +19,6 @@ public interface MemberRepository {
     Boolean isNicknameExist(String nickname);
 
     Page<Member> searchMembers(String q, Pageable pageable);
+
+    Optional<Member> findByMemberId(Long memberId);
 }

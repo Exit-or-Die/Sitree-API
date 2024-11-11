@@ -17,6 +17,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -47,6 +48,12 @@ public class GlobalExceptionHandler {
         log.info("{}", e.getMessage());
         e.printStackTrace(System.err);
         return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(MissingServletRequestParameterException missingServletRequestParameterException) {
+        log.info("{}\n{}", missingServletRequestParameterException.getMessage(), missingServletRequestParameterException.getStackTrace());
+        return getResponse(HttpStatus.BAD_REQUEST, missingServletRequestParameterException.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

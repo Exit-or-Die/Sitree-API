@@ -5,10 +5,8 @@ import com.eod.sitree.common.domain.model.BaseTimeDomain;
 import com.eod.sitree.member.infra.entity.MemberEntity;
 import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 public class Member extends BaseTimeDomain {
@@ -27,7 +25,7 @@ public class Member extends BaseTimeDomain {
     private String thirdPartyProfileUrl;
 
     @Nullable
-    private String belonging;
+    private Long belongingId;
 
 
     public Member(MemberEntity memberEntity) {
@@ -38,7 +36,7 @@ public class Member extends BaseTimeDomain {
         this.email = memberEntity.getEmail();
         this.profileImgUrl = memberEntity.getProfileImgUrl();
         this.thirdPartyProfileUrl = memberEntity.getThirdPartyProfileUrl();
-        this.belonging = memberEntity.getBelonging();
+        this.belongingId = memberEntity.getBelongingId();
     }
 
     public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
@@ -49,11 +47,11 @@ public class Member extends BaseTimeDomain {
         this.email = memberSignUpRequestDto.getEmail();
         this.profileImgUrl = memberSignUpRequestDto.getProfileImgUrl();
         this.thirdPartyProfileUrl = memberSignUpRequestDto.getThirdPartyProfileUrl();
-        this.belonging = memberSignUpRequestDto.getBelonging();
+        this.belongingId = memberSignUpRequestDto.getBelongingId();
     }
 
     public Member(Long memberId, Provider provider, String nickname, String email, String profileImgUrl, @Nullable String thirdPartyProfileUrl,
-        @Nullable String belonging, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        @Nullable Long belongingId, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         super(createdAt, modifiedAt);
         this.memberId = memberId;
         this.provider = provider;
@@ -61,6 +59,11 @@ public class Member extends BaseTimeDomain {
         this.email = email;
         this.profileImgUrl = profileImgUrl;
         this.thirdPartyProfileUrl = thirdPartyProfileUrl;
-        this.belonging = belonging;
+        this.belongingId = belongingId;
+    }
+
+    public boolean hasBelonging() {
+
+        return belongingId != null;
     }
 }

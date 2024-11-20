@@ -43,6 +43,6 @@ public class MemberSignUpRequestDto {
 
     public boolean validateBelongingIncluded() {
 
-        return Objects.isNull(belongingId);
+        return Objects.nonNull(belongingId);
     }
 }

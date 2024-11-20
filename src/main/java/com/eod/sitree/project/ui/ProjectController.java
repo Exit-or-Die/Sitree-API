@@ -6,9 +6,12 @@ import com.eod.sitree.common.response.ResponseDto;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.project.service.ProjectService;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
+import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/projects")
@@ -40,8 +44,10 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseDto<?> getProjectList() {
-        var result = projectService.getTotalProjects();
+    @AuthNotRequired
+    public ResponseDto<?> getProjectList(ProjectListRequestDto dto) {
+        Pageable pageable = dto.getPageableParam();
+        var result = projectService.getProjectList(pageable, dto.getSortType());
         return new ResponseDto<>(result);
     }
 

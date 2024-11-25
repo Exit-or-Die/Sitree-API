@@ -28,8 +28,8 @@ public class BelongingController {
 
     @AuthNotRequired
     @GetMapping("/ranking")
-    public ResponseDto<List<BelongingWithPoint>> rankBelongings() {
+    public ResponseDto<List<Belonging>> rankBelongings() {
 
-        return ResponseDto.ok(belongingService.calculateBelongingPoints());
+        return ResponseDto.ok(belongingService.findRanking());
     }
 }

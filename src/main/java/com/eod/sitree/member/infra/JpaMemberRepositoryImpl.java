@@ -82,8 +82,7 @@ public class JpaMemberRepositoryImpl extends QuerydslRepositorySupport implement
             pageable,
             jpaQueryFactory.selectFrom(qMemberEntity)
                 .where(
-                    qMemberEntity.nickname.like(q + "%"),
-                    qMemberEntity.email.like(q + "%")
+                    qMemberEntity.nickname.like(q + "%")
                 )
         );
 

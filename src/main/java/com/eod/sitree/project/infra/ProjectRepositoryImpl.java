@@ -1,6 +1,7 @@
 package com.eod.sitree.project.infra;
 
 import static com.eod.sitree.comment.infra.entity.QCommentEntity.commentEntity;
+import static com.eod.sitree.project.infra.entity.QCategoryUsageEntity.categoryUsageEntity;
 import static com.eod.sitree.project.infra.entity.QProjectEntity.projectEntity;
 import static com.eod.sitree.project.infra.entity.QProjectLikesEntity.projectLikesEntity;
 
@@ -25,11 +26,13 @@ import com.eod.sitree.project.infra.jpa_interfaces.ProjectJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectLikesRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
+import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,8 +118,17 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public Page<ProjectDisplayElement> getListBySearchType(Pageable pageable, SortType type) {
-        List<OrderSpecifier<?>> orders = getOrderSpecifiers(type);
+    public Page<ProjectDisplayElement> getListBySearchType(Pageable pageable, ProjectListRequestDto dto) {
+
+        List<Long> projectIds = null;
+        if (!dto.getCategoryIds().isEmpty()) {
+            projectIds = jpaQueryFactory.select(categoryUsageEntity.projectId)
+                    .from(categoryUsageEntity)
+                    .where(categoryUsageEntity.categoryId.in(dto.getCategoryIds()))
+                    .fetch();
+        }
+
+        List<OrderSpecifier<?>> orders = getOrderSpecifiers(dto.getSortType());
         List<ProjectDisplayElement> listResult = jpaQueryFactory.select(
                         Projections.constructor(ProjectDisplayElement.class,
                                 projectEntity.headEntity.title,
@@ -134,6 +146,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .leftJoin(projectLikesEntity)
                     .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
                 .groupBy(projectEntity.projectId)
+                .where(inProjectIds(projectIds))
                 .orderBy(orders.toArray(new OrderSpecifier[0]))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -175,5 +188,12 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         orders.add(new OrderSpecifier(Order.DESC, type.getTClass()));
         orders.add(new OrderSpecifier(Order.DESC, projectEntity.createdAt));
         return orders;
+    }
+
+    private BooleanExpression inProjectIds(List<Long> projectIds) {
+        if (projectIds == null) {
+            return null;
+        }
+        return projectEntity.projectId.in(projectIds);
     }
 }

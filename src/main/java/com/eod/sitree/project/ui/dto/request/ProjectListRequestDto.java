@@ -6,6 +6,8 @@ import static com.eod.sitree.project.infra.entity.QProjectLikesEntity.projectLik
 
 import com.eod.sitree.common.request.PageRequestDto;
 import com.querydsl.core.types.Expression;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProjectListRequestDto extends PageRequestDto {
     private SortType sortType = SortType.LATEST;
+    private List<Long> categoryIds = new ArrayList<>();
 
     @Getter
     public enum SortType {

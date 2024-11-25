@@ -1,7 +1,7 @@
 package com.eod.sitree.project.domain.modelRepository;
 
 import com.eod.sitree.project.domain.model.Project;
-import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
+import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,7 @@ public interface ProjectRepository {
 
     void getListByParticipantId();
 
-    Page<ProjectDisplayElement> getListBySearchType(Pageable pageable, SortType type);
+    Page<ProjectDisplayElement> getListBySearchType(Pageable pageable, ProjectListRequestDto type);
 
     void plusViewCount(long projectId, String userIp);
 

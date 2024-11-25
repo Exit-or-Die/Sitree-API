@@ -1,7 +1,6 @@
 package com.eod.sitree.member.service;
 
 import com.eod.sitree.auth.domain.JwtToken;
-import com.eod.sitree.auth.domain.JwtTokenType;
 import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.auth.service.AuthService;
 import com.eod.sitree.belonging.domain.modelRepository.BelongingRepository;
@@ -22,6 +21,7 @@ import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +31,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final BelongingRepository belongingRepository;
     private final AuthService authService;
+
+    @Value("${asset.image.baseProfileImage}")
+    private String BASE_PROFILE_IMAGE_URL;
 
 
     public SignInResponseDto signIn(MemberSignInRequestDto memberSignInRequestDto) {
@@ -68,7 +71,7 @@ public class MemberService {
             throw new BelongingException(ApplicationErrorType.BELONGING_NOT_FOUND);
         }
 
-        Member registeredNewMember = memberRepository.save(new Member(memberSignUpRequestDto));
+        Member registeredNewMember = memberRepository.save(new Member(memberSignUpRequestDto, BASE_PROFILE_IMAGE_URL));
 
         return new MemberTokensResponseDto(registeredNewMember);
     }

@@ -22,23 +22,19 @@ public class MemberSignUpRequestDto {
     @NotNull
     private String nickname;
 
-    @NotNull
-    private String profileImgUrl;
-
     private String thirdPartyProfileUrl;
 
     private Long belongingId;
 
 
     public MemberSignUpRequestDto(Provider provider, String oAuthToken, String email,
-        String thirdPartyProfileUrl, Long belongingId, String nickname, String profileImgUrl) {
+        String thirdPartyProfileUrl, Long belongingId, String nickname) {
         this.provider = provider;
         this.oAuthToken = oAuthToken;
         this.email = email;
         this.thirdPartyProfileUrl = thirdPartyProfileUrl;
         this.belongingId = belongingId;
         this.nickname = nickname;
-        this.profileImgUrl = profileImgUrl;
     }
 
     public boolean validateBelongingIncluded() {

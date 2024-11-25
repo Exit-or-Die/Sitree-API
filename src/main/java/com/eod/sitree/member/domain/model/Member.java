@@ -39,13 +39,13 @@ public class Member extends BaseTimeDomain {
         this.belongingId = memberEntity.getBelongingId();
     }
 
-    public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
+    public Member(MemberSignUpRequestDto memberSignUpRequestDto, String baseProfileImgUrl) {
         super(LocalDateTime.now(), null);
         this.memberId = null;
         this.provider = memberSignUpRequestDto.getProvider();
         this.nickname = memberSignUpRequestDto.getNickname();
         this.email = memberSignUpRequestDto.getEmail();
-        this.profileImgUrl = memberSignUpRequestDto.getProfileImgUrl();
+        this.profileImgUrl = baseProfileImgUrl;
         this.thirdPartyProfileUrl = memberSignUpRequestDto.getThirdPartyProfileUrl();
         this.belongingId = memberSignUpRequestDto.getBelongingId();
     }

@@ -45,3 +45,7 @@ oauth:
   url:
     google: https://www.googleapis.com/oauth2/v3/tokeninfo
     github: https://api.github.com/user
+
+asset:
+  image:
+    baseProfileImage: ENC(EFZ1ul/JuYb27JN5Ke+yT7oj0U5nVeDoRBZFMiCTl45UxBfKSQXW290Z0uPJva7i59SX1kJaWpG+MpyBP/Fp2q/Sj00DLCRbftyb4lou+Uqdx/KEuAhynhR7IgnXI/bgOWIzkmYleAUXSfV5v0ip6NPos6BTqRCJdVyBb7msVy4=)

@@ -51,8 +51,8 @@ public class MemberService {
 
     public MemberTokensResponseDto signUp(MemberSignUpRequestDto memberSignUpRequestDto) {
 
-        authService.validateOauthToken(memberSignUpRequestDto.getProvider(),
-            memberSignUpRequestDto.getOAuthToken(), memberSignUpRequestDto.getEmail());
+//        authService.validateOauthToken(memberSignUpRequestDto.getProvider(),
+//            memberSignUpRequestDto.getOAuthToken(), memberSignUpRequestDto.getEmail());
 
         Optional<Member> memberOptional = memberRepository.findByProviderAndEmailOptional(
             memberSignUpRequestDto.getProvider(), memberSignUpRequestDto.getEmail());

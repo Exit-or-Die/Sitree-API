@@ -28,4 +28,11 @@ public class CategoryController {
         var result = categoryService.getAllCategories();
         return ResponseDto.ok(result);
     }
+
+    @AuthNotRequired
+    @GetMapping("/grouped")
+    public ResponseDto<?> getGroupedCategories(){
+        var result = categoryService.getGroupedCategories();
+        return ResponseDto.ok(result);
+    }
 }

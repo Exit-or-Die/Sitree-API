@@ -13,9 +13,9 @@ public class BelongingWithPoint extends Belonging{
 
 
     public BelongingWithPoint(Long belongingId, BelongingType type, String name, String imageUrl,
-        long count) {
+        Long currentRanking, Long prevRanking, long count) {
 
-        super(belongingId, type, name, imageUrl);
+        super(belongingId, type, name, imageUrl, currentRanking, prevRanking);
         this.count = count;
         this.point = 0L;
     }

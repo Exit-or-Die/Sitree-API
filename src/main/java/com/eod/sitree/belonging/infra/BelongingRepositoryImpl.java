@@ -8,6 +8,9 @@ import com.eod.sitree.belonging.infra.entity.QBelongingEntity;
 import com.eod.sitree.member.infra.entity.QMemberEntity;
 import com.eod.sitree.project.infra.entity.QParticipantEntity;
 import com.eod.sitree.project.infra.entity.QProjectEntity;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -63,6 +66,8 @@ public class BelongingRepositoryImpl implements BelongingRepository {
                     belongingEntity.belongingType,
                     belongingEntity.name,
                     belongingEntity.imageUrl,
+                    belongingEntity.currentRanking,
+                    belongingEntity.prevRanking,
                     belongingEntity.belongingId.count()
                 )
             )
@@ -86,5 +91,29 @@ public class BelongingRepositoryImpl implements BelongingRepository {
                 belongingEntity.imageUrl
                 )
             .fetch();
+    }
+
+    @Override
+    public List<BelongingEntity> saveAll(List<BelongingEntity> belongingEntities) {
+
+        return belongingJpaRepository.saveAll(belongingEntities);
+    }
+
+    @Override
+    public List<Belonging> findBelongingByRankingAsc() {
+
+        return jpaQueryFactory.selectFrom(belongingEntity)
+            .orderBy(
+                orderNullsLast(belongingEntity.currentRanking, Order.ASC),
+                belongingEntity.name.asc()
+            )
+            .fetch()
+            .stream()
+            .map(BelongingEntity::toDomainModel)
+            .toList();
+    }
+
+    private <T extends Comparable> OrderSpecifier<T> orderNullsLast(Path<T> path, Order order) {
+        return new OrderSpecifier<>(order, path, OrderSpecifier.NullHandling.NullsLast);
     }
 }

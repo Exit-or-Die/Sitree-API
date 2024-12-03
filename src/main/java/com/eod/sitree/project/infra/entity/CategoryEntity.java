@@ -20,6 +20,9 @@ public class CategoryEntity {
     @Column(name = "id")
     private Long categoryId;
 
+    @Column(nullable = false)
+    private Long groupId;
+
     @Column(nullable = false, unique = true)
     private String name;
 

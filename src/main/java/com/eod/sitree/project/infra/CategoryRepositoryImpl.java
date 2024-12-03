@@ -14,6 +14,8 @@ import com.eod.sitree.project.infra.jpa_interfaces.CategoryUsageJpaRepository;
 import com.eod.sitree.project.ui.dto.response.CategoryGetResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -75,4 +77,19 @@ public class CategoryRepositoryImpl implements CategoryRepository {
                 .groupBy(categoryEntity.categoryId)
                 .fetch();
     }
+
+    @Override
+    public List<List<CategoryGetResponseDto>> getGroupedCategories() {
+        HashMap<Long, List<CategoryGetResponseDto>> output = new HashMap<>();
+        List<CategoryEntity> categoryEntities = jpaQueryFactory
+                .selectFrom(categoryEntity)
+                .fetch();
+        categoryEntities.forEach(c -> {
+            List<CategoryGetResponseDto> categoryGroup = output.getOrDefault(c.getGroupId(), new ArrayList<>());
+            categoryGroup.add(new CategoryGetResponseDto(c.getCategoryId(), c.getName()));
+            output.put(c.getGroupId(), categoryGroup);
+        });
+        return output.values().stream().toList();
+    }
+
 }

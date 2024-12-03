@@ -6,7 +6,7 @@ import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
 import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.ClientRequestServiceImpl;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
-import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
+import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
@@ -57,8 +57,8 @@ public class ProjectService {
         return new ProjectLikesResponseDto(isLiked);
     }
 
-    public ProjectListResponseDto getProjectList(Pageable pageable, SortType type) {
-        var result = projectRepository.getListBySearchType(pageable, type);
+    public ProjectListResponseDto getProjectList(Pageable pageable, ProjectListRequestDto dto) {
+        var result = projectRepository.getListBySearchType(pageable, dto);
         return new ProjectListResponseDto(result.getNumber(), result.isLast(), result.getContent());
     }
 

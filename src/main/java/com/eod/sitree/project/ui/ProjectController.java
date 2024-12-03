@@ -47,7 +47,7 @@ public class ProjectController {
     @AuthNotRequired
     public ResponseDto<?> getProjectList(ProjectListRequestDto dto) {
         Pageable pageable = dto.getPageableParam();
-        var result = projectService.getProjectList(pageable, dto.getSortType());
+        var result = projectService.getProjectList(pageable, dto);
         return new ResponseDto<>(result);
     }
 

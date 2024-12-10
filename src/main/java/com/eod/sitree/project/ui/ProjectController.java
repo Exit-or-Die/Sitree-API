@@ -52,8 +52,16 @@ public class ProjectController {
     }
 
     @PostMapping("{projectId}/likes")
-    public ResponseDto<?> toggleProjectLikes(@PathVariable Long projectId, @MemberPrincipal Member member){
+    public ResponseDto<?> toggleProjectLikes(@PathVariable Long projectId,
+            @MemberPrincipal Member member) {
         var result = projectService.toggleProjectLikes(projectId, member.getMemberId());
+        return new ResponseDto<>(result);
+    }
+
+    @AuthNotRequired
+    @GetMapping("/sitree-pick")
+    public ResponseDto<?> getSitreeSuggestion() {
+        var result = projectService.getSitreeSuggestion();
         return new ResponseDto<>(result);
     }
 }

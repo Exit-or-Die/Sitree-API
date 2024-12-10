@@ -14,6 +14,7 @@ public class ProjectListResponseDto {
 
     @Getter
     public static class ProjectDisplayElement{
+        private final long projectId;
         private final String name;
         private final String thumbnail;
         private final String shortDescription;
@@ -24,9 +25,10 @@ public class ProjectListResponseDto {
         private final LocalDateTime latestUpdateTime; // timestamp 형식
         private Boolean isHealthy;
 
-        public ProjectDisplayElement(String name, String thumbnail, String shortDescription,
+        public ProjectDisplayElement(Long projectId, String name, String thumbnail, String shortDescription,
                 String backgroundImage, long commentCount, long likesCount, long viewCount,
                 LocalDateTime latestUpdateTime) {
+            this.projectId = projectId;
             this.name = name;
             this.thumbnail = thumbnail;
             this.shortDescription = shortDescription;

@@ -11,7 +11,9 @@ import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
+import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -67,5 +69,9 @@ public class ProjectService {
         if (!projectRepository.existsById(projectId)) {
             throw new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID);
         }
+    }
+
+    public List<SitreePickGetResponse> getSitreeSuggestion() {
+        return projectRepository.getSitreeSuggestion();
     }
 }

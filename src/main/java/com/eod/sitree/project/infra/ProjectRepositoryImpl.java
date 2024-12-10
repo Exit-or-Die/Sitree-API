@@ -4,6 +4,7 @@ import static com.eod.sitree.comment.infra.entity.QCommentEntity.commentEntity;
 import static com.eod.sitree.project.infra.entity.QCategoryUsageEntity.categoryUsageEntity;
 import static com.eod.sitree.project.infra.entity.QProjectEntity.projectEntity;
 import static com.eod.sitree.project.infra.entity.QProjectLikesEntity.projectLikesEntity;
+import static com.eod.sitree.project.infra.entity.QProjectSuggestionEntity.projectSuggestionEntity;
 
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Architecture;
@@ -29,6 +30,7 @@ import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
+import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -131,6 +133,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         List<OrderSpecifier<?>> orders = getOrderSpecifiers(dto.getSortType());
         List<ProjectDisplayElement> listResult = jpaQueryFactory.select(
                         Projections.constructor(ProjectDisplayElement.class,
+                                projectEntity.projectId,
                                 projectEntity.headEntity.title,
                                 projectEntity.headEntity.thumbnailImageUrl,
                                 projectEntity.headEntity.shortDescription,
@@ -180,6 +183,29 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         projectLikes.toggleLike();
         ProjectLikesEntity save = projectLikesRepository.save(projectLikes);
         return save.getIsLiked();
+    }
+
+    @Override
+    public List<SitreePickGetResponse> getSitreeSuggestion() {
+        return jpaQueryFactory.select(
+                        Projections.constructor(SitreePickGetResponse.class,
+                                projectEntity.projectId,
+                                projectEntity.headEntity.title,
+                                projectEntity.headEntity.thumbnailImageUrl,
+                                projectEntity.overviewEntity.representImage,
+                                commentEntity.commentId.countDistinct(),
+                                projectLikesEntity.likesId.countDistinct(),
+                                projectEntity.viewCount
+                        ))
+                .from(projectEntity)
+                .innerJoin(projectSuggestionEntity)
+                .on(projectEntity.projectId.eq(projectSuggestionEntity.projectId))
+                .leftJoin(commentEntity)
+                .on(projectEntity.projectId.eq(commentEntity.targetId).and(commentEntity.isDeleted.eq(false)))
+                .leftJoin(projectLikesEntity)
+                .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
+                .groupBy(projectEntity.projectId)
+                .fetch();
     }
 
     private List<OrderSpecifier<?>> getOrderSpecifiers(SortType type) {

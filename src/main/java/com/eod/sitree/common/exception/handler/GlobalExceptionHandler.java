@@ -21,6 +21,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -76,6 +77,13 @@ public class GlobalExceptionHandler {
         log.info("{}", e.getMessage());
         e.printStackTrace(System.err);
         return getResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ResponseDto<String>> handleIllegalArgumentException(NoResourceFoundException e) {
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
+        return getResponse(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(AuthException.class)

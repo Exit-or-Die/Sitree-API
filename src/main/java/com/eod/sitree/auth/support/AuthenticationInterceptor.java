@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 @RequiredArgsConstructor
 public class AuthenticationInterceptor implements HandlerInterceptor {
@@ -19,7 +20,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
 
-        if (checkAnnotation(handler, AuthNotRequired.class) || request.getMethod().equals("OPTIONS")) {
+        if (checkAnnotation(handler, AuthNotRequired.class) || request.getMethod().equals("OPTIONS") || handler.getClass().equals(
+            ResourceHttpRequestHandler.class)) {
             return true;
         }
 

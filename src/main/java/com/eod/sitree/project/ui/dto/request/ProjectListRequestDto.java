@@ -18,6 +18,7 @@ import lombok.Setter;
 public class ProjectListRequestDto extends PageRequestDto {
     private SortType sortType = SortType.LATEST;
     private List<Long> categoryIds = new ArrayList<>();
+    private String nameKeyword = "";
 
     @Getter
     public enum SortType {

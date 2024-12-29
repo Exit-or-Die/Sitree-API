@@ -149,7 +149,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .leftJoin(projectLikesEntity)
                     .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
                 .groupBy(projectEntity.projectId)
-                .where(inProjectIds(projectIds))
+                .where(inProjectIds(projectIds), projectNameContains(dto.getNameKeyword()))
                 .orderBy(orders.toArray(new OrderSpecifier[0]))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -221,5 +221,12 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             return null;
         }
         return projectEntity.projectId.in(projectIds);
+    }
+
+    private BooleanExpression projectNameContains(String keyWord) {
+        if (keyWord.isEmpty()) {
+            return null;
+        }
+        return projectEntity.headEntity.title.containsIgnoreCase(keyWord);
     }
 }

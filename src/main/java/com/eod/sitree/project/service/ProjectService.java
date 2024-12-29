@@ -7,6 +7,7 @@ import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.ClientRequestServiceImpl;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
+import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
@@ -61,6 +62,10 @@ public class ProjectService {
 
     public ProjectListResponseDto getProjectList(Pageable pageable, ProjectListRequestDto dto) {
         var result = projectRepository.getListBySearchType(pageable, dto);
+        result.getContent().forEach(p -> {
+            boolean healthy = clientRequestService.isHealthy(p.getHealthCheckUrl());
+            p.setIsHealthy(healthy);
+        });
         return new ProjectListResponseDto(result.getNumber(), result.isLast(), result.getContent());
     }
 
@@ -74,4 +79,15 @@ public class ProjectService {
     public List<SitreePickGetResponse> getSitreeSuggestion() {
         return projectRepository.getSitreeSuggestion();
     }
+
+    public List<ParticipatedProjectsResponseDto> getParticipatedProjects(Long memberId){
+        List<ParticipatedProjectsResponseDto> participatedProjects = projectRepository.getParticipatedProjects(
+                memberId);
+        participatedProjects.forEach(p -> {
+            boolean healthy = clientRequestService.isHealthy(p.getHealthCheckUrl());
+            p.setIsHealthy(healthy);
+        });
+        return participatedProjects;
+    }
+
 }

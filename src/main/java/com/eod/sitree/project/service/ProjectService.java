@@ -15,6 +15,7 @@ import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -62,7 +63,7 @@ public class ProjectService {
 
     public ProjectListResponseDto getProjectList(Pageable pageable, ProjectListRequestDto dto) {
         var result = projectRepository.getListBySearchType(pageable, dto);
-        result.getContent().forEach(p -> {
+        result.getContent().parallelStream().forEach(p -> {
             boolean healthy = clientRequestService.isHealthy(p.getHealthCheckUrl());
             p.setIsHealthy(healthy);
         });
@@ -83,7 +84,7 @@ public class ProjectService {
     public List<ParticipatedProjectsResponseDto> getParticipatedProjects(Long memberId){
         List<ParticipatedProjectsResponseDto> participatedProjects = projectRepository.getParticipatedProjects(
                 memberId);
-        participatedProjects.forEach(p -> {
+        participatedProjects.parallelStream().forEach(p -> {
             boolean healthy = clientRequestService.isHealthy(p.getHealthCheckUrl());
             p.setIsHealthy(healthy);
         });

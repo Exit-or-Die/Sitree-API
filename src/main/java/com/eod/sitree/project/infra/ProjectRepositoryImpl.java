@@ -2,6 +2,8 @@ package com.eod.sitree.project.infra;
 
 import static com.eod.sitree.comment.infra.entity.QCommentEntity.commentEntity;
 import static com.eod.sitree.project.infra.entity.QCategoryUsageEntity.categoryUsageEntity;
+import static com.eod.sitree.project.infra.entity.QFocusPointEntity.focusPointEntity;
+import static com.eod.sitree.project.infra.entity.QParticipantEntity.participantEntity;
 import static com.eod.sitree.project.infra.entity.QProjectEntity.projectEntity;
 import static com.eod.sitree.project.infra.entity.QProjectLikesEntity.projectLikesEntity;
 import static com.eod.sitree.project.infra.entity.QProjectSuggestionEntity.projectSuggestionEntity;
@@ -29,6 +31,7 @@ import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository
 import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
+import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import com.querydsl.core.types.Order;
@@ -141,14 +144,23 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                                 commentEntity.commentId.countDistinct(),
                                 projectLikesEntity.likesId.countDistinct(),
                                 projectEntity.viewCount,
-                                projectEntity.modifiedAt
+                                projectEntity.modifiedAt,
+                                projectEntity.headEntity.healthCheckUrl
                         ))
                 .from(projectEntity)
                 .leftJoin(commentEntity)
                     .on(projectEntity.projectId.eq(commentEntity.targetId).and(commentEntity.isDeleted.eq(false)))
                 .leftJoin(projectLikesEntity)
                     .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
-                .groupBy(projectEntity.projectId)
+                .groupBy(projectEntity.projectId,
+                        projectEntity.headEntity.title,
+                        projectEntity.headEntity.thumbnailImageUrl,
+                        projectEntity.headEntity.shortDescription,
+                        projectEntity.overviewEntity.representImage,
+                        projectEntity.viewCount,
+                        projectEntity.modifiedAt,
+                        projectEntity.headEntity.healthCheckUrl
+                )
                 .where(inProjectIds(projectIds), projectNameContains(dto.getNameKeyword()))
                 .orderBy(orders.toArray(new OrderSpecifier[0]))
                 .offset(pageable.getOffset())
@@ -205,6 +217,46 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .leftJoin(projectLikesEntity)
                 .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
                 .groupBy(projectEntity.projectId)
+                .fetch();
+    }
+
+    @Override
+    public List<ParticipatedProjectsResponseDto> getParticipatedProjects(long memberId) {
+        return jpaQueryFactory.select(
+                Projections.constructor(ParticipatedProjectsResponseDto.class,
+                            projectEntity.projectId,
+                            projectEntity.headEntity.title,
+                            projectEntity.headEntity.thumbnailImageUrl,
+                            projectEntity.headEntity.shortDescription,
+                            projectEntity.overviewEntity.representImage,
+                            commentEntity.commentId.countDistinct(),
+                            projectLikesEntity.likesId.countDistinct(),
+                            projectEntity.viewCount,
+                            projectEntity.modifiedAt,
+                            projectEntity.headEntity.healthCheckUrl,
+                            focusPointEntity.focusPointId,
+                            focusPointEntity.focusedOn
+                        ))
+                .from(projectEntity)
+                .innerJoin(participantEntity)
+                    .on(projectEntity.projectId.eq(participantEntity.projectId))
+                .leftJoin(commentEntity)
+                    .on(projectEntity.projectId.eq(commentEntity.targetId).and(commentEntity.isDeleted.eq(false)))
+                .leftJoin(projectLikesEntity)
+                    .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
+                .leftJoin(focusPointEntity)
+                    .on(participantEntity.participantId.eq(focusPointEntity.participantId))
+                .where(participantEntity.memberId.eq(memberId))
+                .groupBy(projectEntity.projectId,
+                        projectEntity.headEntity.title,
+                        projectEntity.headEntity.thumbnailImageUrl,
+                        projectEntity.headEntity.shortDescription,
+                        projectEntity.overviewEntity.representImage,
+                        projectEntity.viewCount,
+                        projectEntity.modifiedAt,
+                        projectEntity.headEntity.healthCheckUrl,
+                        focusPointEntity.focusPointId,
+                        focusPointEntity.focusedOn)
                 .fetch();
     }
 

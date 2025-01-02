@@ -7,6 +7,7 @@ import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.ClientRequestServiceImpl;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
+import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
@@ -14,6 +15,7 @@ import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +63,10 @@ public class ProjectService {
 
     public ProjectListResponseDto getProjectList(Pageable pageable, ProjectListRequestDto dto) {
         var result = projectRepository.getListBySearchType(pageable, dto);
+        result.getContent().parallelStream().forEach(p -> {
+            boolean healthy = clientRequestService.isHealthy(p.getHealthCheckUrl());
+            p.setIsHealthy(healthy);
+        });
         return new ProjectListResponseDto(result.getNumber(), result.isLast(), result.getContent());
     }
 
@@ -74,4 +80,15 @@ public class ProjectService {
     public List<SitreePickGetResponse> getSitreeSuggestion() {
         return projectRepository.getSitreeSuggestion();
     }
+
+    public List<ParticipatedProjectsResponseDto> getParticipatedProjects(Long memberId){
+        List<ParticipatedProjectsResponseDto> participatedProjects = projectRepository.getParticipatedProjects(
+                memberId);
+        participatedProjects.parallelStream().forEach(p -> {
+            boolean healthy = clientRequestService.isHealthy(p.getHealthCheckUrl());
+            p.setIsHealthy(healthy);
+        });
+        return participatedProjects;
+    }
+
 }

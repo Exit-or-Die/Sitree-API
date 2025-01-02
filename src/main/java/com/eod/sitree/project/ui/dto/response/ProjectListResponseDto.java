@@ -1,5 +1,6 @@
 package com.eod.sitree.project.ui.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -24,10 +25,12 @@ public class ProjectListResponseDto {
         private final long viewCount;
         private final LocalDateTime latestUpdateTime; // timestamp 형식
         private Boolean isHealthy;
+        @JsonIgnore
+        private final String healthCheckUrl;
 
         public ProjectDisplayElement(Long projectId, String name, String thumbnail, String shortDescription,
                 String backgroundImage, long commentCount, long likesCount, long viewCount,
-                LocalDateTime latestUpdateTime) {
+                LocalDateTime latestUpdateTime, String healthCheckUrl) {
             this.projectId = projectId;
             this.name = name;
             this.thumbnail = thumbnail;
@@ -38,6 +41,11 @@ public class ProjectListResponseDto {
             this.viewCount = viewCount;
             this.latestUpdateTime = latestUpdateTime;
             this.isHealthy = null;
+            this.healthCheckUrl = healthCheckUrl;
+        }
+
+        public void setIsHealthy(boolean isHealthy) {
+            this.isHealthy = isHealthy;
         }
     }
 }

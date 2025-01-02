@@ -64,4 +64,11 @@ public class ProjectController {
         var result = projectService.getSitreeSuggestion();
         return new ResponseDto<>(result);
     }
+
+    @AuthNotRequired
+    @GetMapping("/participants/{memberId}")
+    public ResponseDto<?> getParticipatedProjects(@PathVariable Long memberId){
+        var result = projectService.getParticipatedProjects(memberId);
+        return new ResponseDto<>(result);
+    }
 }

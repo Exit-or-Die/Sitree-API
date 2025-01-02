@@ -1,6 +1,7 @@
 package com.eod.sitree.comment.ui;
 
 import com.eod.sitree.auth.infra.resolver.MemberPrincipal;
+import com.eod.sitree.auth.support.AuthNotRequired;
 import com.eod.sitree.comment.service.CommentService;
 import com.eod.sitree.comment.ui.dto.request.CommentCreateRequestDto;
 import com.eod.sitree.comment.ui.dto.response.CommentCreateResponseDto;
@@ -35,6 +36,7 @@ public class CommentController {
         return ResponseDto.ok(commentService.createProjectComment(projectId, commentCreateRequestDto, member));
     }
 
+    @AuthNotRequired
     @GetMapping("/project/{projectId}")
     public ResponseDto<List<CommentsResponseDto>> findProjectComments(@PathVariable Long projectId) {
 

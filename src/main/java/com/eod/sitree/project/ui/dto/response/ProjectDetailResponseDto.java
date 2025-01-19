@@ -2,7 +2,6 @@ package com.eod.sitree.project.ui.dto.response;
 
 import com.eod.sitree.project.domain.model.Architecture;
 import com.eod.sitree.project.domain.model.Category;
-import com.eod.sitree.project.domain.model.ClientUrl;
 import com.eod.sitree.project.domain.model.Head;
 import com.eod.sitree.project.domain.model.Image;
 import com.eod.sitree.project.domain.model.Overview;
@@ -10,6 +9,7 @@ import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.model.Techview;
 import com.eod.sitree.project.domain.model.type.PlatformType;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import lombok.Getter;
@@ -23,6 +23,7 @@ public class ProjectDetailResponseDto {
     private final List<Architecture> architectureList;
     private final List<ParticipantDto> participantList;
     private final Long viewCount;
+    private final LocalDateTime createdAt;
     private final boolean isHealthy;
 
     public ProjectDetailResponseDto(Project project, boolean isHealthy) {
@@ -35,6 +36,7 @@ public class ProjectDetailResponseDto {
         this.participantList = project.getParticipants().stream().map(ParticipantDto::new).toList();
         this.viewCount = project.getViewCount();
         this.isHealthy = isHealthy;
+        this.createdAt = project.getCreatedAt();
     }
 
     @Getter

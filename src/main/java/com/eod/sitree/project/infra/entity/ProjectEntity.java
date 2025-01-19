@@ -51,6 +51,6 @@ public class ProjectEntity extends BaseEntity {
     public Project toDomainModel(List<Category> categoryList, List<Techview> techviewList, List<Architecture> architectureList, List<Participant> participantList) {
         Head head = this.headEntity.toDomainModel();
         Overview overview = this.overviewEntity.toDomainModel();
-        return new Project(head, categoryList, overview, techviewList, architectureList, participantList, this.viewCount);
+        return new Project(head, categoryList, overview, techviewList, architectureList, participantList, this.viewCount, this.getCreatedAt());
     }
 }

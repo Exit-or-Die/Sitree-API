@@ -45,7 +45,7 @@ public class ProjectCreateRequestDto {
         List<Architecture> architectureDomainModelList = architectureList.stream().map(ArchitectureDto::toDomainModel).toList();
         List<Participant> participantDomainModelList = participantList.stream().map(ParticipantDto::toDomainModel).toList();
         return new Project(headDomainModel, categoryDomainModelList, overviewDomainModel,
-                techviewDomainModelList,architectureDomainModelList, participantDomainModelList);
+                techviewDomainModelList,architectureDomainModelList, participantDomainModelList, null);
     }
 
     @Getter

@@ -1,10 +1,9 @@
 package com.eod.sitree.project.domain.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,10 +16,11 @@ public class Project {
     private final List<Techview> techviews;
     private final List<Architecture> architectures;
     private final List<Participant> participants;
+    private final LocalDateTime createdAt;
 
     public Project(Head head, List<Category> categories, Overview overview,
             List<Techview> techviews,
-            List<Architecture> architectures, List<Participant> participants, Long viewCount) {
+            List<Architecture> architectures, List<Participant> participants, Long viewCount, LocalDateTime createdAt) {
         List<Architecture> arr = new ArrayList<>(architectures);
         arr.sort(Comparator.comparingInt(o -> o.getArchitectureType().getTabNumber()));
         this.head = head;
@@ -30,6 +30,7 @@ public class Project {
         this.architectures = arr;
         this.participants = participants;
         this.viewCount = viewCount;
+        this.createdAt = createdAt;
     }
 
     private Long viewCount = 0L;

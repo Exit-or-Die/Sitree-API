@@ -8,17 +8,31 @@ import com.eod.sitree.comment.domain.modelrepository.CommentRepository;
 import com.eod.sitree.comment.exception.CommentException;
 import com.eod.sitree.comment.infra.entity.CommentEntity;
 import com.eod.sitree.common.exception.ApplicationErrorType;
+import com.eod.sitree.member.domain.model.Member;
+import com.eod.sitree.member.infra.entity.MemberEntity;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
-public class CommentRepositoryImpl implements CommentRepository {
+public class CommentRepositoryImpl extends QuerydslRepositorySupport implements CommentRepository {
 
     private final CommentJpaRepository commentJpaRepository;
+    private final JPAQueryFactory jpaQueryFactory;
+
+    public CommentRepositoryImpl(CommentJpaRepository commentJpaRepository, JPAQueryFactory jpaQueryFactory) {
+        super(Member.class);
+        this.jpaQueryFactory = jpaQueryFactory;
+        this.commentJpaRepository = commentJpaRepository;
+    }
 
     @Override
     public Comment save(Comment comment) {
@@ -47,6 +61,25 @@ public class CommentRepositoryImpl implements CommentRepository {
             .orElseGet(ArrayList::new)
             .stream().map(CommentEntity::toDomainModel)
             .toList();
+    }
+
+    @Override
+    public Page<Comment> findByProjectIdAsPage(Long projectId, Pageable pageable) {
+        JPQLQuery<CommentEntity> query = getQuerydsl().applyPagination(
+            pageable,
+            jpaQueryFactory.selectFrom(commentEntity)
+                .where(
+                    commentEntity.commentType.eq(CommentType.PROJECT),
+                    commentEntity.targetId.eq(projectId),
+                    commentEntity.isChildComment.eq(false)
+                )
+        );
+
+        return new PageImpl<>(
+            query.fetch().stream().map(CommentEntity::toDomainModel).toList(),
+            pageable,
+            query.fetchCount()
+        );
     }
 
     @Override

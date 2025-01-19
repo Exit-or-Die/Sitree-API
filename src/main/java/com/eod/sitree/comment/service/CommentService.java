@@ -4,9 +4,11 @@ import com.eod.sitree.comment.domain.model.Comment;
 import com.eod.sitree.comment.domain.model.CommentType;
 import com.eod.sitree.comment.domain.modelrepository.CommentRepository;
 import com.eod.sitree.comment.ui.dto.request.CommentCreateRequestDto;
+import com.eod.sitree.comment.ui.dto.request.CommentFetchRequest;
 import com.eod.sitree.comment.ui.dto.response.CommentCreateResponseDto;
 import com.eod.sitree.comment.ui.dto.request.CommentUpdateRequestDto;
 import com.eod.sitree.comment.ui.dto.response.CommentDeleteResponseDto;
+import com.eod.sitree.comment.ui.dto.response.CommentResponseDto;
 import com.eod.sitree.comment.ui.dto.response.CommentUpdateResponseDto;
 import com.eod.sitree.comment.ui.dto.response.CommentsResponseDto;
 import com.eod.sitree.member.domain.model.Member;
@@ -46,12 +48,17 @@ public class CommentService {
         return new CommentCreateResponseDto(true);
     }
 
-    public List<CommentsResponseDto> findProjectComment(Long projectId) {
+    public List<CommentResponseDto> findProjectComment(Long projectId) {
 
         List<Comment> comments = commentRepository.findByProjectId(projectId);
         return comments.stream()
-            .map(CommentsResponseDto::new)
+            .map(CommentResponseDto::new)
             .toList();
+    }
+
+    public CommentsResponseDto findProjectCommentAsPage(Long projectId, CommentFetchRequest request) {
+
+        return new CommentsResponseDto(commentRepository.findByProjectIdAsPage(projectId, request.getPageable()));
     }
 
     @Transactional

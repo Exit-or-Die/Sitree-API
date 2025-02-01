@@ -4,6 +4,7 @@ import com.eod.sitree.auth.infra.resolver.MemberPrincipal;
 import com.eod.sitree.auth.support.AuthNotRequired;
 import com.eod.sitree.comment.service.CommentService;
 import com.eod.sitree.comment.ui.dto.request.CommentCreateRequestDto;
+import com.eod.sitree.comment.ui.dto.request.CommentFetchRequest;
 import com.eod.sitree.comment.ui.dto.response.CommentCreateResponseDto;
 import com.eod.sitree.comment.ui.dto.request.CommentUpdateRequestDto;
 import com.eod.sitree.comment.ui.dto.response.CommentDeleteResponseDto;
@@ -38,9 +39,9 @@ public class CommentController {
 
     @AuthNotRequired
     @GetMapping("/project/{projectId}")
-    public ResponseDto<List<CommentsResponseDto>> findProjectComments(@PathVariable Long projectId) {
+    public ResponseDto<CommentsResponseDto> findProjectComments(@PathVariable Long projectId, CommentFetchRequest request) {
 
-        return ResponseDto.ok(commentService.findProjectComment(projectId));
+        return ResponseDto.ok(commentService.findProjectCommentAsPage(projectId, request));
     }
 
     @PutMapping("/{commentId}")

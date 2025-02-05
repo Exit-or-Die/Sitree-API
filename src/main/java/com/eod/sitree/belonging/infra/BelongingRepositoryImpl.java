@@ -1,6 +1,7 @@
 package com.eod.sitree.belonging.infra;
 
 import com.eod.sitree.belonging.domain.model.Belonging;
+import com.eod.sitree.belonging.domain.model.BelongingType;
 import com.eod.sitree.belonging.domain.model.BelongingWithPoint;
 import com.eod.sitree.belonging.domain.modelRepository.BelongingRepository;
 import com.eod.sitree.belonging.infra.entity.BelongingEntity;
@@ -12,6 +13,7 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,8 @@ public class BelongingRepositoryImpl implements BelongingRepository {
     private final QProjectEntity projectEntity = QProjectEntity.projectEntity;
     private final QParticipantEntity participantEntity = QParticipantEntity.participantEntity;
     private final QMemberEntity memberEntity = QMemberEntity.memberEntity;
+
+    private final static Long DEFAULT_RANKING_SIZE = 20L;
 
 
     @Override
@@ -100,13 +104,17 @@ public class BelongingRepositoryImpl implements BelongingRepository {
     }
 
     @Override
-    public List<Belonging> findBelongingByRankingAsc() {
+    public List<Belonging> findBelongingByRankingAsc(BelongingType belongingType) {
 
         return jpaQueryFactory.selectFrom(belongingEntity)
+            .where(
+                eqBelongingType(belongingType, belongingEntity)
+            )
             .orderBy(
                 orderNullsLast(belongingEntity.currentRanking, Order.ASC),
                 belongingEntity.name.asc()
             )
+            .limit(DEFAULT_RANKING_SIZE)
             .fetch()
             .stream()
             .map(BelongingEntity::toDomainModel)
@@ -115,5 +123,14 @@ public class BelongingRepositoryImpl implements BelongingRepository {
 
     private <T extends Comparable> OrderSpecifier<T> orderNullsLast(Path<T> path, Order order) {
         return new OrderSpecifier<>(order, path, OrderSpecifier.NullHandling.NullsLast);
+    }
+
+    public BooleanExpression eqBelongingType(BelongingType belongingType, QBelongingEntity belongingEntity) {
+
+        if(belongingType == null) {
+            return null;
+        }
+
+        return belongingEntity.belongingType.eq(belongingType);
     }
 }

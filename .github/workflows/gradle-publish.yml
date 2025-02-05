@@ -77,9 +77,8 @@ jobs:
           chmod 600 private_key.pem
           scp -i private_key.pem -o StrictHostKeyChecking=no build/libs/sitree-0.0.1-SNAPSHOT.jar ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USERNAME }}/sitree.jar
           ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "pgrep java | xargs kill -9; nohup java -jar -Dspring.profiles.active=live -Djasypt.encryptor.password=${{ secrets.JASYPT_KEY }} /home/${{ secrets.EC2_USERNAME }}/sitree.jar > app.log 2>&1 & disown" </dev/null
-          rm -f private_key.pem
-          
-      - name: Check server health
-        run: |
           sleep 5
           ssh -i private_key.pem -o StrictHostKeyChecking=no ***@*** "curl -Is http://localhost:8080 | head -n 1"
+          rm -f private_key.pem
+          exit
+        

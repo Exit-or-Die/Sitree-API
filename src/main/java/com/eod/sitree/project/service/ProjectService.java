@@ -2,6 +2,7 @@ package com.eod.sitree.project.service;
 
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Project;
+import com.eod.sitree.project.domain.modelRepository.ProjectLikesRepository;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
 import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.ClientRequestServiceImpl;
@@ -15,7 +16,6 @@ import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +28,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ClientRequestServiceImpl clientRequestService;
+    private final ProjectLikesRepository projectLikesRepository;
 
     @Transactional
     public ProjectCreateResponseDto createProject(ProjectCreateRequestDto projectCreateRequestDto) {
@@ -36,10 +37,15 @@ public class ProjectService {
         return new ProjectCreateResponseDto(savedProjectId);
     }
 
-    public ProjectDetailResponseDto getProjectDetail(long projectId){
-        Project project = projectRepository.getById(projectId);
-        boolean healthy = clientRequestService.isHealthy(project.getHealthCheckUrl());
-        return new ProjectDetailResponseDto(project, healthy);
+    public ProjectDetailResponseDto getProjectDetail(long projectId, Long memberId){
+        ProjectDetailResponseDto project = projectRepository.getProjectDetailByProjectId(projectId);
+        boolean healthy = clientRequestService.isHealthy(project.getHead().getHealthCheckUrl());
+        var result = projectLikesRepository.getProjectLikeInfo(projectId, memberId);
+
+        project.setLikeInfo(result.getLikeCount(), result.getIsLiked());
+        project.setHealthCheck(healthy);
+
+        return project;
     }
 
     @Transactional

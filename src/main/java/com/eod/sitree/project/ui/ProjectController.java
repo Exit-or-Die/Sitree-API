@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -36,10 +37,10 @@ public class ProjectController {
 
     @AuthNotRequired
     @GetMapping("/{projectId}")
-    public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId
+    public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId, @RequestParam(required = false) Long memberId
             , HttpServletRequest request) {
         projectService.addViewCount(projectId, request.getRemoteAddr());
-        var result = projectService.getProjectDetail(projectId);
+        var result = projectService.getProjectDetail(projectId, memberId);
         return new ResponseDto<>(result);
     }
 

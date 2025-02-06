@@ -39,6 +39,10 @@ public class ProjectService {
 
     public ProjectDetailResponseDto getProjectDetail(long projectId, Long memberId){
         ProjectDetailResponseDto project = projectRepository.getProjectDetailByProjectId(projectId);
+        if (project == null) {
+            throw new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID);
+        }
+
         boolean healthy = clientRequestService.isHealthy(project.getHead().getHealthCheckUrl());
         var result = projectLikesRepository.getProjectLikeInfo(projectId, memberId);
 

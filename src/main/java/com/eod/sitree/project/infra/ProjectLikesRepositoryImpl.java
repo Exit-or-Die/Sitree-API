@@ -37,8 +37,7 @@ public class ProjectLikesRepositoryImpl implements ProjectLikesRepository {
                 .select(projectLikesEntity.isLiked.isTrue())
                 .from(projectLikesEntity)
                 .where(projectLikesEntity.memberId.eq(memberId)
-                        .and(projectLikesEntity.projectId.eq(projectId))
-                        .and(projectLikesEntity.isLiked.isTrue()))
+                        .and(projectLikesEntity.projectId.eq(projectId)))
                 .limit(1);
 
         // 최종 쿼리 (한방에 처리?)

@@ -111,7 +111,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .where(projectEntity.projectId.eq(projectId))
                 .fetchOne();
         if (projectDetailDto == null) {
-            throw new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID);
+            return null;
         }
         List<Category> categories = categoryRepository.findAllByProjectId(projectId);
         List<ParticipantDto> participantDtos = jpaQueryFactory.select(

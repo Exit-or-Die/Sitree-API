@@ -3,6 +3,7 @@ package com.eod.sitree.project.domain.modelRepository;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import java.util.List;
@@ -11,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProjectRepository {
 
-    Project getById(long projectId);
+//    Project getById(long projectId);
+
+    ProjectDetailResponseDto getProjectDetailByProjectId(long projectId);
 
     Long save(Project project);
 

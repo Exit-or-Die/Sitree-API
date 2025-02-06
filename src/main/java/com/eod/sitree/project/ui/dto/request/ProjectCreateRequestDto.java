@@ -28,7 +28,7 @@ public class ProjectCreateRequestDto {
     @NotNull @Valid
     private HeadDto head;
     @NotNull @Valid
-    private List<ProjectTagDto> projectTagList; // Domain Model 에서는 Category 로 사용됨
+    private List<ProjectTagDto> categories; // Domain Model 에서는 Category 로 사용됨
     @NotNull @Valid
     private OverviewDto overview;
     @Valid
@@ -39,7 +39,7 @@ public class ProjectCreateRequestDto {
 
     public Project toDomainModel(){
         Head headDomainModel = this.head.toDomainModel();
-        List<Category> categoryDomainModelList = this.projectTagList.stream().map(ProjectTagDto::toDomainModel).toList();
+        List<Category> categoryDomainModelList = this.categories.stream().map(ProjectTagDto::toDomainModel).toList();
         Overview overviewDomainModel = this.overview.toDomainModel();
         List<Techview> techviewDomainModelList = techviewList.stream().map(TechviewDto::toDomainModel).toList();
         List<Architecture> architectureDomainModelList = architectureList.stream().map(ArchitectureDto::toDomainModel).toList();

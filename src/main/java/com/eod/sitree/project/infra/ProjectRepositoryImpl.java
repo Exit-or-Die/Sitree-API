@@ -1,6 +1,7 @@
 package com.eod.sitree.project.infra;
 
 import static com.eod.sitree.comment.infra.entity.QCommentEntity.commentEntity;
+import static com.eod.sitree.member.infra.entity.QMemberEntity.memberEntity;
 import static com.eod.sitree.project.infra.entity.QCategoryUsageEntity.categoryUsageEntity;
 import static com.eod.sitree.project.infra.entity.QFocusPointEntity.focusPointEntity;
 import static com.eod.sitree.project.infra.entity.QParticipantEntity.participantEntity;
@@ -11,7 +12,7 @@ import static com.eod.sitree.project.infra.entity.QProjectSuggestionEntity.proje
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Architecture;
 import com.eod.sitree.project.domain.model.Category;
-import com.eod.sitree.project.domain.model.Participant;
+import com.eod.sitree.project.domain.model.Head;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.model.Techview;
 import com.eod.sitree.project.domain.model.type.TechStackType;
@@ -26,12 +27,16 @@ import com.eod.sitree.project.infra.entity.ProjectTechStackEntity;
 import com.eod.sitree.project.infra.entity.TechviewEntity;
 import com.eod.sitree.project.infra.jpa_interfaces.ArchitectureJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectJpaRepository;
-import com.eod.sitree.project.infra.jpa_interfaces.ProjectLikesRepository;
+import com.eod.sitree.project.infra.jpa_interfaces.ProjectLikesJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.TechviewJpaRepository;
+import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto.OverviewDto;
+import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto.ParticipantDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
 import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto.ProjectDetailDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import com.querydsl.core.types.Order;
@@ -61,25 +66,81 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private final CategoryRepository categoryRepository;
     private final TechviewJpaRepository techviewJpaRepository;
     private final ProjectTechStackJpaRepository techStackJpaRepository;
-    private final ProjectLikesRepository projectLikesRepository;
+    private final ProjectLikesJpaRepository projectLikesJpaRepository;
     private final ArchitectureJpaRepository architectureJpaRepository;
 
 
+//    @Override
+//    public Project getById(long projectId) {
+//        ProjectEntity projectEntity = projectJpaRepository.findById(projectId)
+//                .orElseThrow(() -> new ProjectException(
+//                        ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID));
+//        List<Category> categories = categoryRepository.findAllByProjectId(projectId);
+//        List<Participant> participants = participantRepository.findAllByProjectId(projectId);
+//        List<Techview> techviews = techviewJpaRepository.findAllByProjectId(projectId)
+//                .stream().map((techviewEntity -> {
+//                    List<TechStackType> techStackTypes = techStackJpaRepository.findAllByTechviewId(
+//                                    techviewEntity.getTechviewId())
+//                            .stream().map(ProjectTechStackEntity::toDomainModel).toList();
+//                    return techviewEntity.toDomainModel(techStackTypes);
+//                })).toList();
+//        List<Architecture> architectures = architectureJpaRepository.findAllByProjectId(projectId)
+//                .stream()
+//                .map(ArchitectureEntity::toDomainModel).toList();
+//        return projectEntity.toDomainModel(categories, techviews, architectures, participants);
+//    }
+
     @Override
-    public Project getById(long projectId) {
-        ProjectEntity projectEntity = projectJpaRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID));
+    public ProjectDetailResponseDto getProjectDetailByProjectId(long projectId) {
+
+        ProjectDetailDto projectDetailDto = jpaQueryFactory.select(
+                        Projections.constructor(ProjectDetailDto.class,
+                                Projections.constructor(Head.class,
+                                        projectEntity.headEntity.thumbnailImageUrl,
+                                        projectEntity.headEntity.title,
+                                        projectEntity.headEntity.shortDescription,
+                                        projectEntity.headEntity.healthCheckUrl
+                                ),
+                                Projections.constructor(OverviewDto.class,
+                                        projectEntity.overviewEntity
+                                ),
+                                projectEntity.viewCount,
+                                projectEntity.createdAt
+                        ))
+                .from(projectEntity)
+                .where(projectEntity.projectId.eq(projectId))
+                .fetchOne();
+        if (projectDetailDto == null) {
+            return null;
+        }
         List<Category> categories = categoryRepository.findAllByProjectId(projectId);
-        List<Participant> participants = participantRepository.findAllByProjectId(projectId);
+        List<ParticipantDto> participantDtos = jpaQueryFactory.select(
+                        Projections.constructor(ParticipantDto.class,
+                                participantEntity.memberId,
+                                memberEntity.nickname,
+                                memberEntity.profileImgUrl,
+                                participantEntity.position,
+                                participantEntity.isLeader,
+                                focusPointEntity.focusedOn
+                                )
+                ).from(participantEntity).innerJoin(memberEntity)
+                .on(participantEntity.memberId.eq(memberEntity.memberId))
+                .leftJoin(focusPointEntity).on(participantEntity.participantId.eq(focusPointEntity.participantId))
+                .where(participantEntity.projectId.eq(projectId))
+                .fetch();
+
         List<Techview> techviews = techviewJpaRepository.findAllByProjectId(projectId)
                 .stream().map((techviewEntity -> {
-                    List<TechStackType> techStackTypes = techStackJpaRepository.findAllByTechviewId(techviewEntity.getTechviewId())
+                    List<TechStackType> techStackTypes = techStackJpaRepository.findAllByTechviewId(
+                                    techviewEntity.getTechviewId())
                             .stream().map(ProjectTechStackEntity::toDomainModel).toList();
                     return techviewEntity.toDomainModel(techStackTypes);
                 })).toList();
-        List<Architecture> architectures = architectureJpaRepository.findAllByProjectId(projectId).stream()
+        List<Architecture> architectures = architectureJpaRepository.findAllByProjectId(projectId)
+                .stream()
                 .map(ArchitectureEntity::toDomainModel).toList();
-        return projectEntity.toDomainModel(categories, techviews, architectures, participants);
+        return new ProjectDetailResponseDto(projectDetailDto, categories, techviews, architectures,
+                participantDtos);
     }
 
     @Override
@@ -96,7 +157,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         // techview 저장
         project.getTechviews().forEach(techview -> {
-            TechviewEntity techviewEntity = techviewJpaRepository.save(new TechviewEntity(projectId, techview));
+            TechviewEntity techviewEntity = techviewJpaRepository.save(
+                    new TechviewEntity(projectId, techview));
             Long techviewId = techviewEntity.getTechviewId();
 
             // tech stack 저장
@@ -123,7 +185,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public Page<ProjectDisplayElement> getListBySearchType(Pageable pageable, ProjectListRequestDto dto) {
+    public Page<ProjectDisplayElement> getListBySearchType(Pageable pageable,
+            ProjectListRequestDto dto) {
 
         List<Long> projectIds = null;
         if (!dto.getCategoryIds().isEmpty()) {
@@ -149,9 +212,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                         ))
                 .from(projectEntity)
                 .leftJoin(commentEntity)
-                    .on(projectEntity.projectId.eq(commentEntity.targetId).and(commentEntity.isDeleted.eq(false)))
+                .on(projectEntity.projectId.eq(commentEntity.targetId)
+                        .and(commentEntity.isDeleted.eq(false)))
                 .leftJoin(projectLikesEntity)
-                    .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
+                .on(projectEntity.projectId.eq(projectLikesEntity.projectId)
+                        .and(projectLikesEntity.isLiked.eq(true)))
                 .groupBy(projectEntity.projectId,
                         projectEntity.headEntity.title,
                         projectEntity.headEntity.thumbnailImageUrl,
@@ -171,7 +236,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .from(projectEntity)
                 .fetchOne();
 
-        return new PageImpl<>(listResult, pageable, totalCount != null ? totalCount : 0); // 반환값 null 방어
+        return new PageImpl<>(listResult, pageable,
+                totalCount != null ? totalCount : 0); // 반환값 null 방어
     }
 
     @Override
@@ -190,10 +256,10 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public boolean toggleLike(long projectId, long memberId) {
-        ProjectLikesEntity projectLikes = projectLikesRepository.findByProjectIdAndMemberId(
+        ProjectLikesEntity projectLikes = projectLikesJpaRepository.findByProjectIdAndMemberId(
                 projectId, memberId).orElseGet(() -> new ProjectLikesEntity(projectId, memberId));
         projectLikes.toggleLike();
-        ProjectLikesEntity save = projectLikesRepository.save(projectLikes);
+        ProjectLikesEntity save = projectLikesJpaRepository.save(projectLikes);
         return save.getIsLiked();
     }
 
@@ -213,9 +279,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .innerJoin(projectSuggestionEntity)
                 .on(projectEntity.projectId.eq(projectSuggestionEntity.projectId))
                 .leftJoin(commentEntity)
-                .on(projectEntity.projectId.eq(commentEntity.targetId).and(commentEntity.isDeleted.eq(false)))
+                .on(projectEntity.projectId.eq(commentEntity.targetId)
+                        .and(commentEntity.isDeleted.eq(false)))
                 .leftJoin(projectLikesEntity)
-                .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
+                .on(projectEntity.projectId.eq(projectLikesEntity.projectId)
+                        .and(projectLikesEntity.isLiked.eq(true)))
                 .groupBy(projectEntity.projectId)
                 .fetch();
     }
@@ -223,29 +291,31 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public List<ParticipatedProjectsResponseDto> getParticipatedProjects(long memberId) {
         return jpaQueryFactory.select(
-                Projections.constructor(ParticipatedProjectsResponseDto.class,
-                            projectEntity.projectId,
-                            projectEntity.headEntity.title,
-                            projectEntity.headEntity.thumbnailImageUrl,
-                            projectEntity.headEntity.shortDescription,
-                            projectEntity.overviewEntity.representImage,
-                            commentEntity.commentId.countDistinct(),
-                            projectLikesEntity.likesId.countDistinct(),
-                            projectEntity.viewCount,
-                            projectEntity.modifiedAt,
-                            projectEntity.headEntity.healthCheckUrl,
-                            focusPointEntity.focusPointId,
-                            focusPointEntity.focusedOn
+                        Projections.constructor(ParticipatedProjectsResponseDto.class,
+                                projectEntity.projectId,
+                                projectEntity.headEntity.title,
+                                projectEntity.headEntity.thumbnailImageUrl,
+                                projectEntity.headEntity.shortDescription,
+                                projectEntity.overviewEntity.representImage,
+                                commentEntity.commentId.countDistinct(),
+                                projectLikesEntity.likesId.countDistinct(),
+                                projectEntity.viewCount,
+                                projectEntity.modifiedAt,
+                                projectEntity.headEntity.healthCheckUrl,
+                                focusPointEntity.focusPointId,
+                                focusPointEntity.focusedOn
                         ))
                 .from(projectEntity)
                 .innerJoin(participantEntity)
-                    .on(projectEntity.projectId.eq(participantEntity.projectId))
+                .on(projectEntity.projectId.eq(participantEntity.projectId))
                 .leftJoin(commentEntity)
-                    .on(projectEntity.projectId.eq(commentEntity.targetId).and(commentEntity.isDeleted.eq(false)))
+                .on(projectEntity.projectId.eq(commentEntity.targetId)
+                        .and(commentEntity.isDeleted.eq(false)))
                 .leftJoin(projectLikesEntity)
-                    .on(projectEntity.projectId.eq(projectLikesEntity.projectId).and(projectLikesEntity.isLiked.eq(true)))
+                .on(projectEntity.projectId.eq(projectLikesEntity.projectId)
+                        .and(projectLikesEntity.isLiked.eq(true)))
                 .leftJoin(focusPointEntity)
-                    .on(participantEntity.participantId.eq(focusPointEntity.participantId))
+                .on(participantEntity.participantId.eq(focusPointEntity.participantId))
                 .where(participantEntity.memberId.eq(memberId))
                 .groupBy(projectEntity.projectId,
                         projectEntity.headEntity.title,

@@ -30,7 +30,7 @@ public class BelongingController {
 
     @AuthNotRequired
     @GetMapping("/ranking")
-    public ResponseDto<List<Belonging>> rankBelongings(BelongingRankingRequestDto request) {
+    public ResponseDto<List<BelongingRankingResponseDto>> rankBelongings(BelongingRankingRequestDto request) {
 
         return ResponseDto.ok(belongingService.findRanking(request));
     }

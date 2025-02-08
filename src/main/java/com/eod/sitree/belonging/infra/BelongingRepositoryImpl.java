@@ -6,6 +6,7 @@ import com.eod.sitree.belonging.domain.model.BelongingWithPoint;
 import com.eod.sitree.belonging.domain.modelRepository.BelongingRepository;
 import com.eod.sitree.belonging.infra.entity.BelongingEntity;
 import com.eod.sitree.belonging.infra.entity.QBelongingEntity;
+import com.eod.sitree.belonging.ui.dto.response.BelongingRankingResponseDto;
 import com.eod.sitree.member.infra.entity.QMemberEntity;
 import com.eod.sitree.project.infra.entity.QParticipantEntity;
 import com.eod.sitree.project.infra.entity.QProjectEntity;
@@ -93,7 +94,7 @@ public class BelongingRepositoryImpl implements BelongingRepository {
                 belongingEntity.belongingType,
                 belongingEntity.name,
                 belongingEntity.imageUrl
-                )
+            )
             .fetch();
     }
 
@@ -121,13 +122,49 @@ public class BelongingRepositoryImpl implements BelongingRepository {
             .toList();
     }
 
+    @Override
+    public List<BelongingRankingResponseDto> findBelongingByRankingAscWithProjectCount(
+        BelongingType belongingType) {
+
+        return jpaQueryFactory.select(
+                Projections.constructor(
+                    BelongingRankingResponseDto.class,
+                    belongingEntity.belongingId,
+                    belongingEntity.belongingType,
+                    belongingEntity.name,
+                    belongingEntity.imageUrl,
+                    belongingEntity.currentRanking,
+                    belongingEntity.prevRanking,
+                    projectEntity.projectId.countDistinct()
+                )
+            )
+            .from(belongingEntity)
+            .leftJoin(memberEntity)
+            .on(memberEntity.belongingId.eq(belongingEntity.belongingId))
+            .leftJoin(participantEntity)
+            .on(participantEntity.memberId.eq(memberEntity.memberId))
+            .leftJoin(projectEntity)
+            .on(projectEntity.projectId.eq(participantEntity.projectId))
+            .where(
+                eqBelongingType(belongingType, belongingEntity)
+            )
+            .groupBy(belongingEntity)
+            .orderBy(
+                orderNullsLast(belongingEntity.currentRanking, Order.ASC),
+                belongingEntity.name.asc()
+            )
+            .limit(DEFAULT_RANKING_SIZE)
+            .fetch();
+    }
+
     private <T extends Comparable> OrderSpecifier<T> orderNullsLast(Path<T> path, Order order) {
         return new OrderSpecifier<>(order, path, OrderSpecifier.NullHandling.NullsLast);
     }
 
-    public BooleanExpression eqBelongingType(BelongingType belongingType, QBelongingEntity belongingEntity) {
+    public BooleanExpression eqBelongingType(BelongingType belongingType,
+        QBelongingEntity belongingEntity) {
 
-        if(belongingType == null) {
+        if (belongingType == null) {
             return null;
         }
 

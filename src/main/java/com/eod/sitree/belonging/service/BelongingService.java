@@ -4,6 +4,8 @@ import com.eod.sitree.belonging.domain.model.Belonging;
 import com.eod.sitree.belonging.domain.model.BelongingWithPoint;
 import com.eod.sitree.belonging.domain.modelRepository.BelongingRepository;
 import com.eod.sitree.belonging.infra.entity.BelongingEntity;
+import com.eod.sitree.belonging.ui.dto.request.BelongingRankingRequestDto;
+import com.eod.sitree.belonging.ui.dto.response.BelongingRankingResponseDto;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -21,8 +23,8 @@ public class BelongingService {
         return belongingRepository.searchByName(name);
     }
 
-    public List<Belonging> findRanking() {
+    public List<BelongingRankingResponseDto> findRanking(BelongingRankingRequestDto request) {
 
-        return belongingRepository.findBelongingByRankingAsc();
+        return belongingRepository.findBelongingByRankingAscWithProjectCount(request.getBelongingType());
     }
 }

@@ -77,7 +77,7 @@ public class MemberController {
         return ResponseDto.ok(memberService.getExpiredToken(memberTokenRequestDto));
     }
 
-    @AuthNotRequired
+    // @AuthNotRequired
     @GetMapping("/search")
     public ResponseDto<MemberSearchPageResponse> searchMembers(MemberSearchPageRequestDto request) {
 

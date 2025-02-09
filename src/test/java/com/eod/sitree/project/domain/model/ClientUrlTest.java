@@ -51,7 +51,7 @@ class ClientUrlTest {
     @Test
     void addDownloadMethod() {
         ClientUrl clientUrl = new ClientUrl(downloadMethods);
-        clientUrl.addDownloadMethod(PlatformType.ANDROID, "new Android DownloadUrl");
+        clientUrl.addDownloadMethod(PlatformType.AOS, "new Android DownloadUrl");
         assertThat(clientUrl.getClientUrls().size()).isEqualTo(3);
     }
 }

@@ -27,10 +27,11 @@ public class ProjectListResponseDto {
         private Boolean isHealthy;
         @JsonIgnore
         private final String healthCheckUrl;
+        private final Boolean existFocusedOn;
 
         public ProjectDisplayElement(Long projectId, String name, String thumbnail, String shortDescription,
                 String backgroundImage, long commentCount, long likesCount, long viewCount,
-                LocalDateTime latestUpdateTime, String healthCheckUrl) {
+                LocalDateTime latestUpdateTime, String healthCheckUrl, Boolean existFocusedOn) {
             this.projectId = projectId;
             this.name = name;
             this.thumbnail = thumbnail;
@@ -40,6 +41,7 @@ public class ProjectListResponseDto {
             this.likesCount = likesCount;
             this.viewCount = viewCount;
             this.latestUpdateTime = latestUpdateTime;
+            this.existFocusedOn = existFocusedOn;
             this.isHealthy = null;
             this.healthCheckUrl = healthCheckUrl;
         }

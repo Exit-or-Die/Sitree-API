@@ -29,22 +29,6 @@ public class ProjectDetailResponseDto {
     private final LocalDateTime createdAt;
     private boolean isHealthy;
 
-//    public ProjectDetailResponseDto(Project project, Long likeCount, boolean isLiked,
-//            boolean isHealthy) {
-//
-//        this.head = project.getHead();
-//        this.categories = project.getCategories();
-//        this.overview = new OverviewDto(project.getOverview());
-//        this.techviewList = project.getTechviews();
-//        this.architectureList = project.getArchitectures();
-//        this.participantList = project.getParticipants().stream().map(ParticipantDto::new).toList();
-//        this.viewCount = project.getViewCount();
-//        this.isHealthy = isHealthy;
-//        this.createdAt = project.getCreatedAt();
-//        this.likeCount = likeCount;
-//        this.isLiked = isLiked;
-//    }
-
     public ProjectDetailResponseDto(ProjectDetailDto project, List<Category> categories, List<Techview> techviews,
             List<Architecture> architectures, List<ParticipantDto> participants) {
 
@@ -105,7 +89,7 @@ public class ProjectDetailResponseDto {
         private final String nickname;
         private final String imageUrl;
         private final String position;
-        private final boolean isLeader;
+        private final Boolean isLeader;
         private final String focusPoint;
     }
 }

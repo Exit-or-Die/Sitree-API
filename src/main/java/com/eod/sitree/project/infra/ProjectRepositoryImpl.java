@@ -39,10 +39,13 @@ import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto.ProjectDetailDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -208,7 +211,10 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                                 projectLikesEntity.likesId.countDistinct(),
                                 projectEntity.viewCount,
                                 projectEntity.modifiedAt,
-                                projectEntity.headEntity.healthCheckUrl
+                                projectEntity.headEntity.healthCheckUrl,
+                                JPAExpressions.selectOne().from(participantEntity).innerJoin(focusPointEntity).on(participantEntity.participantId.eq(
+                                        focusPointEntity.participantId)).where(projectEntity.projectId.eq(
+                                        participantEntity.projectId)).exists()
                         ))
                 .from(projectEntity)
                 .leftJoin(commentEntity)

@@ -1,15 +1,11 @@
 package com.eod.sitree.comment.ui.dto.response;
 
-import com.eod.sitree.comment.domain.model.Comment;
 import com.eod.sitree.comment.domain.model.CommentType;
-import com.eod.sitree.common.response.BasePageResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 @Getter
 @AllArgsConstructor
@@ -25,7 +21,7 @@ public class CommentResponseDto {
 
     private String contents;
 
-    private Long createMemberId;
+    private CommentMemberDto createMember;
 
     private Long parentCommentId;
 
@@ -35,25 +31,49 @@ public class CommentResponseDto {
 
     private Boolean isDeleted;
 
+    @Getter
+    public static class CommentMemberDto {
 
-    public CommentResponseDto(Comment comment) {
-        this.commentId = comment.getCommentId();
-        this.commentType = comment.getCommentType();
-        this.targetId = comment.getTargetId();
-        this.contents = comment.getContents();
-        this.createMemberId = comment.getCreateMemberId();
-        this.parentCommentId = comment.getParentCommentId();
-        this.childComments = childComments(comment.getChildComments());
-        this.isChildComment = comment.getIsChildComment();
-        this.isDeleted = comment.getIsDeleted();
+        private Long memberId;
+
+        private String nickname;
+
+        private String profileImgUrl;
+
+        private boolean isProjectOwner;
+
+        private boolean isProjectMember;
+
+        public CommentMemberDto(Long memberId, String nickname, String profileImgUrl,
+            boolean isProjectOwner, boolean isProjectMember) {
+
+            this.memberId = memberId;
+            this.nickname = nickname;
+            this.profileImgUrl = profileImgUrl;
+            this.isProjectOwner = isProjectOwner;
+            this.isProjectMember = isProjectMember;
+        }
     }
 
-    public List<CommentResponseDto> childComments(List<Comment> childComments) {
+    public CommentResponseDto(Long commentId, CommentType commentType, Long targetId,
+        String contents, Long memberId, String nickname, String profileImgUrl,
+        boolean isProjectOwner, boolean isProjectMember, Long parentCommentId,
+        Boolean isChildComment, Boolean isDeleted) {
 
-        return Optional.ofNullable(childComments).orElseGet(ArrayList::new)
-            .stream()
-            .map(CommentResponseDto::new)
-            .toList();
+        this.commentId = commentId;
+        this.commentType = commentType;
+        this.targetId = targetId;
+        this.contents = contents;
+        this.createMember = new CommentMemberDto(memberId, nickname, profileImgUrl, isProjectOwner, isProjectMember);
+        this.parentCommentId = parentCommentId;
+        this.childComments = new ArrayList<>();
+        this.isChildComment = isChildComment;
+        this.isDeleted = isDeleted;
+    }
+
+    public void addChildComment(List<CommentResponseDto> childComment) {
+
+        this.childComments = childComment;
     }
 }
 

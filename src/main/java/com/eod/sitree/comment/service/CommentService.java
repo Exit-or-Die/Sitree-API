@@ -15,6 +15,7 @@ import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.project.service.ProjectService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,21 +49,24 @@ public class CommentService {
         return new CommentCreateResponseDto(true);
     }
 
-    public List<CommentResponseDto> findProjectComment(Long projectId) {
+    @Transactional(readOnly = true)
+    public CommentsResponseDto findProjectCommentAsPage(Long projectId,
+        CommentFetchRequest request) {
 
-        List<Comment> comments = commentRepository.findByProjectId(projectId);
-        return comments.stream()
-            .map(CommentResponseDto::new)
-            .toList();
-    }
+        Page<CommentResponseDto> projectCommentDtoPage = commentRepository.findDtoByProjectIdAsPage(projectId, request.getPageable());
+        projectCommentDtoPage.getContent().forEach(comment -> {
+                List<CommentResponseDto> childComments = commentRepository.findChildCommentsByProjectIdAndParentCommentId(
+                    projectId, comment.getCommentId());
+                comment.addChildComment(childComments);
+            }
+        );
 
-    public CommentsResponseDto findProjectCommentAsPage(Long projectId, CommentFetchRequest request) {
-
-        return new CommentsResponseDto(commentRepository.findByProjectIdAsPage(projectId, request.getPageable()));
+        return new CommentsResponseDto(projectCommentDtoPage);
     }
 
     @Transactional
-    public CommentUpdateResponseDto updateComment(Long commentId, CommentUpdateRequestDto commentUpdateRequestDto, Member member) {
+    public CommentUpdateResponseDto updateComment(Long commentId,
+        CommentUpdateRequestDto commentUpdateRequestDto, Member member) {
 
         Comment comment = commentRepository.findByCommentId(commentId);
         comment.updateContents(commentUpdateRequestDto.getContents(), member);

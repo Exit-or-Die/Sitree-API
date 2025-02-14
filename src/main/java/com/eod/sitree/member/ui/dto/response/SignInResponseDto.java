@@ -12,6 +12,8 @@ import lombok.Getter;
 @Getter
 public class SignInResponseDto {
 
+    private Long memberId;
+
     private Provider provider;
 
     private String email;
@@ -28,7 +30,8 @@ public class SignInResponseDto {
 
 
     @Builder
-    private SignInResponseDto(Provider provider, String email, String nickname, String profileImgUrl, Boolean isNewMember, String accessToken, String refreshToken) {
+    private SignInResponseDto(Long memberId, Provider provider, String email, String nickname, String profileImgUrl, Boolean isNewMember, String accessToken, String refreshToken) {
+        this.memberId = memberId;
         this.provider = provider;
         this.email = email;
         this.nickname = nickname;
@@ -43,6 +46,7 @@ public class SignInResponseDto {
         JwtToken refreshToken = new JwtToken(member, JwtTokenType.REFRESH_TOKEN, AuthService.jwtKeypair);
 
         return SignInResponseDto.builder()
+            .memberId(member.getMemberId())
             .provider(member.getProvider())
             .email(member.getEmail())
             .nickname(member.getNickname())
@@ -60,5 +64,4 @@ public class SignInResponseDto {
             .isNewMember(true)
             .build();
     }
-
 }

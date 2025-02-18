@@ -9,4 +9,6 @@ public interface ProjectLikesJpaRepository extends JpaRepository<ProjectLikesEnt
     Optional<ProjectLikesEntity> findByProjectIdAndMemberId(long projectId, long memberId);
 
     Long countByProjectIdAndIsLikedIsTrue (Long projectId);
+
+    Boolean existsByProjectIdAndMemberIdAndIsLikedIsTrue(long projectId, long memberId);
 }

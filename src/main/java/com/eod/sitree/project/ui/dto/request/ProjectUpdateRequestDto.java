@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProjectCreateRequestDto {
+public class ProjectUpdateRequestDto {
     @NotNull @Valid
     private HeadDto head;
     @NotNull @Valid
@@ -42,7 +42,8 @@ public class ProjectCreateRequestDto {
         List<Category> categoryDomainModelList = this.categories.stream().map(ProjectTagDto::toDomainModel).toList();
         Overview overviewDomainModel = this.overview.toDomainModel();
         List<Techview> techviewDomainModelList = techviewList.stream().map(TechviewDto::toDomainModel).toList();
-        List<Architecture> architectureDomainModelList = architectureList.stream().map(ArchitectureDto::toDomainModel).toList();
+        List<Architecture> architectureDomainModelList = architectureList.stream().map(
+                ArchitectureDto::toDomainModel).toList();
         List<Participant> participantDomainModelList = participantList.stream().map(ParticipantDto::toDomainModel).toList();
         return new Project(headDomainModel, categoryDomainModelList, overviewDomainModel,
                 techviewDomainModelList,architectureDomainModelList, participantDomainModelList);
@@ -93,6 +94,8 @@ public class ProjectCreateRequestDto {
 
     @Getter
     public static class TechviewDto{
+        @NotNull
+        private Long techviewId;
         @NotBlank
         private String techTitle; // 개발 영역
         @NotBlank
@@ -101,7 +104,7 @@ public class ProjectCreateRequestDto {
         private String techDesc; // 개발 상세
 
         private Techview toDomainModel(){
-            return new Techview(this.techTitle, this.gitRepositoryUrl, this.techTagList, this.techDesc);
+            return new Techview(this.techviewId, this.techTitle, this.gitRepositoryUrl, this.techTagList, this.techDesc);
         }
     }
 

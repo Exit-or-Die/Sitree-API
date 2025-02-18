@@ -1,5 +1,6 @@
 package com.eod.sitree.project.infra.entity;
 
+import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Techview;
 import com.eod.sitree.project.domain.model.type.TechStackType;
 import jakarta.persistence.Column;
@@ -42,6 +43,12 @@ public class TechviewEntity {
     }
 
     public Techview toDomainModel(List<TechStackType> projectTechStacks){
-        return new Techview(this.techTitle, this.gitRepositoryUrl, projectTechStacks, this.techDesc);
+        return new Techview(this.getTechviewId(), this.techTitle, this.gitRepositoryUrl, projectTechStacks, this.techDesc);
+    }
+
+    public void updateProjectTechview(Techview techview) {
+        this.techTitle = techview.getTechTitle();
+        this.gitRepositoryUrl = techview.getGitRepositoryUrl();
+        this.techDesc = techview.getTechDesc();
     }
 }

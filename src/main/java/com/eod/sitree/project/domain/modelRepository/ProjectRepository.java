@@ -12,13 +12,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProjectRepository {
 
-//    Project getById(long projectId);
+    Project getProjectById(long projectId);
 
     ProjectDetailResponseDto getProjectDetailByProjectId(long projectId);
 
     Long save(Project project);
 
-    void update(long projectId, Project project);
+    Long update(long projectId, Project project);
 
     void getListByParticipantId();
 

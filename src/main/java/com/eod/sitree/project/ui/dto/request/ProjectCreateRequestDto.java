@@ -34,7 +34,7 @@ public class ProjectCreateRequestDto {
     @Valid
     private List<TechviewDto> techviewList;
     private List<ArchitectureDto> architectureList;
-    @NotNull
+    @NotNull @Valid
     private List<ParticipantDto> participantList;
 
     public Project toDomainModel(){

@@ -18,7 +18,7 @@ public class ImageController {
     private final ImageService imageService;
 
     @PostMapping
-    public ResponseDto<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseDto<String> uploadFile(MultipartFile file) {
         return ResponseDto.ok(imageService.uploadImage(file));
     }
 }

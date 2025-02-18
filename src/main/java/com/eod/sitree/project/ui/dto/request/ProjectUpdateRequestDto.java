@@ -94,7 +94,7 @@ public class ProjectUpdateRequestDto {
 
     @Getter
     public static class TechviewDto{
-        @NotNull
+
         private Long techviewId;
         @NotBlank
         private String techTitle; // 개발 영역

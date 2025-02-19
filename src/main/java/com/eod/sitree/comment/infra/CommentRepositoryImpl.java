@@ -98,7 +98,9 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
                         .otherwise(true),
                     commentEntity.parentCommentId,
                     commentEntity.isChildComment,
-                    commentEntity.isDeleted
+                    commentEntity.isDeleted,
+                    commentEntity.createdAt,
+                    commentEntity.modifiedAt
                 )
             )
             .from(commentEntity)
@@ -164,7 +166,9 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
                             .otherwise(true),
                         commentEntity.parentCommentId,
                         commentEntity.isChildComment,
-                        commentEntity.isDeleted
+                        commentEntity.isDeleted,
+                        commentEntity.createdAt,
+                        commentEntity.modifiedAt
                     )
                 )
                 .from(commentEntity)

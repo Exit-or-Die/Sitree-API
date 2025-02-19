@@ -51,4 +51,10 @@ public class ProjectLikesRepositoryImpl implements ProjectLikesRepository {
         Boolean isLiked = result.get(isLikedSub) != null ? result.get(isLikedSub) : false;
         return new ProjectLikeInfoResponseDto(totalLikes, isLiked);
     }
+
+    @Override
+    public Boolean isMemberProjectLike(long projectId, long memberId) {
+        return projectLikesJpaRepository.existsByProjectIdAndMemberIdAndIsLikedIsTrue(projectId,
+                memberId);
+    }
 }

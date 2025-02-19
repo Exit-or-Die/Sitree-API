@@ -37,7 +37,8 @@ public class ProjectController {
 
     @AuthNotRequired
     @GetMapping("/{projectId}")
-    public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId, @RequestParam(required = false) Long memberId
+    public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId,
+            @RequestParam(required = false) Long memberId
             , HttpServletRequest request) {
         projectService.addViewCount(projectId, request.getRemoteAddr());
         var result = projectService.getProjectDetail(projectId, memberId);
@@ -68,8 +69,16 @@ public class ProjectController {
 
     @AuthNotRequired
     @GetMapping("/participants/{memberId}")
-    public ResponseDto<?> getParticipatedProjects(@PathVariable Long memberId){
+    public ResponseDto<?> getParticipatedProjects(@PathVariable Long memberId) {
         var result = projectService.getParticipatedProjects(memberId);
+        return new ResponseDto<>(result);
+    }
+
+    @AuthNotRequired
+    @GetMapping("/{projectId}/likes/check")
+    public ResponseDto<?> getProjectMemberLike(@PathVariable Long projectId,
+            @RequestParam(required = false) Long memberId) {
+        var result = projectService.getProjectMemberLike(projectId, memberId);
         return new ResponseDto<>(result);
     }
 }

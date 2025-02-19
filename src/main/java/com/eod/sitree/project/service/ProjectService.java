@@ -13,6 +13,7 @@ import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectMemberLikeResponseDto;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -101,4 +102,11 @@ public class ProjectService {
         return participatedProjects;
     }
 
+    public ProjectMemberLikeResponseDto getProjectMemberLike(Long projectId, Long memberId) {
+        if (memberId == null) {
+            return new ProjectMemberLikeResponseDto(false);
+        }
+        Boolean memberProjectLike = projectLikesRepository.isMemberProjectLike(projectId, memberId);
+        return new ProjectMemberLikeResponseDto(memberProjectLike);
+    }
 }

@@ -5,6 +5,7 @@ import com.eod.sitree.belonging.domain.model.Belonging;
 import com.eod.sitree.belonging.domain.model.BelongingWithPoint;
 import com.eod.sitree.belonging.service.BelongingService;
 import com.eod.sitree.belonging.ui.dto.request.BelongingRankingRequestDto;
+import com.eod.sitree.belonging.ui.dto.response.BelongingRankingPageResponseDto;
 import com.eod.sitree.belonging.ui.dto.response.BelongingRankingResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
 import java.util.List;
@@ -30,8 +31,8 @@ public class BelongingController {
 
     @AuthNotRequired
     @GetMapping("/ranking")
-    public ResponseDto<List<BelongingRankingResponseDto>> rankBelongings(BelongingRankingRequestDto request) {
+    public ResponseDto<BelongingRankingPageResponseDto> rankBelongings(BelongingRankingRequestDto request) {
 
-        return ResponseDto.ok(belongingService.findRanking(request));
+        return ResponseDto.ok(new BelongingRankingPageResponseDto(belongingService.searchRanking(request)));
     }
 }

@@ -9,7 +9,6 @@ public interface CategoryRepository {
 
     List<Category> findAllByProjectId(long projectId);
 
-
     void saveAllProjectCategoryIds(long projectId, List<Category> categories);
 
     List<CategoryGetResponseDto> getAllCategories();
@@ -17,4 +16,6 @@ public interface CategoryRepository {
     List<CategoryGetResponseDto> getAllUsingCategories();
 
     List<List<CategoryGetResponseDto>> getGroupedCategories();
+
+    void updateProjectCategories(long projectId, List<Category> categories);
 }

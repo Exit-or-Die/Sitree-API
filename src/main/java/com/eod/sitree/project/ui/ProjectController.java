@@ -7,6 +7,7 @@ import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.project.service.ProjectService;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
+import com.eod.sitree.project.ui.dto.request.ProjectUpdateRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +39,8 @@ public class ProjectController {
 
     @AuthNotRequired
     @GetMapping("/{projectId}")
-    public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId, @RequestParam(required = false) Long memberId
+    public ResponseDto<?> getProjectDetail(@PathVariable("projectId") long projectId,
+            @RequestParam(required = false) Long memberId
             , HttpServletRequest request) {
         projectService.addViewCount(projectId, request.getRemoteAddr());
         var result = projectService.getProjectDetail(projectId, memberId);
@@ -68,8 +71,15 @@ public class ProjectController {
 
     @AuthNotRequired
     @GetMapping("/participants/{memberId}")
-    public ResponseDto<?> getParticipatedProjects(@PathVariable Long memberId){
+    public ResponseDto<?> getParticipatedProjects(@PathVariable Long memberId) {
         var result = projectService.getParticipatedProjects(memberId);
+        return new ResponseDto<>(result);
+    }
+
+    @PutMapping("/{projectId}")
+    public ResponseDto<?> updateProject (@PathVariable Long projectId,
+            @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto) {
+        var result = projectService.updateProject(projectId, projectUpdateRequestDto);
         return new ResponseDto<>(result);
     }
 }

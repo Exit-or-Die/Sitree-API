@@ -44,4 +44,10 @@ public class ArchitectureEntity {
         return new Architecture(this.architectureType, this.architectureDesc,
                 new Image(this.architectureImageUrl, ImageType.ARCHITECTURE));
     }
+
+    public void updateArchitectureEntity(Architecture architecture) {
+        this.architectureType = architecture.getArchitectureType();
+        this.architectureDesc = architecture.getArchitectureDesc();
+        this.architectureImageUrl = architecture.getArchitectureImage().getImageUrl();
+    }
 }

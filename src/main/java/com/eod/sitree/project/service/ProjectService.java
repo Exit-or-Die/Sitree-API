@@ -8,11 +8,13 @@ import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.ClientRequestServiceImpl;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
+import com.eod.sitree.project.ui.dto.request.ProjectUpdateRequestDto;
 import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectUpdateResponseDto;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -57,8 +59,11 @@ public class ProjectService {
         projectRepository.plusViewCount(projectId, userIp);
     }
 
-    public void updateProject(){
-
+    @Transactional
+    public ProjectUpdateResponseDto updateProject(long projectId, ProjectUpdateRequestDto projectUpdateRequestDto){
+        Project updateProject = projectUpdateRequestDto.toDomainModel();
+        Long updatedProjectId = projectRepository.update(projectId, updateProject);
+        return new ProjectUpdateResponseDto(updatedProjectId);
     }
 
     public void exportProject(){

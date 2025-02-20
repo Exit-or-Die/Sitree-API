@@ -11,7 +11,10 @@ import com.eod.sitree.project.infra.jpa_interfaces.FocusPointJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ParticipantJpaRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -48,6 +51,44 @@ public class ParticipantRepositoryImpl implements ParticipantRepository {
         List<ParticipantEntity> participantEntityList = participants.stream()
                 .map(p -> new ParticipantEntity(projectId, p)).toList();
         participantJpaRepository.saveAll(participantEntityList);
+    }
+
+    @Override
+    public void updateParticipants(long projectId, List<Participant> updateParticipants) {
+        // 업데이트 참여자
+        Map<Long, Participant> updateParticipantMap = updateParticipants.stream().collect(
+                Collectors.toMap(Participant::getMemberId, p -> p));
+
+        // 기존 참여자
+        List<ParticipantEntity> participantEntities = participantJpaRepository.findAllByProjectId(
+                projectId);
+
+        List<ParticipantEntity> updateParticipantEntityList = new ArrayList<>();
+        List<ParticipantEntity> deleteParticipantEntityList = new ArrayList<>();
+
+        // 기존 참여자 중 Update 대상 여부에 따라 처리
+        participantEntities.forEach(p -> {
+            if (updateParticipantMap.containsKey(p.getMemberId())) {
+                p.updateParticipantEntity(updateParticipantMap.get(p.getMemberId()));
+                updateParticipantMap.remove(p.getMemberId());
+                updateParticipantEntityList.add(p);
+            } else {
+                deleteParticipantEntityList.add(p);
+            }
+        });
+
+        // 신규 참여자 추가
+        updateParticipantMap.values().forEach(p -> {
+            ParticipantEntity participantEntity = new ParticipantEntity(projectId, p);
+            updateParticipantEntityList.add(participantEntity);
+        });
+
+        if (!deleteParticipantEntityList.isEmpty()) {
+            participantJpaRepository.deleteAll(deleteParticipantEntityList);
+        }
+        if (!updateParticipantEntityList.isEmpty()) {
+            participantJpaRepository.saveAll(updateParticipantEntityList);
+        }
     }
 
 

@@ -45,6 +45,14 @@ public class JpaMemberRepositoryImpl extends QuerydslRepositorySupport implement
     }
 
     @Override
+    public Optional<Member> findByEmailOptional(String email) {
+        Optional<MemberEntity> memberEntityOptional = Optional.ofNullable(
+            memberJpaRepository.findByEmail(email));
+
+        return memberEntityOptional.map(Member::new);
+    }
+
+    @Override
     public Member findByProviderAndEmail(Provider provider, String email) {
         MemberEntity memberEntity = memberJpaRepository.findByProviderAndEmail(provider, email);
 

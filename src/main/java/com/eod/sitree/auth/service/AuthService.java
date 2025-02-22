@@ -40,7 +40,7 @@ public class AuthService {
         if (response == null || !response.getStatusCode().is2xxSuccessful()
             || response.getBody() == null || !email.equals(response.getBody().getEmail())) {
 
-            throw new AuthException(ApplicationErrorType.UNAUTHORIZED);
+            throw new AuthException(ApplicationErrorType.OAUTH_UNAUTHORIZED);
         }
     }
 

@@ -42,7 +42,6 @@ public class TechviewRepositoryImpl implements TechviewRepository {
         }
 
         // 수정/신규 반영
-        List<TechviewEntity> updateTechviewEntityList = new ArrayList<>();
         List<ProjectTechStackEntity> updateProjectTechStackEntityList = new ArrayList<>();
 
         updateTechviews.forEach(t -> {

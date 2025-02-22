@@ -13,12 +13,15 @@ import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Architecture;
 import com.eod.sitree.project.domain.model.Category;
 import com.eod.sitree.project.domain.model.Head;
+import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.model.Techview;
 import com.eod.sitree.project.domain.model.type.TechStackType;
+import com.eod.sitree.project.domain.modelRepository.ArchitectureRepository;
 import com.eod.sitree.project.domain.modelRepository.CategoryRepository;
 import com.eod.sitree.project.domain.modelRepository.ParticipantRepository;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
+import com.eod.sitree.project.domain.modelRepository.TechviewRepository;
 import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.entity.ArchitectureEntity;
 import com.eod.sitree.project.infra.entity.ProjectEntity;
@@ -26,6 +29,8 @@ import com.eod.sitree.project.infra.entity.ProjectLikesEntity;
 import com.eod.sitree.project.infra.entity.ProjectTechStackEntity;
 import com.eod.sitree.project.infra.entity.TechviewEntity;
 import com.eod.sitree.project.infra.jpa_interfaces.ArchitectureJpaRepository;
+import com.eod.sitree.project.infra.jpa_interfaces.CategoryJpaRepository;
+import com.eod.sitree.project.infra.jpa_interfaces.CategoryUsageJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectLikesJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ProjectTechStackJpaRepository;
@@ -39,13 +44,11 @@ import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto.ProjectDetailDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +65,16 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ProjectRepositoryImpl implements ProjectRepository {
 
+    private final CategoryJpaRepository categoryJpaRepository;
+
+    private final CategoryUsageJpaRepository categoryUsageJpaRepository;
+
+
     private final JPAQueryFactory jpaQueryFactory;
 
     private final ParticipantRepository participantRepository;
+    private final ArchitectureRepository architectureRepository;
+    private final TechviewRepository techviewRepository;
     private final ProjectJpaRepository projectJpaRepository;
     private final CategoryRepository categoryRepository;
     private final TechviewJpaRepository techviewJpaRepository;
@@ -73,25 +83,25 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     private final ArchitectureJpaRepository architectureJpaRepository;
 
 
-//    @Override
-//    public Project getById(long projectId) {
-//        ProjectEntity projectEntity = projectJpaRepository.findById(projectId)
-//                .orElseThrow(() -> new ProjectException(
-//                        ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID));
-//        List<Category> categories = categoryRepository.findAllByProjectId(projectId);
-//        List<Participant> participants = participantRepository.findAllByProjectId(projectId);
-//        List<Techview> techviews = techviewJpaRepository.findAllByProjectId(projectId)
-//                .stream().map((techviewEntity -> {
-//                    List<TechStackType> techStackTypes = techStackJpaRepository.findAllByTechviewId(
-//                                    techviewEntity.getTechviewId())
-//                            .stream().map(ProjectTechStackEntity::toDomainModel).toList();
-//                    return techviewEntity.toDomainModel(techStackTypes);
-//                })).toList();
-//        List<Architecture> architectures = architectureJpaRepository.findAllByProjectId(projectId)
-//                .stream()
-//                .map(ArchitectureEntity::toDomainModel).toList();
-//        return projectEntity.toDomainModel(categories, techviews, architectures, participants);
-//    }
+    @Override
+    public Project getProjectById(long projectId) {
+        ProjectEntity projectEntity = projectJpaRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectException(
+                        ApplicationErrorType.NOT_EXIST_PROJECT_WITH_SUCH_PROJECT_ID));
+        List<Category> categories = categoryRepository.findAllByProjectId(projectId);
+        List<Participant> participants = participantRepository.findAllByProjectId(projectId);
+        List<Techview> techviews = techviewJpaRepository.findAllByProjectId(projectId)
+                .stream().map((techviewEntity -> {
+                    List<TechStackType> techStackTypes = techStackJpaRepository.findAllByTechviewId(
+                                    techviewEntity.getTechviewId())
+                            .stream().map(ProjectTechStackEntity::toDomainModel).toList();
+                    return techviewEntity.toDomainModel(techStackTypes);
+                })).toList();
+        List<Architecture> architectures = architectureJpaRepository.findAllByProjectId(projectId)
+                .stream()
+                .map(ArchitectureEntity::toDomainModel).toList();
+        return projectEntity.toDomainModel(categories, techviews, architectures, participants);
+    }
 
     @Override
     public ProjectDetailResponseDto getProjectDetailByProjectId(long projectId) {
@@ -178,8 +188,27 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public void update(long projectId, Project project) {
+    public Long update(long projectId, Project updateProject) {
 
+        // ProjectEntity 조회 및 수정
+        ProjectEntity projectEntity = projectJpaRepository.findById(projectId).orElseThrow(
+                () -> new ProjectException(ApplicationErrorType.NOT_EXIST_PROJECT)
+        );
+        ProjectEntity updateProjectEntity = new ProjectEntity(updateProject);
+        projectEntity.updateProjectEntity(updateProjectEntity);
+
+        // CategoryEntity 조회 및 수정
+        categoryRepository.updateProjectCategories(projectId, updateProject.getCategories());
+
+        // ParticipantEntity 조회 및 수정
+        participantRepository.updateParticipants(projectId, updateProject.getParticipants());
+
+        // ArchitectureEntity 조회 및 수정
+        architectureRepository.updateProjectArchitecture(projectId, updateProject.getArchitectures());
+
+        // TechviewEntity 조회 및 수정
+        techviewRepository.updateProjectTechviews(projectId, updateProject.getTechviews());
+        return projectId;
     }
 
     @Override

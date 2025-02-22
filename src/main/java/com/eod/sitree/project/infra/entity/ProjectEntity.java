@@ -53,4 +53,9 @@ public class ProjectEntity extends BaseEntity {
         Overview overview = this.overviewEntity.toDomainModel();
         return new Project(head, categoryList, overview, techviewList, architectureList, participantList, this.viewCount, this.getCreatedAt());
     }
+
+    public void updateProjectEntity(ProjectEntity projectEntity) {
+        this.headEntity = projectEntity.getHeadEntity();
+        this.overviewEntity = projectEntity.getOverviewEntity();
+    }
 }

@@ -19,6 +19,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -155,6 +158,51 @@ public class BelongingRepositoryImpl implements BelongingRepository {
             )
             .limit(DEFAULT_RANKING_SIZE)
             .fetch();
+    }
+
+    @Override
+    public Page<BelongingRankingResponseDto> findBelongingByRankingAscWithProjectCountAsPage(
+        Pageable pageable, BelongingType belongingType) {
+
+        List<BelongingRankingResponseDto> result = jpaQueryFactory.select(
+                Projections.constructor(
+                    BelongingRankingResponseDto.class,
+                    belongingEntity.belongingId,
+                    belongingEntity.belongingType,
+                    belongingEntity.name,
+                    belongingEntity.imageUrl,
+                    belongingEntity.currentRanking,
+                    belongingEntity.prevRanking,
+                    projectEntity.projectId.countDistinct()
+                )
+            )
+            .from(belongingEntity)
+            .leftJoin(memberEntity)
+            .on(memberEntity.belongingId.eq(belongingEntity.belongingId))
+            .leftJoin(participantEntity)
+            .on(participantEntity.memberId.eq(memberEntity.memberId))
+            .leftJoin(projectEntity)
+            .on(projectEntity.projectId.eq(participantEntity.projectId))
+            .where(
+                eqBelongingType(belongingType, belongingEntity)
+            )
+            .groupBy(belongingEntity)
+            .orderBy(
+                orderNullsLast(belongingEntity.currentRanking, Order.ASC),
+                belongingEntity.name.asc()
+            )
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        Long total = Optional.ofNullable(
+                jpaQueryFactory.select(belongingEntity.belongingId.count())
+                    .from(belongingEntity)
+                    .fetchOne()
+            )
+            .orElse(0L);
+
+        return new PageImpl<>(result, pageable, total);
     }
 
     private <T extends Comparable> OrderSpecifier<T> orderNullsLast(Path<T> path, Order order) {

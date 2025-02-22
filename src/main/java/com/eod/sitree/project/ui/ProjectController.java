@@ -7,6 +7,7 @@ import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.project.service.ProjectService;
 import com.eod.sitree.project.ui.dto.request.ProjectCreateRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
+import com.eod.sitree.project.ui.dto.request.ProjectUpdateRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -79,6 +81,13 @@ public class ProjectController {
     public ResponseDto<?> getProjectMemberLike(@PathVariable Long projectId,
             @RequestParam(required = false) Long memberId) {
         var result = projectService.getProjectMemberLike(projectId, memberId);
+       return new ResponseDto<>(result);
+    }
+
+    @PutMapping("/{projectId}")
+    public ResponseDto<?> updateProject (@PathVariable Long projectId,
+            @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto) {
+        var result = projectService.updateProject(projectId, projectUpdateRequestDto);
         return new ResponseDto<>(result);
     }
 }

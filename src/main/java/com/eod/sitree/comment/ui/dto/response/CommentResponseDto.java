@@ -1,6 +1,7 @@
 package com.eod.sitree.comment.ui.dto.response;
 
 import com.eod.sitree.comment.domain.model.CommentType;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,10 @@ public class CommentResponseDto {
 
     private Boolean isDeleted;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
+
     @Getter
     public static class CommentMemberDto {
 
@@ -58,7 +63,7 @@ public class CommentResponseDto {
     public CommentResponseDto(Long commentId, CommentType commentType, Long targetId,
         String contents, Long memberId, String nickname, String profileImgUrl,
         boolean isProjectOwner, boolean isProjectMember, Long parentCommentId,
-        Boolean isChildComment, Boolean isDeleted) {
+        Boolean isChildComment, Boolean isDeleted, LocalDateTime createdAt, LocalDateTime modifiedAt) {
 
         this.commentId = commentId;
         this.commentType = commentType;
@@ -69,6 +74,8 @@ public class CommentResponseDto {
         this.childComments = new ArrayList<>();
         this.isChildComment = isChildComment;
         this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public void addChildComment(List<CommentResponseDto> childComment) {

@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,5 +27,10 @@ public class BelongingService {
     public List<BelongingRankingResponseDto> findRanking(BelongingRankingRequestDto request) {
 
         return belongingRepository.findBelongingByRankingAscWithProjectCount(request.getBelongingType());
+    }
+
+    public Page<BelongingRankingResponseDto> searchRanking(BelongingRankingRequestDto request) {
+
+        return belongingRepository.findBelongingByRankingAscWithProjectCountAsPage(request.getPageable(), request.getBelongingType());
     }
 }

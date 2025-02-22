@@ -38,9 +38,14 @@ public class AuthService {
 
     private void validateTokenResponse(String email, ResponseEntity<OAuthResponseDto> response) {
         if (response == null || !response.getStatusCode().is2xxSuccessful()
-            || response.getBody() == null || !email.equals(response.getBody().getEmail())) {
+            || response.getBody() == null || (response.getBody().getEmail() != null && !email.equals(response.getBody().getEmail()))) {
 
             throw new AuthException(ApplicationErrorType.OAUTH_UNAUTHORIZED);
+        }
+
+        if (response.getBody().getEmail() == null) {
+
+            throw new AuthException(ApplicationErrorType.OAUTH_EMAIL_NOT_FOUND);
         }
     }
 

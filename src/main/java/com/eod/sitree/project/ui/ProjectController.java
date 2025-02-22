@@ -76,6 +76,14 @@ public class ProjectController {
         return new ResponseDto<>(result);
     }
 
+    @AuthNotRequired
+    @GetMapping("/{projectId}/likes/check")
+    public ResponseDto<?> getProjectMemberLike(@PathVariable Long projectId,
+            @RequestParam(required = false) Long memberId) {
+        var result = projectService.getProjectMemberLike(projectId, memberId);
+       return new ResponseDto<>(result);
+    }
+
     @PutMapping("/{projectId}")
     public ResponseDto<?> updateProject (@PathVariable Long projectId,
             @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto) {

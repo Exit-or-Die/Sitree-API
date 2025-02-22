@@ -10,6 +10,8 @@ public interface MemberRepository {
 
     Optional<Member> findByProviderAndEmailOptional(Provider provider, String email);
 
+    Optional<Member> findByEmailOptional(String email);
+
     Member findByProviderAndEmail(Provider provider, String email);
 
     Member save(Member member);

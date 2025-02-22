@@ -1,15 +1,17 @@
 package com.eod.sitree.common.request;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @Getter
+@NoArgsConstructor
 public class BasePageRequest {
 
-    private int page;
+    private Integer pageNo;
 
-    private int size;
+    private Integer size;
 
     private static final int DEFAULT_PAGE = 1;
 
@@ -20,14 +22,14 @@ public class BasePageRequest {
     private static final int MIN_SIZE = 10;
 
 
-    public BasePageRequest(Integer page, Integer size) {
+    public BasePageRequest(Integer pageNo, Integer size) {
 
-        this.page = page == null || page < MIN_PAGE ? DEFAULT_PAGE : page;
+        this.pageNo = pageNo == null || pageNo < MIN_PAGE ? DEFAULT_PAGE : pageNo;
         this.size = size == null || size < MIN_SIZE ? DEFAULT_SIZE : size;
     }
 
     public Pageable getPageable() {
 
-        return PageRequest.of(Math.max(page - 1, 0), size);
+        return PageRequest.of(Math.max(pageNo - 1, 0), size);
     }
 }

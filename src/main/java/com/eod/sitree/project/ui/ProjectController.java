@@ -50,7 +50,7 @@ public class ProjectController {
     @GetMapping
     @AuthNotRequired
     public ResponseDto<?> getProjectList(ProjectListRequestDto dto) {
-        Pageable pageable = dto.getPageableParam();
+        Pageable pageable = dto.getPageable();
         var result = projectService.getProjectList(pageable, dto);
         return new ResponseDto<>(result);
     }

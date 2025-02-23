@@ -2,6 +2,7 @@ package com.eod.sitree.project.ui.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +24,7 @@ public class ParticipatedProjectsResponseDto {
 
     public ParticipatedProjectsResponseDto(long projectId, String name, String thumbnail,
             String shortDescription, String backgroundImage, long commentCount, long likesCount,
-            long viewCount, LocalDateTime latestUpdateTime, String healthCheckUrl, long focusPointId, String focusPoint) {
+            long viewCount, LocalDateTime latestUpdateTime, String healthCheckUrl, long focusPointId, List<String> focusPoint) {
         this.projectId = projectId;
         this.name = name;
         this.thumbnail = thumbnail;
@@ -41,7 +42,7 @@ public class ParticipatedProjectsResponseDto {
     @RequiredArgsConstructor
     private static class FocusPoint {
         private final long focusPointId;
-        private final String focusPoint;
+        private final List<String> focusPoints;
     }
 
     public void setIsHealthy(boolean isHealthy) {

@@ -134,7 +134,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                                 memberEntity.profileImgUrl,
                                 participantEntity.position,
                                 participantEntity.isLeader,
-                                focusPointEntity.focusedOn
+                                focusPointEntity.focusPoints
                                 )
                 ).from(participantEntity).innerJoin(memberEntity)
                 .on(participantEntity.memberId.eq(memberEntity.memberId))
@@ -338,7 +338,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                                 projectEntity.modifiedAt,
                                 projectEntity.headEntity.healthCheckUrl,
                                 focusPointEntity.focusPointId,
-                                focusPointEntity.focusedOn
+                                focusPointEntity.focusPoints
                         ))
                 .from(projectEntity)
                 .innerJoin(participantEntity)
@@ -361,7 +361,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                         projectEntity.modifiedAt,
                         projectEntity.headEntity.healthCheckUrl,
                         focusPointEntity.focusPointId,
-                        focusPointEntity.focusedOn)
+                        focusPointEntity.focusPoints)
                 .fetch();
     }
 

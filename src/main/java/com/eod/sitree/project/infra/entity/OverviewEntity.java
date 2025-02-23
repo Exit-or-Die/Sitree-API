@@ -1,6 +1,6 @@
 package com.eod.sitree.project.infra.entity;
 
-import com.eod.sitree.common.converter.ListConverter;
+import com.eod.sitree.common.converter.ImageListConverter;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Image;
 import com.eod.sitree.project.domain.model.Overview;
@@ -25,7 +25,7 @@ public class OverviewEntity {
     private String representImage;
 
     @Column(nullable = false)
-    @Convert(converter = ListConverter.class)
+    @Convert(converter = ImageListConverter.class)
     private List<Image> images;
 
     @Embedded

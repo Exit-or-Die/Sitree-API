@@ -9,7 +9,7 @@ import jakarta.persistence.Converter;
 import java.util.List;
 
 @Converter
-public class ListConverter implements AttributeConverter<List<Image>, String> {
+public class ImageListConverter implements AttributeConverter<List<Image>, String> {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

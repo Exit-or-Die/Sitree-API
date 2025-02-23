@@ -338,7 +338,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                                 projectEntity.modifiedAt,
                                 projectEntity.headEntity.healthCheckUrl,
                                 focusPointEntity.focusPointId,
-                                focusPointEntity.focusPoints
+                                focusPointEntity.focusPoints,
+                                participantEntity.participantId
                         ))
                 .from(projectEntity)
                 .innerJoin(participantEntity)
@@ -361,7 +362,9 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                         projectEntity.modifiedAt,
                         projectEntity.headEntity.healthCheckUrl,
                         focusPointEntity.focusPointId,
-                        focusPointEntity.focusPoints)
+                        focusPointEntity.focusPoints,
+                        participantEntity.participantId
+                        )
                 .fetch();
     }
 

@@ -1,10 +1,12 @@
-package com.eod.sitree.mypage.domain.model;
+package com.eod.sitree.member.domain.model;
 
 import com.eod.sitree.project.domain.model.type.TechStackType;
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class MyPage {
 
     private SelfIntroduction selfIntroduction;
@@ -18,6 +20,16 @@ public class MyPage {
     private List<TechStackType> techStacks;
 
     private List<String> links;
+
+    public MyPage(SelfIntroduction selfIntroduction, List<Career> careers,
+        List<EducationActivity> educationActivities, List<TechStackType> techStacks,
+        List<String> links) {
+        this.selfIntroduction = selfIntroduction;
+        this.careers = careers;
+        this.educationActivities = educationActivities;
+        this.techStacks = techStacks;
+        this.links = links;
+    }
 }
 
 /*

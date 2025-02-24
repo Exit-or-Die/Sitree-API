@@ -1,4 +1,4 @@
-package com.eod.sitree.mypage.domain.model.type;
+package com.eod.sitree.member.domain.model.type;
 
 public enum RoleTagType {
     PM,

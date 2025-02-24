@@ -9,8 +9,10 @@ import com.eod.sitree.member.ui.dto.request.MemberSearchPageRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
+import com.eod.sitree.member.ui.dto.request.MemberUpdateRequestDto;
 import com.eod.sitree.member.ui.dto.response.MemberNicknameExistResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberSearchPageResponse;
+import com.eod.sitree.member.ui.dto.response.MemberUpdateResponseDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
@@ -18,7 +20,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,5 +86,11 @@ public class MemberController {
     public ResponseDto<MemberSearchPageResponse> searchMembers(MemberSearchPageRequestDto request) {
 
         return ResponseDto.ok(memberService.searchMembers(request));
+    }
+
+    @PutMapping("/members/{memberId}")
+    public ResponseDto<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequestDto request) {
+
+        return ResponseDto.ok(memberService.updateMember(memberId, request));
     }
 }

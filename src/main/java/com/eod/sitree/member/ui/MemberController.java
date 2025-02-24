@@ -81,14 +81,13 @@ public class MemberController {
         return ResponseDto.ok(memberService.getExpiredToken(memberTokenRequestDto));
     }
 
-    // @AuthNotRequired
     @GetMapping("/search")
     public ResponseDto<MemberSearchPageResponse> searchMembers(MemberSearchPageRequestDto request) {
 
         return ResponseDto.ok(memberService.searchMembers(request));
     }
 
-    @PutMapping("/members/{memberId}")
+    @PutMapping("/{memberId}")
     public ResponseDto<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequestDto request) {
 
         return ResponseDto.ok(memberService.updateMember(memberId, request));

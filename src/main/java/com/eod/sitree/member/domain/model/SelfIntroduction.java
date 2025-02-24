@@ -1,8 +1,10 @@
 package com.eod.sitree.member.domain.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class SelfIntroduction {
 
     private String title;

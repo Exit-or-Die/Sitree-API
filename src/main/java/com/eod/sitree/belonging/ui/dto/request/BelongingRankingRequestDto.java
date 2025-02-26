@@ -8,8 +8,8 @@ public class BelongingRankingRequestDto extends BasePageRequest {
 
     private String type;
 
-    public BelongingRankingRequestDto(String type, Integer page, Integer size) {
-        super(page, size == null ? 30 : size);
+    public BelongingRankingRequestDto(String type, Integer pageNo, Integer size) {
+        super(pageNo, size == null ? 30 : size);
         this.type = type;
     }
 

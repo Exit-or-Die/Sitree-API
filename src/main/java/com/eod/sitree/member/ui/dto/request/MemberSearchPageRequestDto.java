@@ -10,8 +10,8 @@ public class MemberSearchPageRequestDto extends BasePageRequest {
 
     private String q;
 
-    public MemberSearchPageRequestDto(Integer page, Integer size, String q) {
-        super(page, size);
+    public MemberSearchPageRequestDto(Integer pageNo, Integer size, String q) {
+        super(pageNo, size);
         this.q = StringUtils.isEmpty(q) ? Strings.EMPTY : q;
     }
 

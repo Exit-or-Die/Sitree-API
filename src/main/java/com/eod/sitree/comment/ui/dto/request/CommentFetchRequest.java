@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CommentFetchRequest extends BasePageRequest {
 
-    public CommentFetchRequest(Integer page, Integer size) {
-        super(page, size);
+    public CommentFetchRequest(Integer pageNo, Integer size) {
+        super(pageNo, size);
     }
 }

@@ -1,8 +1,10 @@
 package com.eod.sitree.member.ui;
 
 import com.eod.sitree.auth.domain.JwtTokenType;
+import com.eod.sitree.auth.infra.resolver.MemberPrincipal;
 import com.eod.sitree.auth.support.AuthNotRequired;
 import com.eod.sitree.auth.support.LocalOnly;
+import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.service.MemberService;
 import com.eod.sitree.member.ui.dto.request.MemberNicknameExistRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSearchPageRequestDto;
@@ -10,6 +12,7 @@ import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberUpdateRequestDto;
+import com.eod.sitree.member.ui.dto.response.MemberDetailResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberNicknameExistResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberSearchPageResponse;
 import com.eod.sitree.member.ui.dto.response.MemberUpdateResponseDto;
@@ -25,7 +28,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -88,8 +90,15 @@ public class MemberController {
     }
 
     @PutMapping("/{memberId}")
-    public ResponseDto<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequestDto request) {
+    public ResponseDto<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequestDto request, @MemberPrincipal
+        Member currentMember) {
 
-        return ResponseDto.ok(memberService.updateMember(memberId, request));
+        return ResponseDto.ok(memberService.updateMember(memberId, request, currentMember));
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseDto<MemberDetailResponseDto> getMember(@PathVariable Long memberId) {
+
+        return ResponseDto.ok(memberService.getMemberDetailAsDto(memberId));
     }
 }

@@ -16,11 +16,13 @@ import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberUpdateRequestDto;
+import com.eod.sitree.member.ui.dto.response.MemberDetailResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberNicknameExistResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberSearchPageResponse;
 import com.eod.sitree.member.ui.dto.response.MemberUpdateResponseDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -130,17 +132,26 @@ public class MemberService {
 
     public MemberSearchPageResponse searchMembers(MemberSearchPageRequestDto request) {
 
-        return new MemberSearchPageResponse(memberRepository.searchMembers(request.getQ(), request.getPageable()));
+        return new MemberSearchPageResponse(memberRepository.searchMembersAsDto(request.getQ(), request.getPageable()));
     }
 
-    public MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto request) {
+    public MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto request, Member currentMember) {
 
         Member member = memberRepository.findByMemberId(memberId)
             .orElseThrow(() -> new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND));
+
+        if(!Objects.equals(currentMember.getMemberId(), member.getMemberId())) {
+            throw new MemberException(ApplicationErrorType.MEMBER_UPDATE_NOT_ALLOWED);
+        }
 
         Member updatingMember = request.toDomain();
         member.update(updatingMember);
 
         return new MemberUpdateResponseDto(memberRepository.save(member) != null);
+    }
+
+    public MemberDetailResponseDto getMemberDetailAsDto(Long memberId) {
+
+        return memberRepository.getMemberDetailByMemberId(memberId);
     }
 }

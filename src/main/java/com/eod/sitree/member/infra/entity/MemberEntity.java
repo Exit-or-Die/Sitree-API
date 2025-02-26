@@ -1,9 +1,12 @@
 package com.eod.sitree.member.infra.entity;
 
+import com.eod.sitree.common.converter.MyPageConverter;
 import com.eod.sitree.common.infra.entity.BaseEntity;
 import com.eod.sitree.member.domain.model.Member;
+import com.eod.sitree.member.domain.model.MyPage;
 import com.eod.sitree.member.domain.model.Provider;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -52,6 +55,10 @@ public class MemberEntity extends BaseEntity {
     @Column
     private Long belongingId;
 
+    @Column
+    @Convert(converter = MyPageConverter.class)
+    private MyPage myPage;
+
     public MemberEntity(Member member) {
         this.memberId = member.getMemberId();
         this.provider = member.getProvider();
@@ -60,6 +67,7 @@ public class MemberEntity extends BaseEntity {
         this.profileImgUrl = member.getProfileImgUrl();
         this.thirdPartyProfileUrl = member.getThirdPartyProfileUrl();
         this.belongingId = member.getBelongingId();
+        this.myPage = member.getMyPage();
     }
 
     public Member toDomainModel() {
@@ -72,6 +80,7 @@ public class MemberEntity extends BaseEntity {
             this.profileImgUrl,
             this.thirdPartyProfileUrl,
             this.belongingId,
+            this.myPage,
             this.getCreatedAt(),
             this.getModifiedAt()
         );

@@ -106,4 +106,10 @@ public class JpaMemberRepositoryImpl extends QuerydslRepositorySupport implement
         return memberJpaRepository.findById(memberId)
             .map(MemberEntity::toDomainModel);
     }
+
+    @Override
+    public void updateMember(Long memberId, Member updatingMember) {
+        memberJpaRepository.findById(memberId)
+            .orElseThrow(() -> new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND));
+    }
 }

@@ -27,6 +27,9 @@ public class Member extends BaseTimeDomain {
     @Nullable
     private Long belongingId;
 
+    @Nullable
+    private MyPage myPage;
+
 
     public Member(MemberEntity memberEntity) {
         super(memberEntity.getCreatedAt(), memberEntity.getModifiedAt());
@@ -37,6 +40,7 @@ public class Member extends BaseTimeDomain {
         this.profileImgUrl = memberEntity.getProfileImgUrl();
         this.thirdPartyProfileUrl = memberEntity.getThirdPartyProfileUrl();
         this.belongingId = memberEntity.getBelongingId();
+        this.myPage = memberEntity.getMyPage();
     }
 
     public Member(MemberSignUpRequestDto memberSignUpRequestDto, String baseProfileImgUrl) {
@@ -48,10 +52,11 @@ public class Member extends BaseTimeDomain {
         this.profileImgUrl = baseProfileImgUrl;
         this.thirdPartyProfileUrl = memberSignUpRequestDto.getThirdPartyProfileUrl();
         this.belongingId = memberSignUpRequestDto.getBelongingId();
+        this.myPage = null;
     }
 
     public Member(Long memberId, Provider provider, String nickname, String email, String profileImgUrl, @Nullable String thirdPartyProfileUrl,
-        @Nullable Long belongingId, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        @Nullable Long belongingId, @Nullable MyPage myPage, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         super(createdAt, modifiedAt);
         this.memberId = memberId;
         this.provider = provider;
@@ -60,10 +65,36 @@ public class Member extends BaseTimeDomain {
         this.profileImgUrl = profileImgUrl;
         this.thirdPartyProfileUrl = thirdPartyProfileUrl;
         this.belongingId = belongingId;
+        this.myPage = myPage;
+    }
+
+    public Member(Provider provider, String nickname, String email, String profileImgUrl, @Nullable String thirdPartyProfileUrl,
+        @Nullable Long belongingId, @Nullable MyPage myPage) {
+        super(null, null);
+        this.provider = provider;
+        this.nickname = nickname;
+        this.email = email;
+        this.profileImgUrl = profileImgUrl;
+        this.thirdPartyProfileUrl = thirdPartyProfileUrl;
+        this.belongingId = belongingId;
+        this.myPage = myPage;
     }
 
     public boolean hasBelonging() {
 
         return belongingId != null;
+    }
+
+    public void update(Member updatingMember) {
+
+        if(updatingMember == null) {
+            return;
+        }
+
+        this.nickname = updatingMember.getNickname();
+        this.profileImgUrl = updatingMember.getProfileImgUrl();
+        this.thirdPartyProfileUrl = updatingMember.getThirdPartyProfileUrl();
+        this.belongingId = updatingMember.getBelongingId();
+        this.myPage = updatingMember.getMyPage();
     }
 }

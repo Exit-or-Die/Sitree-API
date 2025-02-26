@@ -23,4 +23,6 @@ public interface MemberRepository {
     Page<Member> searchMembers(String q, Pageable pageable);
 
     Optional<Member> findByMemberId(Long memberId);
+
+    void updateMember(Long memberId, Member updatingMember);
 }

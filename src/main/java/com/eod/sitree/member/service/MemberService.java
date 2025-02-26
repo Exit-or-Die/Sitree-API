@@ -15,8 +15,10 @@ import com.eod.sitree.member.ui.dto.request.MemberSearchPageRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
+import com.eod.sitree.member.ui.dto.request.MemberUpdateRequestDto;
 import com.eod.sitree.member.ui.dto.response.MemberNicknameExistResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberSearchPageResponse;
+import com.eod.sitree.member.ui.dto.response.MemberUpdateResponseDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
 import java.util.Optional;
@@ -129,5 +131,16 @@ public class MemberService {
     public MemberSearchPageResponse searchMembers(MemberSearchPageRequestDto request) {
 
         return new MemberSearchPageResponse(memberRepository.searchMembers(request.getQ(), request.getPageable()));
+    }
+
+    public MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto request) {
+
+        Member member = memberRepository.findByMemberId(memberId)
+            .orElseThrow(() -> new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND));
+
+        Member updatingMember = request.toDomain();
+        member.update(updatingMember);
+
+        return new MemberUpdateResponseDto(memberRepository.save(member) != null);
     }
 }

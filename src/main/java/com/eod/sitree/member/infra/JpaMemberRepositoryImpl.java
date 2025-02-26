@@ -1,5 +1,6 @@
 package com.eod.sitree.member.infra;
 
+import com.eod.sitree.belonging.infra.entity.QBelongingEntity;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.Provider;
@@ -7,8 +8,11 @@ import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.infra.entity.MemberEntity;
 import com.eod.sitree.member.infra.entity.QMemberEntity;
+import com.eod.sitree.member.ui.dto.response.MemberSearchPageResponse.MemberSearchResponseDto;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -29,7 +33,8 @@ public class JpaMemberRepositoryImpl extends QuerydslRepositorySupport implement
 
     private final static QMemberEntity qMemberEntity = QMemberEntity.memberEntity;
 
-    public JpaMemberRepositoryImpl(JPAQueryFactory jpaQueryFactory, MemberJpaRepository memberJpaRepository) {
+    public JpaMemberRepositoryImpl(JPAQueryFactory jpaQueryFactory,
+        MemberJpaRepository memberJpaRepository) {
 
         super(MemberEntity.class);
         this.jpaQueryFactory = jpaQueryFactory;
@@ -98,6 +103,48 @@ public class JpaMemberRepositoryImpl extends QuerydslRepositorySupport implement
             query.fetch().stream().map(MemberEntity::toDomainModel).toList(),
             pageable,
             query.fetchCount()
+        );
+    }
+
+    @Override
+    public Page<MemberSearchResponseDto> searchMembersAsDto(String q, Pageable pageable) {
+
+        QBelongingEntity qBelongingEntity = new QBelongingEntity("belonging");
+
+        List<MemberSearchResponseDto> result = jpaQueryFactory.select(
+                Projections.constructor(
+                    MemberSearchResponseDto.class,
+                    qMemberEntity.memberId,
+                    qMemberEntity.nickname,
+                    qMemberEntity.email,
+                    qMemberEntity.profileImgUrl,
+                    qMemberEntity.thirdPartyProfileUrl,
+                    qMemberEntity.belongingId,
+                    qBelongingEntity.name
+                )
+            )
+            .from(qMemberEntity)
+            .leftJoin(qBelongingEntity)
+            .on(qBelongingEntity.belongingId.eq(qMemberEntity.belongingId))
+            .where(
+                qMemberEntity.nickname.like(q + "%")
+            )
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        Long totalCount = Optional.ofNullable(
+                jpaQueryFactory.select(qMemberEntity.memberId.count())
+                    .from(qMemberEntity)
+                    .where(qMemberEntity.nickname.like(q + "%"))
+                    .fetchFirst()
+            )
+            .orElse(0L);
+
+        return new PageImpl<>(
+            result,
+            pageable,
+            totalCount
         );
     }
 

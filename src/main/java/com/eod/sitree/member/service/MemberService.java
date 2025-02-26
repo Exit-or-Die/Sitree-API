@@ -130,7 +130,7 @@ public class MemberService {
 
     public MemberSearchPageResponse searchMembers(MemberSearchPageRequestDto request) {
 
-        return new MemberSearchPageResponse(memberRepository.searchMembers(request.getQ(), request.getPageable()));
+        return new MemberSearchPageResponse(memberRepository.searchMembersAsDto(request.getQ(), request.getPageable()));
     }
 
     public MemberUpdateResponseDto updateMember(Long memberId, MemberUpdateRequestDto request) {

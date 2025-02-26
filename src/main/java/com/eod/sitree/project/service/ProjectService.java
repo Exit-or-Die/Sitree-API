@@ -2,6 +2,7 @@ package com.eod.sitree.project.service;
 
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.Project;
+import com.eod.sitree.project.domain.model.type.TechStackType;
 import com.eod.sitree.project.domain.modelRepository.ProjectLikesRepository;
 import com.eod.sitree.project.domain.modelRepository.ProjectRepository;
 import com.eod.sitree.project.exeption.ProjectException;
@@ -17,7 +18,9 @@ import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectMemberLikeResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectUpdateResponseDto;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
+import com.eod.sitree.project.ui.dto.response.TechStackListResponseDto;
 import jakarta.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -113,5 +116,11 @@ public class ProjectService {
         }
         Boolean memberProjectLike = projectLikesRepository.isMemberProjectLike(projectId, memberId);
         return new ProjectMemberLikeResponseDto(memberProjectLike);
+    }
+
+    public TechStackListResponseDto getTechStackList() {
+        TechStackType[] values = TechStackType.values();
+        List<String> techStackList = Arrays.stream(values).map(TechStackType::name).toList();
+        return new TechStackListResponseDto(techStackList);
     }
 }

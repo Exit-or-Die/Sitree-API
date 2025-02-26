@@ -90,4 +90,11 @@ public class ProjectController {
         var result = projectService.updateProject(projectId, projectUpdateRequestDto);
         return new ResponseDto<>(result);
     }
+
+    @AuthNotRequired
+    @GetMapping("/tech-stacks")
+    public ResponseDto<?> getTechStackList() {
+        var result = projectService.getTechStackList();
+        return new ResponseDto<>(result);
+    }
 }

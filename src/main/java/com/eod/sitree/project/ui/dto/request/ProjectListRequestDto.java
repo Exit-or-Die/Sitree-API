@@ -13,19 +13,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class ProjectListRequestDto extends BasePageRequest {
-    private SortType sortType = SortType.LATEST;
-    private List<Long> categoryIds = new ArrayList<>();
-    private String nameKeyword = "";
+    private SortType sortType;
+    private List<Long> categoryIds;
+    private String nameKeyword;
 
     public ProjectListRequestDto(Integer pageNo, Integer size, SortType sortType,
         List<Long> categoryIds, String nameKeyword) {
         super(pageNo, size);
-        this.sortType = sortType;
-        this.categoryIds = categoryIds;
-        this.nameKeyword = nameKeyword;
+        this.sortType = sortType == null ? SortType.LATEST : sortType ;
+        this.categoryIds = categoryIds == null? new ArrayList<>() : categoryIds;
+        this.nameKeyword = nameKeyword == null ? "" : nameKeyword;
     }
 
     @Getter

@@ -4,6 +4,7 @@ import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectLeaderResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import java.util.List;
@@ -33,4 +34,6 @@ public interface ProjectRepository {
     List<SitreePickGetResponse> getSitreeSuggestion();
 
     List<ParticipatedProjectsResponseDto> getParticipatedProjects(long memberId);
+
+    ProjectLeaderResponseDto getProjectLeader(Long projectId);
 }

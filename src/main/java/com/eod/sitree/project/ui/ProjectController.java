@@ -81,11 +81,11 @@ public class ProjectController {
     public ResponseDto<?> getProjectMemberLike(@PathVariable Long projectId,
             @RequestParam(required = false) Long memberId) {
         var result = projectService.getProjectMemberLike(projectId, memberId);
-       return new ResponseDto<>(result);
+        return new ResponseDto<>(result);
     }
 
     @PutMapping("/{projectId}")
-    public ResponseDto<?> updateProject (@PathVariable Long projectId,
+    public ResponseDto<?> updateProject(@PathVariable Long projectId,
             @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto) {
         var result = projectService.updateProject(projectId, projectUpdateRequestDto);
         return new ResponseDto<>(result);
@@ -95,6 +95,13 @@ public class ProjectController {
     @GetMapping("/tech-stacks")
     public ResponseDto<?> getTechStackList() {
         var result = projectService.getTechStackList();
+        return new ResponseDto<>(result);
+    }
+
+    @AuthNotRequired
+    @GetMapping("/{projectId}/leader")
+    public ResponseDto<?> getProjectLeader(@PathVariable Long projectId) {
+        var result = projectService.getProjectLeader(projectId);
         return new ResponseDto<>(result);
     }
 }

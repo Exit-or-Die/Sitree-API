@@ -13,6 +13,7 @@ import com.eod.sitree.project.ui.dto.request.ProjectUpdateRequestDto;
 import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectLeaderResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectMemberLikeResponseDto;
@@ -122,5 +123,10 @@ public class ProjectService {
         TechStackType[] values = TechStackType.values();
         List<String> techStackList = Arrays.stream(values).map(TechStackType::name).toList();
         return new TechStackListResponseDto(techStackList);
+    }
+
+    public ProjectLeaderResponseDto getProjectLeader(Long projectId) {
+
+        return projectRepository.getProjectLeader(projectId);
     }
 }

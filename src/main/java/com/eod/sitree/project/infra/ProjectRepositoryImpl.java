@@ -265,7 +265,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                         projectEntity.modifiedAt,
                         projectEntity.headEntity.healthCheckUrl
                 )
-                .where(inProjectIds(projectIds), projectNameContains(dto.getNameKeyword()))
+                .where(inProjectIds(projectIds), projectNameContains(dto.getNameKeyword()), projectEntity.isDeleted.not())
                 .orderBy(orders.toArray(new OrderSpecifier[0]))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -273,6 +273,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         Long totalCount = jpaQueryFactory.select(projectEntity.projectId.count())
                 .from(projectEntity)
+                .where(projectEntity.isDeleted.not())
                 .fetchOne();
 
         return new PageImpl<>(listResult, pageable,
@@ -383,6 +384,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                         participantEntity.isLeader))
                 .where(participantEntity.projectId.eq(projectId))
                 .fetchOne();
+    }
+
+    @Override
+    public void deleteProject(long projectId) {
+        jpaQueryFactory.update(projectEntity)
+                .set(projectEntity.isDeleted, true)
+                .where(projectEntity.projectId.eq(projectId))
+                .execute();
     }
 
     private List<OrderSpecifier<?>> getOrderSpecifiers(SortType type) {

@@ -36,4 +36,6 @@ public interface ProjectRepository {
     List<ParticipatedProjectsResponseDto> getParticipatedProjects(long memberId);
 
     ProjectLeaderResponseDto getProjectLeader(Long projectId);
+
+    void deleteProject(long projectId);
 }

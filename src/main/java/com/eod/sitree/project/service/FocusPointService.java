@@ -39,7 +39,7 @@ public class FocusPointService {
         }
 
         FocusPoint updateFocusPoint = new FocusPoint(member.getMemberId(), dto.getFocusPoints());
-        if (dto.isNewFocusPoint() && participantId == null) {
+        if (dto.isNewFocusPoint()) {
             FocusPoint savedFocusPoint = focusPointRepository.saveFocusPoint(dto.getParticipantId(),
                     updateFocusPoint);
             return new FocusPointUpdateResponseDto(savedFocusPoint.getFocusPoints());

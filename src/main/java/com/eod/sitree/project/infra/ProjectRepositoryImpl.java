@@ -42,6 +42,7 @@ import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
 import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto.ProjectDetailDto;
+import com.eod.sitree.project.ui.dto.response.ProjectLeaderResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import com.querydsl.core.types.Order;
@@ -366,6 +367,22 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                         participantEntity.participantId
                         )
                 .fetch();
+    }
+
+    @Override
+    public ProjectLeaderResponseDto getProjectLeader(Long projectId) {
+        return jpaQueryFactory.select(Projections.constructor(ProjectLeaderResponseDto.class,
+                        memberEntity.memberId,
+                        memberEntity.profileImgUrl,
+                        memberEntity.nickname,
+                        participantEntity.position
+                ))
+                .from(participantEntity)
+                .innerJoin(memberEntity)
+                .on(participantEntity.memberId.eq(memberEntity.memberId).and(
+                        participantEntity.isLeader))
+                .where(participantEntity.projectId.eq(projectId))
+                .fetchOne();
     }
 
     private List<OrderSpecifier<?>> getOrderSpecifiers(SortType type) {

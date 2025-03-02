@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @AllArgsConstructor
@@ -59,5 +58,12 @@ public class Project {
         this.techviews = updatedProject.getTechviews();
         this.architectures = updatedProject.getArchitectures();
         this.participants = updatedProject.getParticipants();
+    }
+
+    public boolean isLeader(long memberId) {
+        return participants.stream()
+                .filter(Participant::isLeader)
+                .map(Participant::getMemberId)
+                .anyMatch(id -> id == memberId);
     }
 }

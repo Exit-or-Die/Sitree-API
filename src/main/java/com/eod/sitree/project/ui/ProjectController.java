@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,11 +82,11 @@ public class ProjectController {
     public ResponseDto<?> getProjectMemberLike(@PathVariable Long projectId,
             @RequestParam(required = false) Long memberId) {
         var result = projectService.getProjectMemberLike(projectId, memberId);
-       return new ResponseDto<>(result);
+        return new ResponseDto<>(result);
     }
 
     @PutMapping("/{projectId}")
-    public ResponseDto<?> updateProject (@PathVariable Long projectId,
+    public ResponseDto<?> updateProject(@PathVariable Long projectId,
             @RequestBody @Valid ProjectUpdateRequestDto projectUpdateRequestDto) {
         var result = projectService.updateProject(projectId, projectUpdateRequestDto);
         return new ResponseDto<>(result);
@@ -95,6 +96,19 @@ public class ProjectController {
     @GetMapping("/tech-stacks")
     public ResponseDto<?> getTechStackList() {
         var result = projectService.getTechStackList();
+        return new ResponseDto<>(result);
+    }
+
+    @AuthNotRequired
+    @GetMapping("/{projectId}/leader")
+    public ResponseDto<?> getProjectLeader(@PathVariable Long projectId) {
+        var result = projectService.getProjectLeader(projectId);
+        return new ResponseDto<>(result);
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseDto<?> deleteProject(@PathVariable Long projectId, @MemberPrincipal Member member) {
+        var result = projectService.projectDelete(projectId, member);
         return new ResponseDto<>(result);
     }
 }

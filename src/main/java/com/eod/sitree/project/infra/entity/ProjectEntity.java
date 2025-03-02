@@ -43,7 +43,10 @@ public class ProjectEntity extends BaseEntity {
     @ColumnDefault("0")
     private long viewCount;
 
+    private boolean isDeleted;
+
     public ProjectEntity(Project project) {
+
         this.headEntity = new HeadEntity(project.getHead());
         this.overviewEntity = new OverviewEntity(project.getOverview());
     }

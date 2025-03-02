@@ -1,6 +1,7 @@
 package com.eod.sitree.project.service;
 
 import com.eod.sitree.common.exception.ApplicationErrorType;
+import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.project.domain.model.Project;
 import com.eod.sitree.project.domain.model.type.TechStackType;
 import com.eod.sitree.project.domain.modelRepository.ProjectLikesRepository;
@@ -12,7 +13,9 @@ import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto;
 import com.eod.sitree.project.ui.dto.request.ProjectUpdateRequestDto;
 import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectCreateResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectDeleteResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
+import com.eod.sitree.project.ui.dto.response.ProjectLeaderResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectLikesResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectMemberLikeResponseDto;
@@ -122,5 +125,20 @@ public class ProjectService {
         TechStackType[] values = TechStackType.values();
         List<String> techStackList = Arrays.stream(values).map(TechStackType::name).toList();
         return new TechStackListResponseDto(techStackList);
+    }
+
+    public ProjectLeaderResponseDto getProjectLeader(Long projectId) {
+
+        return projectRepository.getProjectLeader(projectId);
+    }
+
+    @Transactional
+    public ProjectDeleteResponseDto projectDelete(Long projectId, Member member) {
+        Project project = projectRepository.getProjectById(projectId);
+        if (!project.isLeader(member.getMemberId())) {
+            throw new ProjectException(ApplicationErrorType.NOT_MATCH_PROJECT_LEADER);
+        }
+        projectRepository.deleteProject(projectId);
+        return new ProjectDeleteResponseDto(projectId);
     }
 }

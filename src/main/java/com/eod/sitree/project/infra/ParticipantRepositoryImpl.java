@@ -3,9 +3,11 @@ package com.eod.sitree.project.infra;
 import static com.eod.sitree.project.infra.entity.QFocusPointEntity.focusPointEntity;
 import static com.eod.sitree.project.infra.entity.QParticipantEntity.participantEntity;
 
+import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.project.domain.model.FocusPoint;
 import com.eod.sitree.project.domain.model.Participant;
 import com.eod.sitree.project.domain.modelRepository.ParticipantRepository;
+import com.eod.sitree.project.exeption.ProjectException;
 import com.eod.sitree.project.infra.entity.ParticipantEntity;
 import com.eod.sitree.project.infra.jpa_interfaces.FocusPointJpaRepository;
 import com.eod.sitree.project.infra.jpa_interfaces.ParticipantJpaRepository;
@@ -36,12 +38,13 @@ public class ParticipantRepositoryImpl implements ParticipantRepository {
                                 participantEntity.isLeader,
                                 Projections.constructor(FocusPoint.class,
                                         focusPointEntity.memberId,
-                                        focusPointEntity.focusedOn
+                                        focusPointEntity.focusPoints
                                 )
                         )
                 )
                 .from(participantEntity)
-                .leftJoin(focusPointEntity).on(participantEntity.participantId.eq(focusPointEntity.participantId))
+                .leftJoin(focusPointEntity)
+                .on(participantEntity.participantId.eq(focusPointEntity.participantId))
                 .where(participantEntity.projectId.eq(projectId))
                 .fetch();
     }
@@ -91,5 +94,12 @@ public class ParticipantRepositoryImpl implements ParticipantRepository {
         }
     }
 
+    @Override
+    public Long getParticipantId(Long memberId, Long projectId) {
+        ParticipantEntity participantEntity = participantJpaRepository.findByProjectIdAndMemberId(
+                        projectId, memberId).orElseThrow(
+                        () -> new ProjectException(ApplicationErrorType.NOT_EXIST_PARTICIPANT));
+        return participantEntity.getParticipantId();
+    }
 
 }

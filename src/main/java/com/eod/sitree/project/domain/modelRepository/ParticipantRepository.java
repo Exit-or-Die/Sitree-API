@@ -10,4 +10,6 @@ public interface ParticipantRepository {
     void saveAll(List<Participant> participants, long projectId);
 
     void updateParticipants(long projectId, List<Participant> participants);
+
+    Long getParticipantId(Long memberId, Long projectId);
 }

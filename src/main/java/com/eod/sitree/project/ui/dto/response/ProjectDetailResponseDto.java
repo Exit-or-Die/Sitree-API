@@ -90,6 +90,6 @@ public class ProjectDetailResponseDto {
         private final String imageUrl;
         private final String position;
         private final Boolean isLeader;
-        private final String focusPoint;
+        private final List<String> focusPoints;
     }
 }

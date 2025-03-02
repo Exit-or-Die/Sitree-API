@@ -15,6 +15,15 @@ repositories {
 	mavenCentral()
 }
 
+springBoot {
+	buildInfo() // JAR 메타정보 포함
+}
+
+bootJar {
+	archiveFileName = "sitree.jar"
+	layered{ }
+}
+
 dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

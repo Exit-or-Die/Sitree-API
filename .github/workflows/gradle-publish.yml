@@ -67,10 +67,16 @@ jobs:
       # SCP를 사용하여 JAR 파일을 EC2 서버로 복사
       # SSH를 사용하여 EC2 서버에 연결하고 현재 실행 중인 Java 프로세스를 종료한 다음 새로운 Java 프로세스 생성 및 실행!!
       ## NLP 적용하면 IP -> 도메인으로 수정 + EC2 늘리면 run 추가
-      - name: Deploy to EC2
+      - name: Copy JAR to EC2
         run: |
           echo "${{ secrets.AWS_ACCESS_KEY }}" > private_key.pem
           chmod 600 private_key.pem
           scp -i private_key.pem -o StrictHostKeyChecking=no build/libs/sitree.jar ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USERNAME }}/sitree.jar
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "pgrep java | xargs kill -9; nohup java -jar -Dspring.profiles.active=live -Djasypt.encryptor.password=${{ secrets.JASYPT_KEY }} /home/${{ secrets.EC2_USERNAME }}/sitree.jar > app.log 2>&1 &"
+          rm -f private_key.pem
+
+      - name: Restart Application on EC2
+        run: |
+          echo "${{ secrets.AWS_ACCESS_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "pkill -9 -f 'java -jar' || true && nohup java -jar -Dspring.profiles.active=live -Djasypt.encryptor.password=${{ secrets.JASYPT_KEY }} /home/${{ secrets.EC2_USERNAME }}/sitree.jar > /home/${{ secrets.EC2_USERNAME }}/app.log 2>&1 &"
           rm -f private_key.pem

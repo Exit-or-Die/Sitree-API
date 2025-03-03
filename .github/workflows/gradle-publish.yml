@@ -71,7 +71,11 @@ jobs:
         run: |
           echo "${{ secrets.AWS_ACCESS_KEY }}" > private_key.pem
           chmod 600 private_key.pem
-          scp -i private_key.pem -o StrictHostKeyChecking=no build/libs/sitree.jar ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USERNAME }}/sitree.jar
+          tar -czvf build/libs/sitree.tar.gz -C build/libs sitree.jar
+          scp -i private_key.pem -o StrictHostKeyChecking=no build/libs/sitree.tar.gz ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USERNAME }}/sitree.tar.gz
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "tar -xzvf /home/${{ secrets.EC2_USERNAME }}/sitree.tar.gz -C /home/${{ secrets.EC2_USERNAME }}/"
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "rm -f /home/${{ secrets.EC2_USERNAME }}/sitree.tar.gz"
+          rm -f build/libs/sitree.tar.gz
           rm -f private_key.pem
 
       - name: Restart Application on EC2

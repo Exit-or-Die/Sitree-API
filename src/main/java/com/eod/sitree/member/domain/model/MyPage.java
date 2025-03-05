@@ -15,8 +15,6 @@ public class MyPage {
 
     private List<EducationActivity> educationActivities;
 
-    // Project domain꺼를 가져다가 써도 될까?
-    // 도메인별 분리 + 이중관리 vs 공통 enum으로 빼기
     private List<TechStackType> techStacks;
 
     private List<MyLink> links;

@@ -152,6 +152,13 @@ public class MemberService {
 
     public MemberDetailResponseDto getMemberDetailAsDto(Long memberId) {
 
-        return memberRepository.getMemberDetailByMemberId(memberId);
+        MemberDetailResponseDto memberDto = memberRepository.getMemberDetailByMemberId(memberId);
+
+        if (memberDto == null) {
+
+            throw new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
+        }
+
+        return memberDto;
     }
 }

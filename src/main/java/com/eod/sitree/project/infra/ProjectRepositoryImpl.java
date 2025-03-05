@@ -42,6 +42,7 @@ import com.eod.sitree.project.ui.dto.request.ProjectListRequestDto.SortType;
 import com.eod.sitree.project.ui.dto.response.ParticipatedProjectsResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectDetailResponseDto.ProjectDetailDto;
+import com.eod.sitree.project.ui.dto.response.ProjectLeaderResponseDto;
 import com.eod.sitree.project.ui.dto.response.ProjectListResponseDto.ProjectDisplayElement;
 import com.eod.sitree.project.ui.dto.response.SitreePickGetResponse;
 import com.querydsl.core.types.Order;
@@ -261,7 +262,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                         projectEntity.modifiedAt,
                         projectEntity.headEntity.healthCheckUrl
                 )
-                .where(inProjectIds(projectIds), projectNameContains(dto.getNameKeyword()))
+                .where(inProjectIds(projectIds), projectNameContains(dto.getNameKeyword()), projectEntity.isDeleted.not())
                 .orderBy(orders.toArray(new OrderSpecifier[0]))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -269,6 +270,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
         Long totalCount = jpaQueryFactory.select(projectEntity.projectId.count())
                 .from(projectEntity)
+                .where(projectEntity.isDeleted.not())
                 .fetchOne();
 
         return new PageImpl<>(listResult, pageable,
@@ -366,6 +368,30 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                         participantEntity.participantId
                         )
                 .fetch();
+    }
+
+    @Override
+    public ProjectLeaderResponseDto getProjectLeader(Long projectId) {
+        return jpaQueryFactory.select(Projections.constructor(ProjectLeaderResponseDto.class,
+                        memberEntity.memberId,
+                        memberEntity.profileImgUrl,
+                        memberEntity.nickname,
+                        participantEntity.position
+                ))
+                .from(participantEntity)
+                .innerJoin(memberEntity)
+                .on(participantEntity.memberId.eq(memberEntity.memberId).and(
+                        participantEntity.isLeader))
+                .where(participantEntity.projectId.eq(projectId))
+                .fetchOne();
+    }
+
+    @Override
+    public void deleteProject(long projectId) {
+        jpaQueryFactory.update(projectEntity)
+                .set(projectEntity.isDeleted, true)
+                .where(projectEntity.projectId.eq(projectId))
+                .execute();
     }
 
     private List<OrderSpecifier<?>> getOrderSpecifiers(SortType type) {

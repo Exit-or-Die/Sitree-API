@@ -174,6 +174,7 @@ public class JpaMemberRepositoryImpl extends QuerydslRepositorySupport implement
                 qMemberEntity.email,
                 qMemberEntity.profileImgUrl,
                 qMemberEntity.thirdPartyProfileUrl,
+                qMemberEntity.shortIntroduction,
                 qMemberEntity.belongingId,
                 qBelongingEntity.name,
                 qMemberEntity.myPage

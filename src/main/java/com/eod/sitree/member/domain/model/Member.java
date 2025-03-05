@@ -28,6 +28,9 @@ public class Member extends BaseTimeDomain {
     private Long belongingId;
 
     @Nullable
+    private String shortIntroduction;
+
+    @Nullable
     private MyPage myPage;
 
 
@@ -56,7 +59,7 @@ public class Member extends BaseTimeDomain {
     }
 
     public Member(Long memberId, Provider provider, String nickname, String email, String profileImgUrl, @Nullable String thirdPartyProfileUrl,
-        @Nullable Long belongingId, @Nullable MyPage myPage, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        @Nullable Long belongingId, @Nullable String shortIntroduction, @Nullable MyPage myPage, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         super(createdAt, modifiedAt);
         this.memberId = memberId;
         this.provider = provider;
@@ -65,11 +68,12 @@ public class Member extends BaseTimeDomain {
         this.profileImgUrl = profileImgUrl;
         this.thirdPartyProfileUrl = thirdPartyProfileUrl;
         this.belongingId = belongingId;
+        this.shortIntroduction = shortIntroduction;
         this.myPage = myPage;
     }
 
     public Member(Provider provider, String nickname, String email, String profileImgUrl, @Nullable String thirdPartyProfileUrl,
-        @Nullable Long belongingId, @Nullable MyPage myPage) {
+        @Nullable Long belongingId, @Nullable String shortIntroduction, @Nullable MyPage myPage) {
         super(null, null);
         this.provider = provider;
         this.nickname = nickname;
@@ -77,6 +81,7 @@ public class Member extends BaseTimeDomain {
         this.profileImgUrl = profileImgUrl;
         this.thirdPartyProfileUrl = thirdPartyProfileUrl;
         this.belongingId = belongingId;
+        this.shortIntroduction = shortIntroduction;
         this.myPage = myPage;
     }
 
@@ -95,6 +100,7 @@ public class Member extends BaseTimeDomain {
         this.profileImgUrl = updatingMember.getProfileImgUrl();
         this.thirdPartyProfileUrl = updatingMember.getThirdPartyProfileUrl();
         this.belongingId = updatingMember.getBelongingId();
+        this.shortIntroduction = updatingMember.getShortIntroduction();
         this.myPage = updatingMember.getMyPage();
     }
 }

@@ -97,11 +97,11 @@ public class ProjectCreateRequestDto {
         private String techTitle; // 개발 영역
         @NotBlank
         private String gitRepositoryUrl; // 깃 링크
-        private List<TechStackType> techTagList; // 사용 기술
+        private List<TechStackType> techStackTypes; // 사용 기술
         private String techDesc; // 개발 상세
 
         private Techview toDomainModel(){
-            return new Techview(this.techTitle, this.gitRepositoryUrl, this.techTagList, this.techDesc);
+            return new Techview(this.techTitle, this.gitRepositoryUrl, this.techStackTypes, this.techDesc);
         }
     }
 

@@ -3,13 +3,15 @@ package com.eod.sitree.member.ui.dto.request;
 import com.eod.sitree.member.domain.model.Career;
 import com.eod.sitree.member.domain.model.EducationActivity;
 import com.eod.sitree.member.domain.model.Member;
+import com.eod.sitree.member.domain.model.MyLink;
 import com.eod.sitree.member.domain.model.MyPage;
 import com.eod.sitree.member.domain.model.Project;
 import com.eod.sitree.member.domain.model.Provider;
 import com.eod.sitree.member.domain.model.SelfIntroduction;
 import com.eod.sitree.member.domain.model.type.EducationActivityCategoryType;
+import com.eod.sitree.member.domain.model.type.LinkProviderType;
 import com.eod.sitree.member.domain.model.type.RoleTagType;
-import com.eod.sitree.project.domain.model.type.TechStackType;
+import com.eod.sitree.member.domain.model.type.TechStackType;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
@@ -36,6 +38,9 @@ public class MemberUpdateRequestDto {
     private String thirdPartyProfileUrl;
 
     @Nullable
+    private String shortIntroduction;
+
+    @Nullable
     private Long belongingId;
 
     @Nullable
@@ -50,6 +55,7 @@ public class MemberUpdateRequestDto {
             profileImgUrl,
             thirdPartyProfileUrl,
             belongingId,
+            shortIntroduction,
             Optional.ofNullable(myPage)
                 .map(MyPageDto::toDomain)
                 .orElseGet(MyPage::new)
@@ -68,7 +74,7 @@ public class MemberUpdateRequestDto {
 
         private List<TechStackType> techStacks;
 
-        private List<String> links;
+        private List<MyLinkDto> links;
 
         public MyPage toDomain() {
 
@@ -83,7 +89,10 @@ public class MemberUpdateRequestDto {
                     .map(EducationActivityDto::toDomain)
                     .toList(),
                 techStacks,
-                links
+                Optional.ofNullable(links).orElseGet(ArrayList::new)
+                    .stream()
+                    .map(MyLinkDto::toDomain)
+                    .toList()
             );
         }
     }
@@ -151,6 +160,7 @@ public class MemberUpdateRequestDto {
         }
     }
 
+    @Getter
     public static class EducationActivityDto {
 
         private String educationActivityName;
@@ -169,6 +179,19 @@ public class MemberUpdateRequestDto {
 
             return new EducationActivity(educationActivityName, startedAt, endedAt,
                 majorOrOrganization, category, contents);
+        }
+    }
+
+    @Getter
+    public static class MyLinkDto {
+
+        private LinkProviderType linkProvider;
+
+        private String link;
+
+        public MyLink toDomain() {
+
+            return new MyLink(linkProvider, link);
         }
     }
 }

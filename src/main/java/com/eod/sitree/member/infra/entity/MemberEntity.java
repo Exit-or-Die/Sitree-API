@@ -56,6 +56,9 @@ public class MemberEntity extends BaseEntity {
     private Long belongingId;
 
     @Column
+    private String shortIntroduction;
+
+    @Column
     @Convert(converter = MyPageConverter.class)
     private MyPage myPage;
 
@@ -67,6 +70,7 @@ public class MemberEntity extends BaseEntity {
         this.profileImgUrl = member.getProfileImgUrl();
         this.thirdPartyProfileUrl = member.getThirdPartyProfileUrl();
         this.belongingId = member.getBelongingId();
+        this.shortIntroduction = member.getShortIntroduction();
         this.myPage = member.getMyPage();
     }
 
@@ -80,6 +84,7 @@ public class MemberEntity extends BaseEntity {
             this.profileImgUrl,
             this.thirdPartyProfileUrl,
             this.belongingId,
+            this.shortIntroduction,
             this.myPage,
             this.getCreatedAt(),
             this.getModifiedAt()

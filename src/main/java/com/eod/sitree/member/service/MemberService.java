@@ -8,6 +8,7 @@ import com.eod.sitree.belonging.exception.BelongingException;
 import com.eod.sitree.common.exception.ApplicationErrorType;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.Provider;
+import com.eod.sitree.member.domain.model.type.TechStackType;
 import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.ui.dto.request.MemberNicknameExistRequestDto;
@@ -19,9 +20,12 @@ import com.eod.sitree.member.ui.dto.request.MemberUpdateRequestDto;
 import com.eod.sitree.member.ui.dto.response.MemberDetailResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberNicknameExistResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberSearchPageResponse;
+import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
 import com.eod.sitree.member.ui.dto.response.MemberUpdateResponseDto;
 import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
-import com.eod.sitree.member.ui.dto.response.MemberTokensResponseDto;
+import com.eod.sitree.member.ui.dto.response.TechStackListResponseDto;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -152,6 +156,22 @@ public class MemberService {
 
     public MemberDetailResponseDto getMemberDetailAsDto(Long memberId) {
 
-        return memberRepository.getMemberDetailByMemberId(memberId);
+        MemberDetailResponseDto memberDto = memberRepository.getMemberDetailByMemberId(memberId);
+
+        if (memberDto == null) {
+
+            throw new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND);
+        }
+
+        return memberDto;
+    }
+
+    public TechStackListResponseDto findTechStacks() {
+
+        List<String> teckStackNameList = Arrays.stream(TechStackType.values())
+            .map(TechStackType::name)
+            .toList();
+
+        return new TechStackListResponseDto(teckStackNameList);
     }
 }

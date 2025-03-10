@@ -97,6 +97,7 @@ public class MemberController {
         return ResponseDto.ok(memberService.updateMember(memberId, request, currentMember));
     }
 
+    @AuthNotRequired
     @GetMapping("/{memberId}")
     public ResponseDto<MemberDetailResponseDto> getMember(@PathVariable Long memberId) {
 

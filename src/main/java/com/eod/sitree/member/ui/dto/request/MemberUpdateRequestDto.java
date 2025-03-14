@@ -1,6 +1,7 @@
 package com.eod.sitree.member.ui.dto.request;
 
 import com.eod.sitree.member.domain.model.Career;
+import com.eod.sitree.member.domain.model.Careers;
 import com.eod.sitree.member.domain.model.EducationActivity;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.MyLink;
@@ -68,7 +69,7 @@ public class MemberUpdateRequestDto {
 
         private SelfIntroductionDto selfIntroduction;
 
-        private List<CareerDto> careers;
+        private CareersDto careers;
 
         private List<EducationActivityDto> educationActivities;
 
@@ -79,16 +80,17 @@ public class MemberUpdateRequestDto {
         public MyPage toDomain() {
 
             return new MyPage(
-                selfIntroduction.toDomain(),
-                Optional.ofNullable(careers).orElseGet(ArrayList::new)
-                    .stream()
-                    .map(CareerDto::toDomain)
-                    .toList(),
+                Optional.ofNullable(selfIntroduction)
+                    .map(SelfIntroductionDto::toDomain)
+                    .orElseGet(SelfIntroduction::new),
+                Optional.ofNullable(careers)
+                    .map(CareersDto::toDomain)
+                    .orElseGet(Careers::new),
                 Optional.ofNullable(educationActivities).orElseGet(ArrayList::new)
                     .stream()
                     .map(EducationActivityDto::toDomain)
                     .toList(),
-                techStacks,
+                Optional.ofNullable(techStacks).orElseGet(ArrayList::new),
                 Optional.ofNullable(links).orElseGet(ArrayList::new)
                     .stream()
                     .map(MyLinkDto::toDomain)
@@ -98,6 +100,7 @@ public class MemberUpdateRequestDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class SelfIntroductionDto {
 
         private String title;
@@ -107,6 +110,22 @@ public class MemberUpdateRequestDto {
         public SelfIntroduction toDomain() {
 
             return new SelfIntroduction(title, contents);
+        }
+    }
+
+    @Getter
+    public static class CareersDto {
+
+        List<CareerDto> careerList;
+
+        public Careers toDomain() {
+
+            return new Careers(0, 0, Optional.ofNullable(careerList)
+                .orElseGet(ArrayList::new)
+                .stream()
+                .map(CareerDto::toDomain)
+                .toList()
+            );
         }
     }
 

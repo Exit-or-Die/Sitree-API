@@ -4,15 +4,16 @@ package com.eod.sitree.member.domain.model;
 import com.eod.sitree.belonging.domain.model.Belonging;
 import com.eod.sitree.common.domain.model.BaseTimeDomain;
 import com.eod.sitree.member.infra.entity.MemberEntity;
-import io.jsonwebtoken.lang.Collections;
 import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
+import org.springframework.util.CollectionUtils;
 
 @Getter
 public class Member extends BaseTimeDomain {
@@ -94,6 +95,10 @@ public class Member extends BaseTimeDomain {
         this.myPage = myPage;
     }
 
+    public Member() {
+        super(null, null);
+    }
+
     public boolean hasBelonging() {
 
         return belongingId != null;
@@ -115,11 +120,11 @@ public class Member extends BaseTimeDomain {
 
     public List<Long> findBelongingIds() {
 
-        if (this.myPage == null) {
+        if (this.myPage == null || this.myPage.getCareers() == null) {
             return new ArrayList<>();
         }
 
-        return Optional.ofNullable(this.myPage.getCareers())
+        return Optional.ofNullable(this.myPage.getCareers().getCareerList())
             .orElseGet(ArrayList::new)
             .stream()
             .map(Career::getBelongingId)
@@ -128,12 +133,39 @@ public class Member extends BaseTimeDomain {
 
     public void updateCareerBelonging(Map<Long, Belonging> belongingMap) {
 
-        if (belongingMap == null || this.myPage == null || Collections.isEmpty(
-            this.myPage.getCareers())) {
+        if (belongingMap == null
+            || this.myPage == null
+            || this.myPage.getCareers() == null
+            || CollectionUtils.isEmpty(this.myPage.getCareers().getCareerList())
+        ) {
 
             return;
         }
 
-        this.myPage.getCareers().forEach(career -> career.updateBelonging(belongingMap.get(career.getBelongingId())));
+        this.myPage.getCareers().getCareerList()
+            .forEach(career -> career.updateBelonging(belongingMap.get(career.getBelongingId())));
+    }
+
+    public void updateCareerPeriod() {
+
+        if (this.myPage == null || this.myPage.getCareers() == null
+            || CollectionUtils.isEmpty(this.myPage.getCareers().getCareerList())) {
+
+            return;
+        }
+
+        Period totalPeriod = Period.ZERO;
+
+        List<Career> careers = this.myPage.getCareers().getCareerList();
+        for (Career career : careers) {
+            Period between = Period.between(
+                career.findStartedAtOrElseNow().toLocalDate(),
+                career.findEndedAtOrElseNow().toLocalDate()
+            );
+
+            totalPeriod = totalPeriod.plus(between);
+        }
+
+        this.myPage.getCareers().updatePeriod(totalPeriod);
     }
 }

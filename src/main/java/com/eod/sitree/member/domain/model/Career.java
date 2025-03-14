@@ -37,7 +37,8 @@ public class Career {
 
     private List<Project> projects;
 
-    public Career(Long belongingId, String belongingName, String imageUrl, LocalDateTime startedAt, LocalDateTime endedAt,
+    public Career(Long belongingId, String belongingName, String imageUrl, LocalDateTime startedAt,
+        LocalDateTime endedAt,
         String position, String department, List<Project> projects) {
 
         this.belongingId = belongingId;
@@ -69,5 +70,25 @@ public class Career {
 
         this.belongingName = belonging.getName();
         this.imageUrl = belonging.getImageUrl();
+    }
+
+    public LocalDateTime findStartedAtOrElseNow() {
+
+        if (this.startedAt == null) {
+
+            return LocalDateTime.now();
+        }
+
+        return this.startedAt;
+    }
+
+    public LocalDateTime findEndedAtOrElseNow() {
+
+        if (this.endedAt == null) {
+
+            return LocalDateTime.now();
+        }
+
+        return this.endedAt;
     }
 }

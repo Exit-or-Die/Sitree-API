@@ -153,7 +153,9 @@ public class MemberService {
         Member updatingMember = request.toDomain();
         Map<Long, Belonging> belongingMap = belongingRepository.findByIdsAsMap(
             updatingMember.findBelongingIds());
+
         updatingMember.updateCareerBelonging(belongingMap);
+        updatingMember.updateCareerPeriod();
 
         member.update(updatingMember);
 

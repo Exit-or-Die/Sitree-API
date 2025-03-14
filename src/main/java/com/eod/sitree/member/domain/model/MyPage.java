@@ -11,7 +11,7 @@ public class MyPage {
 
     private SelfIntroduction selfIntroduction;
 
-    private List<Career> careers;
+    private Careers careers;
 
     private List<EducationActivity> educationActivities;
 
@@ -19,7 +19,7 @@ public class MyPage {
 
     private List<MyLink> links;
 
-    public MyPage(SelfIntroduction selfIntroduction, List<Career> careers,
+    public MyPage(SelfIntroduction selfIntroduction, Careers careers,
         List<EducationActivity> educationActivities, List<TechStackType> techStacks,
         List<MyLink> links) {
         this.selfIntroduction = selfIntroduction;

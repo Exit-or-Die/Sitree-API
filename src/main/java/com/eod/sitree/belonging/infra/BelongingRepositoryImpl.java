@@ -17,7 +17,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -203,6 +205,19 @@ public class BelongingRepositoryImpl implements BelongingRepository {
             .orElse(0L);
 
         return new PageImpl<>(result, pageable, total);
+    }
+
+    @Override
+    public Map<Long, Belonging> findByIdsAsMap(List<Long> belongingIds) {
+
+        return jpaQueryFactory.selectFrom(belongingEntity)
+            .where(
+                belongingEntity.belongingId.in(belongingIds)
+            )
+            .fetch()
+            .stream()
+            .map(BelongingEntity::toDomainModel)
+            .collect(Collectors.toMap(Belonging::getBelongingId, b -> b));
     }
 
     private <T extends Comparable> OrderSpecifier<T> orderNullsLast(Path<T> path, Order order) {

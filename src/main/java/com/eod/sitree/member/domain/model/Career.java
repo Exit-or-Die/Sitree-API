@@ -1,5 +1,6 @@
 package com.eod.sitree.member.domain.model;
 
+import com.eod.sitree.belonging.domain.model.Belonging;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -14,7 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Career {
 
-    private String careerName;
+    private Long belongingId;
+
+    private String belongingName;
+
+    private String imageUrl;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -32,14 +37,37 @@ public class Career {
 
     private List<Project> projects;
 
-    public Career(String careerName, LocalDateTime startedAt, LocalDateTime endedAt,
-        String position,
-        String department, List<Project> projects) {
-        this.careerName = careerName;
+    public Career(Long belongingId, String belongingName, String imageUrl, LocalDateTime startedAt, LocalDateTime endedAt,
+        String position, String department, List<Project> projects) {
+
+        this.belongingId = belongingId;
+        this.belongingName = belongingName;
+        this.imageUrl = imageUrl;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
         this.position = position;
         this.department = department;
         this.projects = projects;
+    }
+
+    public Career(Long belongingId, LocalDateTime startedAt, LocalDateTime endedAt,
+        String position, String department, List<Project> projects) {
+
+        this.belongingId = belongingId;
+        this.startedAt = startedAt;
+        this.endedAt = endedAt;
+        this.position = position;
+        this.department = department;
+        this.projects = projects;
+    }
+
+    public void updateBelonging(Belonging belonging) {
+
+        if (belonging == null) {
+            return;
+        }
+
+        this.belongingName = belonging.getName();
+        this.imageUrl = belonging.getImageUrl();
     }
 }

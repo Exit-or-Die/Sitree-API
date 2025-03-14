@@ -113,7 +113,9 @@ public class MemberUpdateRequestDto {
     @Getter
     public static class CareerDto {
 
-        private String careerName;
+        private Long belongingId;
+
+        private String belongingName;
 
         private LocalDateTime startedAt;
 
@@ -128,7 +130,7 @@ public class MemberUpdateRequestDto {
         public Career toDomain() {
 
             return new Career(
-                careerName,
+                belongingId,
                 startedAt,
                 endedAt,
                 position,

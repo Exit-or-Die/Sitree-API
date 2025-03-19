@@ -29,7 +29,7 @@ public class MemberUpdateRequestDto {
 
     private String email;
 
-    @Pattern(regexp = "^\\\\d{3}-\\\\d{4}-\\\\d{4}$", message = "Wrong phone number format")
+    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "Wrong phone number format")
     private String phoneNumber;
 
     private Provider provider;

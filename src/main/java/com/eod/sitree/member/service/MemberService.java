@@ -3,6 +3,7 @@ package com.eod.sitree.member.service;
 import com.eod.sitree.auth.domain.JwtToken;
 import com.eod.sitree.auth.domain.MemberClaim;
 import com.eod.sitree.auth.service.AuthService;
+import com.eod.sitree.belonging.domain.model.Belonging;
 import com.eod.sitree.belonging.domain.modelRepository.BelongingRepository;
 import com.eod.sitree.belonging.exception.BelongingException;
 import com.eod.sitree.common.exception.ApplicationErrorType;
@@ -26,6 +27,7 @@ import com.eod.sitree.member.ui.dto.response.SignInResponseDto;
 import com.eod.sitree.member.ui.dto.response.TechStackListResponseDto;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -149,6 +151,12 @@ public class MemberService {
         }
 
         Member updatingMember = request.toDomain();
+        Map<Long, Belonging> belongingMap = belongingRepository.findByIdsAsMap(
+            updatingMember.findBelongingIds());
+
+        updatingMember.updateCareerBelonging(belongingMap);
+        updatingMember.updateCareerPeriod();
+
         member.update(updatingMember);
 
         return new MemberUpdateResponseDto(memberRepository.save(member) != null);

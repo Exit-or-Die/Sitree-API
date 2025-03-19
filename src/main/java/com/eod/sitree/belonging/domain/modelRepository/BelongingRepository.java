@@ -6,6 +6,7 @@ import com.eod.sitree.belonging.domain.model.BelongingWithPoint;
 import com.eod.sitree.belonging.infra.entity.BelongingEntity;
 import com.eod.sitree.belonging.ui.dto.response.BelongingRankingResponseDto;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,4 +29,6 @@ public interface BelongingRepository {
 
     Page<BelongingRankingResponseDto> findBelongingByRankingAscWithProjectCountAsPage(
         Pageable pageable, BelongingType belongingType);
+
+    Map<Long, Belonging> findByIdsAsMap(List<Long> belongingIds);
 }

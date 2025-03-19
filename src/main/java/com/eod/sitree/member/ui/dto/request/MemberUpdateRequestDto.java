@@ -16,6 +16,7 @@ import com.eod.sitree.member.domain.model.type.RoleTagType;
 import com.eod.sitree.member.domain.model.type.TechStackType;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class MemberUpdateRequestDto {
 
     private String email;
 
+    @Pattern(regexp = "^\\\\d{3}-\\\\d{4}-\\\\d{4}$", message = "Wrong phone number format")
     private String phoneNumber;
 
     private Provider provider;

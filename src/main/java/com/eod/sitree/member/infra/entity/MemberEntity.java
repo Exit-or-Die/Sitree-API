@@ -43,8 +43,14 @@ public class MemberEntity extends BaseEntity {
     @Column(nullable = false)
     private String nickname;
 
+    @Column
+    private String position;
+
     @Column(unique = true, nullable = false)
     private String email;
+
+    @Column
+    private String phoneNumber;
 
     @Column(nullable = false)
     private String profileImgUrl;
@@ -66,7 +72,9 @@ public class MemberEntity extends BaseEntity {
         this.memberId = member.getMemberId();
         this.provider = member.getProvider();
         this.nickname = member.getNickname();
+        this.position = member.getPosition();
         this.email = member.getEmail();
+        this.phoneNumber = member.getPhoneNumber();
         this.profileImgUrl = member.getProfileImgUrl();
         this.thirdPartyProfileUrl = member.getThirdPartyProfileUrl();
         this.belongingId = member.getBelongingId();
@@ -80,7 +88,9 @@ public class MemberEntity extends BaseEntity {
             this.memberId,
             this.provider,
             this.nickname,
+            this.position,
             this.email,
+            this.phoneNumber,
             this.profileImgUrl,
             this.thirdPartyProfileUrl,
             this.belongingId,

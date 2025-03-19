@@ -3,6 +3,7 @@ package com.eod.sitree.member.ui.dto.request;
 import com.eod.sitree.member.domain.model.Career;
 import com.eod.sitree.member.domain.model.Careers;
 import com.eod.sitree.member.domain.model.EducationActivity;
+import com.eod.sitree.member.domain.model.EducationActivity.EducationStatus;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.MyLink;
 import com.eod.sitree.member.domain.model.MyPage;
@@ -27,10 +28,14 @@ public class MemberUpdateRequestDto {
 
     private String email;
 
+    private String phoneNumber;
+
     private Provider provider;
 
     @NotEmpty
     private String nickname;
+
+    private String position;
 
     @NotEmpty
     private String profileImgUrl;
@@ -52,7 +57,9 @@ public class MemberUpdateRequestDto {
         return new Member(
             provider,
             nickname,
+            position,
             email,
+            phoneNumber,
             profileImgUrl,
             thirdPartyProfileUrl,
             belongingId,
@@ -190,6 +197,8 @@ public class MemberUpdateRequestDto {
 
         private LocalDateTime endedAt;
 
+        private EducationStatus educationStatus;
+
         private String majorOrOrganization;
 
         private EducationActivityCategoryType category;
@@ -198,7 +207,7 @@ public class MemberUpdateRequestDto {
 
         public EducationActivity toDomain() {
 
-            return new EducationActivity(educationActivityName, startedAt, endedAt,
+            return new EducationActivity(educationActivityName, startedAt, endedAt, educationStatus,
                 majorOrOrganization, category, contents);
         }
     }

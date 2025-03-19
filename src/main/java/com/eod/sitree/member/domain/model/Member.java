@@ -24,7 +24,11 @@ public class Member extends BaseTimeDomain {
 
     private String nickname;
 
+    private String position;
+
     private String email;
+
+    private String phoneNumber;
 
     private String profileImgUrl;
 
@@ -46,7 +50,9 @@ public class Member extends BaseTimeDomain {
         this.memberId = memberEntity.getMemberId();
         this.provider = memberEntity.getProvider();
         this.nickname = memberEntity.getNickname();
+        this.position = memberEntity.getPosition();
         this.email = memberEntity.getEmail();
+        this.phoneNumber = memberEntity.getPhoneNumber();
         this.profileImgUrl = memberEntity.getProfileImgUrl();
         this.thirdPartyProfileUrl = memberEntity.getThirdPartyProfileUrl();
         this.belongingId = memberEntity.getBelongingId();
@@ -65,15 +71,17 @@ public class Member extends BaseTimeDomain {
         this.myPage = null;
     }
 
-    public Member(Long memberId, Provider provider, String nickname, String email,
-        String profileImgUrl, @Nullable String thirdPartyProfileUrl,
+    public Member(Long memberId, Provider provider, String nickname, String position, String email,
+        String phoneNumber, String profileImgUrl, @Nullable String thirdPartyProfileUrl,
         @Nullable Long belongingId, @Nullable String shortIntroduction, @Nullable MyPage myPage,
         LocalDateTime createdAt, LocalDateTime modifiedAt) {
         super(createdAt, modifiedAt);
         this.memberId = memberId;
         this.provider = provider;
         this.nickname = nickname;
+        this.position = position;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.profileImgUrl = profileImgUrl;
         this.thirdPartyProfileUrl = thirdPartyProfileUrl;
         this.belongingId = belongingId;
@@ -81,13 +89,15 @@ public class Member extends BaseTimeDomain {
         this.myPage = myPage;
     }
 
-    public Member(Provider provider, String nickname, String email, String profileImgUrl,
+    public Member(Provider provider, String nickname, String position, String email, String phoneNumber, String profileImgUrl,
         @Nullable String thirdPartyProfileUrl,
         @Nullable Long belongingId, @Nullable String shortIntroduction, @Nullable MyPage myPage) {
         super(null, null);
         this.provider = provider;
         this.nickname = nickname;
+        this.position = position;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.profileImgUrl = profileImgUrl;
         this.thirdPartyProfileUrl = thirdPartyProfileUrl;
         this.belongingId = belongingId;
@@ -110,7 +120,9 @@ public class Member extends BaseTimeDomain {
             return;
         }
 
+        this.phoneNumber = updatingMember.getPhoneNumber();
         this.nickname = updatingMember.getNickname();
+        this.position = updatingMember.getPosition();
         this.profileImgUrl = updatingMember.getProfileImgUrl();
         this.thirdPartyProfileUrl = updatingMember.getThirdPartyProfileUrl();
         this.belongingId = updatingMember.getBelongingId();

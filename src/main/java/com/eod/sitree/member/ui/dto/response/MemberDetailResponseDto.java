@@ -11,7 +11,11 @@ public class MemberDetailResponseDto {
 
     private String nickname;
 
+    private String position;
+
     private String email;
+
+    private String phoneNumber;
 
     private String profileImgUrl;
 
@@ -25,12 +29,14 @@ public class MemberDetailResponseDto {
 
     private MyPage myPage;
 
-    public MemberDetailResponseDto(Long memberId, String nickname, String email,
+    public MemberDetailResponseDto(Long memberId, String nickname, String position, String email, String phoneNumber,
         String profileImgUrl, String thirdPartyProfileUrl, String shortIntroduction, Long belongingId, String belongingName,
         MyPage myPage) {
         this.memberId = memberId;
         this.nickname = nickname;
+        this.position = position;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.profileImgUrl = profileImgUrl;
         this.thirdPartyProfileUrl = thirdPartyProfileUrl;
         this.shortIntroduction = shortIntroduction;
@@ -42,6 +48,8 @@ public class MemberDetailResponseDto {
     public MemberDetailResponseDto(Member member, String belongingName) {
         this.memberId = member.getMemberId();
         this.nickname = member.getNickname();
+        this.position = member.getPosition();
+        this.phoneNumber = member.getPhoneNumber();
         this.email = member.getEmail();
         this.profileImgUrl = member.getProfileImgUrl();
         this.thirdPartyProfileUrl = member.getThirdPartyProfileUrl();

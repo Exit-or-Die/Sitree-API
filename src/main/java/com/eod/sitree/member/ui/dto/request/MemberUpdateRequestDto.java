@@ -1,7 +1,9 @@
 package com.eod.sitree.member.ui.dto.request;
 
 import com.eod.sitree.member.domain.model.Career;
+import com.eod.sitree.member.domain.model.Careers;
 import com.eod.sitree.member.domain.model.EducationActivity;
+import com.eod.sitree.member.domain.model.EducationActivity.EducationStatus;
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.MyLink;
 import com.eod.sitree.member.domain.model.MyPage;
@@ -14,6 +16,7 @@ import com.eod.sitree.member.domain.model.type.RoleTagType;
 import com.eod.sitree.member.domain.model.type.TechStackType;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +29,15 @@ public class MemberUpdateRequestDto {
 
     private String email;
 
+    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "Wrong phone number format")
+    private String phoneNumber;
+
     private Provider provider;
 
     @NotEmpty
     private String nickname;
+
+    private String position;
 
     @NotEmpty
     private String profileImgUrl;
@@ -51,7 +59,9 @@ public class MemberUpdateRequestDto {
         return new Member(
             provider,
             nickname,
+            position,
             email,
+            phoneNumber,
             profileImgUrl,
             thirdPartyProfileUrl,
             belongingId,
@@ -68,7 +78,7 @@ public class MemberUpdateRequestDto {
 
         private SelfIntroductionDto selfIntroduction;
 
-        private List<CareerDto> careers;
+        private CareersDto careers;
 
         private List<EducationActivityDto> educationActivities;
 
@@ -79,16 +89,17 @@ public class MemberUpdateRequestDto {
         public MyPage toDomain() {
 
             return new MyPage(
-                selfIntroduction.toDomain(),
-                Optional.ofNullable(careers).orElseGet(ArrayList::new)
-                    .stream()
-                    .map(CareerDto::toDomain)
-                    .toList(),
+                Optional.ofNullable(selfIntroduction)
+                    .map(SelfIntroductionDto::toDomain)
+                    .orElseGet(SelfIntroduction::new),
+                Optional.ofNullable(careers)
+                    .map(CareersDto::toDomain)
+                    .orElseGet(Careers::new),
                 Optional.ofNullable(educationActivities).orElseGet(ArrayList::new)
                     .stream()
                     .map(EducationActivityDto::toDomain)
                     .toList(),
-                techStacks,
+                Optional.ofNullable(techStacks).orElseGet(ArrayList::new),
                 Optional.ofNullable(links).orElseGet(ArrayList::new)
                     .stream()
                     .map(MyLinkDto::toDomain)
@@ -98,6 +109,7 @@ public class MemberUpdateRequestDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class SelfIntroductionDto {
 
         private String title;
@@ -111,9 +123,27 @@ public class MemberUpdateRequestDto {
     }
 
     @Getter
+    public static class CareersDto {
+
+        List<CareerDto> careerList;
+
+        public Careers toDomain() {
+
+            return new Careers(0, 0, Optional.ofNullable(careerList)
+                .orElseGet(ArrayList::new)
+                .stream()
+                .map(CareerDto::toDomain)
+                .toList()
+            );
+        }
+    }
+
+    @Getter
     public static class CareerDto {
 
-        private String careerName;
+        private Long belongingId;
+
+        private String belongingName;
 
         private LocalDateTime startedAt;
 
@@ -128,7 +158,7 @@ public class MemberUpdateRequestDto {
         public Career toDomain() {
 
             return new Career(
-                careerName,
+                belongingId,
                 startedAt,
                 endedAt,
                 position,
@@ -169,6 +199,8 @@ public class MemberUpdateRequestDto {
 
         private LocalDateTime endedAt;
 
+        private EducationStatus educationStatus;
+
         private String majorOrOrganization;
 
         private EducationActivityCategoryType category;
@@ -177,7 +209,7 @@ public class MemberUpdateRequestDto {
 
         public EducationActivity toDomain() {
 
-            return new EducationActivity(educationActivityName, startedAt, endedAt,
+            return new EducationActivity(educationActivityName, startedAt, endedAt, educationStatus,
                 majorOrOrganization, category, contents);
         }
     }

@@ -15,6 +15,8 @@ public interface BelongingRepository {
 
     List<Belonging> searchByName(String name);
 
+    Page<Belonging> searchByName(Pageable pageable, String name);
+
     Optional<Belonging> findById(Long id);
 
     List<Belonging> findAll();

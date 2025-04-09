@@ -51,6 +51,26 @@ public class BelongingRepositoryImpl implements BelongingRepository {
     }
 
     @Override
+    public Page<Belonging> searchByName(Pageable pageable, String name) {
+        List<Belonging> result = jpaQueryFactory.selectFrom(belongingEntity)
+            .where(belongingEntity.name.like("%" + name + "%"))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch().stream()
+            .map(BelongingEntity::toDomainModel).toList();
+
+        Long total = Optional.ofNullable(
+                jpaQueryFactory.select(belongingEntity.belongingId.count())
+                    .where(belongingEntity.name.like("%" + name + "%"))
+                    .from(belongingEntity)
+                    .fetchOne()
+            )
+            .orElse(0L);
+
+        return new PageImpl<>(result, pageable, total);
+    }
+
+    @Override
     public Optional<Belonging> findById(Long id) {
 
         return belongingJpaRepository.findById(id)

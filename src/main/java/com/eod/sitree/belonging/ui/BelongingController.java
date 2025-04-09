@@ -5,8 +5,10 @@ import com.eod.sitree.belonging.domain.model.Belonging;
 import com.eod.sitree.belonging.domain.model.BelongingWithPoint;
 import com.eod.sitree.belonging.service.BelongingService;
 import com.eod.sitree.belonging.ui.dto.request.BelongingRankingRequestDto;
+import com.eod.sitree.belonging.ui.dto.request.BelongingSearchRequestDto;
 import com.eod.sitree.belonging.ui.dto.response.BelongingRankingPageResponseDto;
 import com.eod.sitree.belonging.ui.dto.response.BelongingRankingResponseDto;
+import com.eod.sitree.belonging.ui.dto.response.BelongingSearchPageResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,9 @@ public class BelongingController {
 
     @AuthNotRequired
     @GetMapping("/search")
-    public ResponseDto<List<Belonging>> searchByName(@RequestParam(defaultValue = "") String name) {
+    public ResponseDto<BelongingSearchPageResponseDto> searchByName(BelongingSearchRequestDto request) {
 
-        return ResponseDto.ok(belongingService.searchByName(name));
+        return ResponseDto.ok(new BelongingSearchPageResponseDto(belongingService.searchByName(request)));
     }
 
     @AuthNotRequired

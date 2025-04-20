@@ -3,6 +3,7 @@ package com.eod.sitree.member.domain.model;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 
 @Getter
@@ -17,7 +18,7 @@ public class Careers {
     public Careers(Integer totalYears, Integer totalMonths, List<Career> careerList) {
         this.totalYears = totalYears;
         this.totalMonths = totalMonths;
-        this.careerList = careerList;
+        this.careerList = Optional.ofNullable(careerList).orElseGet(ArrayList::new);
     }
 
     public Careers() {

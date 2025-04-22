@@ -14,6 +14,7 @@ import com.eod.sitree.member.domain.modelrepository.MemberRepository;
 import com.eod.sitree.member.exception.MemberException;
 import com.eod.sitree.member.ui.dto.request.MemberNicknameExistRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSearchPageRequestDto;
+import com.eod.sitree.member.ui.dto.request.MemberShortIntroductionUpdateRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
@@ -181,5 +182,20 @@ public class MemberService {
             .toList();
 
         return new TechStackListResponseDto(teckStackNameList);
+    }
+
+    public MemberUpdateResponseDto updateShortIntroduction(Long memberId,
+        MemberShortIntroductionUpdateRequestDto request, Member currentMember) {
+
+        Member member = memberRepository.findByMemberId(memberId)
+            .orElseThrow(() -> new MemberException(ApplicationErrorType.MEMBER_NOT_FOUND));
+
+        if(!Objects.equals(currentMember.getMemberId(), member.getMemberId())) {
+            throw new MemberException(ApplicationErrorType.MEMBER_UPDATE_NOT_ALLOWED);
+        }
+
+        member.updateShortIntroduction(request.getShortIntroduction());
+
+        return new MemberUpdateResponseDto(memberRepository.save(member) != null);
     }
 }

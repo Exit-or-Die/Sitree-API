@@ -21,6 +21,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
@@ -42,6 +43,15 @@ public class GlobalExceptionHandler {
         log.info("{}", e.getMessage());
         e.printStackTrace(System.err);
         return getResponse(HttpStatus.BAD_REQUEST, errors);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ResponseDto<String>> handleMethodArgumentNotValidException(
+        MethodArgumentTypeMismatchException e) {
+
+        log.info("{}", e.getMessage());
+        e.printStackTrace(System.err);
+        return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

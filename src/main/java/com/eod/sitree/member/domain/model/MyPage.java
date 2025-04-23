@@ -1,9 +1,12 @@
 package com.eod.sitree.member.domain.model;
 
 import com.eod.sitree.member.domain.model.type.TechStackType;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
@@ -22,11 +25,38 @@ public class MyPage {
     public MyPage(SelfIntroduction selfIntroduction, Careers careers,
         List<EducationActivity> educationActivities, List<TechStackType> techStacks,
         List<MyLink> links) {
+
         this.selfIntroduction = selfIntroduction;
-        this.careers = careers;
-        this.educationActivities = educationActivities;
-        this.techStacks = techStacks;
-        this.links = links;
+        this.careers = Optional.ofNullable(careers).orElseGet(Careers::new);
+        this.educationActivities = Optional.ofNullable(educationActivities)
+            .orElseGet(ArrayList::new);
+        this.techStacks = Optional.ofNullable(techStacks).orElseGet(ArrayList::new);
+        this.links = Optional.ofNullable(links).orElseGet(ArrayList::new);
+    }
+
+    public MyPage switchNullAsEmptyAndReturn() {
+
+        if (selfIntroduction == null) {
+            selfIntroduction = new SelfIntroduction();
+        }
+
+        if (careers == null) {
+            careers = new Careers();
+        }
+
+        if (educationActivities == null) {
+            educationActivities = new ArrayList<>();
+        }
+
+        if (techStacks == null) {
+            techStacks = new ArrayList<>();
+        }
+
+        if (links == null) {
+            links = new ArrayList<>();
+        }
+
+        return this;
     }
 }
 

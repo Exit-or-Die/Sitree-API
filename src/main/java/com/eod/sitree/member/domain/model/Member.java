@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 @Getter
@@ -126,7 +127,6 @@ public class Member extends BaseTimeDomain {
         this.profileImgUrl = updatingMember.getProfileImgUrl();
         this.thirdPartyProfileUrl = updatingMember.getThirdPartyProfileUrl();
         this.belongingId = updatingMember.getBelongingId();
-        this.shortIntroduction = updatingMember.getShortIntroduction();
         this.myPage = updatingMember.getMyPage();
     }
 
@@ -179,5 +179,10 @@ public class Member extends BaseTimeDomain {
         }
 
         this.myPage.getCareers().updatePeriod(totalPeriod);
+    }
+
+    public void updateShortIntroduction(String shortIntroduction) {
+
+        this.shortIntroduction = StringUtils.isEmpty(shortIntroduction) ? "" : shortIntroduction;
     }
 }

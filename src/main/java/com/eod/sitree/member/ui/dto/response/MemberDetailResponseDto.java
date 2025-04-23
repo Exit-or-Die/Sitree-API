@@ -2,6 +2,7 @@ package com.eod.sitree.member.ui.dto.response;
 
 import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.domain.model.MyPage;
+import java.util.Optional;
 import lombok.Getter;
 
 @Getter
@@ -42,7 +43,7 @@ public class MemberDetailResponseDto {
         this.shortIntroduction = shortIntroduction;
         this.belongingId = belongingId;
         this.belongingName = belongingName;
-        this.myPage = myPage;
+        this.myPage = Optional.ofNullable(myPage).orElseGet(MyPage::new).switchNullAsEmptyAndReturn();
     }
 
     public MemberDetailResponseDto(Member member, String belongingName) {

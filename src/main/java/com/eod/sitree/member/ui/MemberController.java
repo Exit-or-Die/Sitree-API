@@ -9,6 +9,7 @@ import com.eod.sitree.member.domain.model.Member;
 import com.eod.sitree.member.service.MemberService;
 import com.eod.sitree.member.ui.dto.request.MemberNicknameExistRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSearchPageRequestDto;
+import com.eod.sitree.member.ui.dto.request.MemberShortIntroductionUpdateRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignInRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberSignUpRequestDto;
 import com.eod.sitree.member.ui.dto.request.MemberTokenRequestDto;
@@ -40,21 +41,23 @@ public class MemberController {
 
     @AuthNotRequired
     @PostMapping("/sign-in")
-    public ResponseDto<SignInResponseDto> signIn(@Valid @RequestBody MemberSignInRequestDto memberSignInRequestDto){
+    public ResponseDto<SignInResponseDto> signIn(
+        @Valid @RequestBody MemberSignInRequestDto memberSignInRequestDto) {
 
         return ResponseDto.ok(memberService.signIn(memberSignInRequestDto));
     }
 
     @AuthNotRequired
     @PostMapping("/sign-up")
-    public ResponseDto<MemberTokensResponseDto> signUp(@Valid @RequestBody MemberSignUpRequestDto memberSignUpRequestDto){
+    public ResponseDto<MemberTokensResponseDto> signUp(
+        @Valid @RequestBody MemberSignUpRequestDto memberSignUpRequestDto) {
 
         return ResponseDto.ok(memberService.signUp(memberSignUpRequestDto));
     }
 
     @AuthNotRequired
     @GetMapping("/refresh")
-    public ResponseDto<MemberTokensResponseDto> refreshToken(HttpServletRequest request){
+    public ResponseDto<MemberTokensResponseDto> refreshToken(HttpServletRequest request) {
 
         String token = request.getHeader(JwtTokenType.REFRESH_TOKEN.getHeaderName());
 
@@ -63,7 +66,8 @@ public class MemberController {
 
     @AuthNotRequired
     @GetMapping("/nickname/exist")
-    public ResponseDto<MemberNicknameExistResponseDto> checkExistNickname(@Valid MemberNicknameExistRequestDto memberNicknameExistRequestDto){
+    public ResponseDto<MemberNicknameExistResponseDto> checkExistNickname(
+        @Valid MemberNicknameExistRequestDto memberNicknameExistRequestDto) {
 
         return ResponseDto.ok(memberService.checkExistNickname(memberNicknameExistRequestDto));
     }
@@ -71,7 +75,8 @@ public class MemberController {
     @AuthNotRequired
     @LocalOnly
     @PostMapping("/token")
-    public ResponseDto<MemberTokensResponseDto> getToken(@Valid @RequestBody MemberTokenRequestDto memberTokenRequestDto){
+    public ResponseDto<MemberTokensResponseDto> getToken(
+        @Valid @RequestBody MemberTokenRequestDto memberTokenRequestDto) {
 
         return ResponseDto.ok(memberService.getToken(memberTokenRequestDto));
     }
@@ -79,7 +84,8 @@ public class MemberController {
     // TODO: live시 제거 필요
     @AuthNotRequired
     @PostMapping("/token/expired")
-    public ResponseDto<MemberTokensResponseDto> getExpiredToken(@Valid @RequestBody MemberTokenRequestDto memberTokenRequestDto){
+    public ResponseDto<MemberTokensResponseDto> getExpiredToken(
+        @Valid @RequestBody MemberTokenRequestDto memberTokenRequestDto) {
 
         return ResponseDto.ok(memberService.getExpiredToken(memberTokenRequestDto));
     }
@@ -91,8 +97,9 @@ public class MemberController {
     }
 
     @PutMapping("/{memberId}")
-    public ResponseDto<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequestDto request, @MemberPrincipal
-        Member currentMember) {
+    public ResponseDto<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId,
+        @Valid @RequestBody MemberUpdateRequestDto request, @MemberPrincipal
+    Member currentMember) {
 
         return ResponseDto.ok(memberService.updateMember(memberId, request, currentMember));
     }
@@ -102,6 +109,13 @@ public class MemberController {
     public ResponseDto<MemberDetailResponseDto> getMember(@PathVariable Long memberId) {
 
         return ResponseDto.ok(memberService.getMemberDetailAsDto(memberId));
+    }
+
+    @PutMapping("/{memberId}/short-introduction")
+    public ResponseDto<MemberUpdateResponseDto> updateMemberShortIntroduction(@PathVariable Long memberId,
+        @RequestBody MemberShortIntroductionUpdateRequestDto request, @MemberPrincipal Member currentMember) {
+
+        return ResponseDto.ok(memberService.updateShortIntroduction(memberId, request, currentMember));
     }
 
     @AuthNotRequired

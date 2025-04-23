@@ -112,7 +112,7 @@ public class MemberController {
     }
 
     @PutMapping("/{memberId}/short-introduction")
-    public ResponseDto<MemberUpdateResponseDto> updateMember(@PathVariable Long memberId,
+    public ResponseDto<MemberUpdateResponseDto> updateMemberShortIntroduction(@PathVariable Long memberId,
         @RequestBody MemberShortIntroductionUpdateRequestDto request, @MemberPrincipal Member currentMember) {
 
         return ResponseDto.ok(memberService.updateShortIntroduction(memberId, request, currentMember));

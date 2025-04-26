@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface BelongingRepository {
 
@@ -29,8 +30,9 @@ public interface BelongingRepository {
 
     List<BelongingRankingResponseDto> findBelongingByRankingAscWithProjectCount(BelongingType belongingType);
 
-    Page<BelongingRankingResponseDto> findBelongingByRankingAscWithProjectCountAsPage(
-        Pageable pageable, BelongingType belongingType);
+    Page<BelongingRankingResponseDto> findBelongingByRankingAscWithProjectCountAsPage(Pageable pageable, BelongingType belongingType);
+
+    Slice<BelongingRankingResponseDto> findBelongingByRankingAscWithProjectCountAsSlice(Pageable pageable, BelongingType belongingType);
 
     Map<Long, Belonging> findByIdsAsMap(List<Long> belongingIds);
 }

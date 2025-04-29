@@ -257,7 +257,7 @@ public class BelongingRepositoryImpl implements BelongingRepository {
                     belongingEntity.imageUrl,
                     belongingEntity.currentRanking,
                     belongingEntity.prevRanking,
-                    projectEntity.projectId.countDistinct()
+                    participantEntity.projectId.countDistinct()
                 )
             )
             .from(belongingEntity)
@@ -265,8 +265,6 @@ public class BelongingRepositoryImpl implements BelongingRepository {
             .on(memberEntity.belongingId.eq(belongingEntity.belongingId))
             .leftJoin(participantEntity)
             .on(participantEntity.memberId.eq(memberEntity.memberId))
-            .leftJoin(projectEntity)
-            .on(projectEntity.projectId.eq(participantEntity.projectId))
             .where(
                 belongingEntity.belongingId.in(belongingIds)
             )

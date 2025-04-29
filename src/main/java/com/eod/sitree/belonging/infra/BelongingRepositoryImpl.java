@@ -233,6 +233,21 @@ public class BelongingRepositoryImpl implements BelongingRepository {
     public Slice<BelongingRankingResponseDto> findBelongingByRankingAscWithProjectCountAsSlice(
         Pageable pageable, BelongingType belongingType) {
 
+        List<Long> belongingIds = jpaQueryFactory.select(
+                belongingEntity.belongingId
+            )
+            .from(belongingEntity)
+            .where(
+                eqBelongingType(belongingType, belongingEntity)
+            )
+            .orderBy(
+                orderNullsLast(belongingEntity.currentRanking, Order.ASC),
+                belongingEntity.name.asc()
+            )
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize() + 1) // has next 판단용 + 1
+            .fetch();
+
         List<BelongingRankingResponseDto> result = jpaQueryFactory.select(
                 Projections.constructor(
                     BelongingRankingResponseDto.class,
@@ -253,15 +268,13 @@ public class BelongingRepositoryImpl implements BelongingRepository {
             .leftJoin(projectEntity)
             .on(projectEntity.projectId.eq(participantEntity.projectId))
             .where(
-                eqBelongingType(belongingType, belongingEntity)
+                belongingEntity.belongingId.in(belongingIds)
             )
             .groupBy(belongingEntity)
             .orderBy(
                 orderNullsLast(belongingEntity.currentRanking, Order.ASC),
                 belongingEntity.name.asc()
             )
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize() + 1) // has next 판단용 + 1
             .fetch();
 
         boolean hasNext = false;

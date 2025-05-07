@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -225,6 +227,61 @@ public class BelongingRepositoryImpl implements BelongingRepository {
             .orElse(0L);
 
         return new PageImpl<>(result, pageable, total);
+    }
+
+    @Override
+    public Slice<BelongingRankingResponseDto> findBelongingByRankingAscWithProjectCountAsSlice(
+        Pageable pageable, BelongingType belongingType) {
+
+        List<Long> belongingIds = jpaQueryFactory.select(
+                belongingEntity.belongingId
+            )
+            .from(belongingEntity)
+            .where(
+                eqBelongingType(belongingType, belongingEntity)
+            )
+            .orderBy(
+                orderNullsLast(belongingEntity.currentRanking, Order.ASC),
+                belongingEntity.name.asc()
+            )
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize() + 1) // has next 판단용 + 1
+            .fetch();
+
+        List<BelongingRankingResponseDto> result = jpaQueryFactory.select(
+                Projections.constructor(
+                    BelongingRankingResponseDto.class,
+                    belongingEntity.belongingId,
+                    belongingEntity.belongingType,
+                    belongingEntity.name,
+                    belongingEntity.imageUrl,
+                    belongingEntity.currentRanking,
+                    belongingEntity.prevRanking,
+                    participantEntity.projectId.countDistinct()
+                )
+            )
+            .from(belongingEntity)
+            .leftJoin(memberEntity)
+            .on(memberEntity.belongingId.eq(belongingEntity.belongingId))
+            .leftJoin(participantEntity)
+            .on(participantEntity.memberId.eq(memberEntity.memberId))
+            .where(
+                belongingEntity.belongingId.in(belongingIds)
+            )
+            .groupBy(belongingEntity)
+            .orderBy(
+                orderNullsLast(belongingEntity.currentRanking, Order.ASC),
+                belongingEntity.name.asc()
+            )
+            .fetch();
+
+        boolean hasNext = false;
+        if (result.size() > pageable.getPageSize()) {
+            hasNext = true;
+            result.remove(result.size() - 1); // has next 판단용 초과분 1개 제거
+        }
+
+        return new SliceImpl<>(result, pageable, hasNext);
     }
 
     @Override

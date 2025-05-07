@@ -8,6 +8,7 @@ import com.eod.sitree.belonging.ui.dto.request.BelongingRankingRequestDto;
 import com.eod.sitree.belonging.ui.dto.request.BelongingSearchRequestDto;
 import com.eod.sitree.belonging.ui.dto.response.BelongingRankingPageResponseDto;
 import com.eod.sitree.belonging.ui.dto.response.BelongingRankingResponseDto;
+import com.eod.sitree.belonging.ui.dto.response.BelongingRankingSliceResponseDto;
 import com.eod.sitree.belonging.ui.dto.response.BelongingSearchPageResponseDto;
 import com.eod.sitree.common.response.ResponseDto;
 import java.util.List;
@@ -33,8 +34,8 @@ public class BelongingController {
 
     @AuthNotRequired
     @GetMapping("/ranking")
-    public ResponseDto<BelongingRankingPageResponseDto> rankBelongings(BelongingRankingRequestDto request) {
+    public ResponseDto<BelongingRankingSliceResponseDto> rankBelongings(BelongingRankingRequestDto request) {
 
-        return ResponseDto.ok(new BelongingRankingPageResponseDto(belongingService.searchRanking(request)));
+        return ResponseDto.ok(new BelongingRankingSliceResponseDto(belongingService.searchRanking(request)));
     }
 }

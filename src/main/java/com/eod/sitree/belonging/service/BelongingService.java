@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,8 +31,8 @@ public class BelongingService {
         return belongingRepository.findBelongingByRankingAscWithProjectCount(request.getBelongingType());
     }
 
-    public Page<BelongingRankingResponseDto> searchRanking(BelongingRankingRequestDto request) {
+    public Slice<BelongingRankingResponseDto> searchRanking(BelongingRankingRequestDto request) {
 
-        return belongingRepository.findBelongingByRankingAscWithProjectCountAsPage(request.getPageable(), request.getBelongingType());
+        return belongingRepository.findBelongingByRankingAscWithProjectCountAsSlice(request.getPageable(), request.getBelongingType());
     }
 }

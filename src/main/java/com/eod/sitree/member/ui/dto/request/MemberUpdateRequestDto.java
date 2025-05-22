@@ -149,6 +149,8 @@ public class MemberUpdateRequestDto {
 
         private LocalDateTime endedAt;
 
+        private boolean inProgress;
+
         private String position;
 
         private String department;
@@ -161,6 +163,7 @@ public class MemberUpdateRequestDto {
                 belongingId,
                 startedAt,
                 endedAt,
+                inProgress,
                 position,
                 department,
                 Optional.ofNullable(projects).orElseGet(ArrayList::new)
@@ -199,6 +202,8 @@ public class MemberUpdateRequestDto {
 
         private LocalDateTime endedAt;
 
+        private boolean isProgress;
+
         private EducationStatus educationStatus;
 
         private String majorOrOrganization;
@@ -209,7 +214,7 @@ public class MemberUpdateRequestDto {
 
         public EducationActivity toDomain() {
 
-            return new EducationActivity(educationActivityName, startedAt, endedAt, educationStatus,
+            return new EducationActivity(educationActivityName, startedAt, endedAt, isProgress, educationStatus,
                 majorOrOrganization, category, contents);
         }
     }

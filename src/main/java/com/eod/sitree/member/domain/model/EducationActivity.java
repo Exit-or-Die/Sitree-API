@@ -26,6 +26,8 @@ public class EducationActivity {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endedAt;
 
+    private boolean isProgress;
+
     private EducationStatus educationStatus;
 
     private String majorOrOrganization;
@@ -35,11 +37,12 @@ public class EducationActivity {
     private String contents;
 
     public EducationActivity(String educationActivityName, LocalDateTime startedAt,
-        LocalDateTime endedAt, EducationStatus educationStatus, String majorOrOrganization, EducationActivityCategoryType category,
+        LocalDateTime endedAt, boolean isProgress, EducationStatus educationStatus, String majorOrOrganization, EducationActivityCategoryType category,
         String contents) {
         this.educationActivityName = educationActivityName;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+        this.isProgress = isProgress;
         this.educationStatus = educationStatus;
         this.majorOrOrganization = majorOrOrganization;
         this.category = category;

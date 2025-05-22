@@ -202,7 +202,7 @@ public class MemberUpdateRequestDto {
 
         private LocalDateTime endedAt;
 
-        private boolean isProgress;
+        private boolean inProgress;
 
         private EducationStatus educationStatus;
 
@@ -214,7 +214,7 @@ public class MemberUpdateRequestDto {
 
         public EducationActivity toDomain() {
 
-            return new EducationActivity(educationActivityName, startedAt, endedAt, isProgress, educationStatus,
+            return new EducationActivity(educationActivityName, startedAt, endedAt, inProgress, educationStatus,
                 majorOrOrganization, category, contents);
         }
     }

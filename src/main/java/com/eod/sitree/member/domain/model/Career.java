@@ -31,6 +31,8 @@ public class Career {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endedAt;
 
+    private boolean inProgress;
+
     private String position;
 
     private String department;
@@ -38,7 +40,7 @@ public class Career {
     private List<Project> projects;
 
     public Career(Long belongingId, String belongingName, String imageUrl, LocalDateTime startedAt,
-        LocalDateTime endedAt,
+        LocalDateTime endedAt, boolean inProgress,
         String position, String department, List<Project> projects) {
 
         this.belongingId = belongingId;
@@ -46,17 +48,20 @@ public class Career {
         this.imageUrl = imageUrl;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+        this.inProgress = inProgress;
         this.position = position;
         this.department = department;
         this.projects = projects;
     }
 
     public Career(Long belongingId, LocalDateTime startedAt, LocalDateTime endedAt,
+        boolean inProgress,
         String position, String department, List<Project> projects) {
 
         this.belongingId = belongingId;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+        this.inProgress = inProgress;
         this.position = position;
         this.department = department;
         this.projects = projects;

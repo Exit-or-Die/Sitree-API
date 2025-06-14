@@ -27,16 +27,19 @@ public class Project {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endedAt;
 
+    private boolean inProgress;
+
     private String contents;
 
     private List<RoleTagType> roleTags;
 
-    public Project(String projectName, LocalDateTime startedAt, LocalDateTime endedAt,
+    public Project(String projectName, LocalDateTime startedAt, LocalDateTime endedAt, boolean inProgress,
         String contents,
         List<RoleTagType> roleTags) {
         this.projectName = projectName;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+        this.inProgress = inProgress;
         this.contents = contents;
         this.roleTags = roleTags;
     }

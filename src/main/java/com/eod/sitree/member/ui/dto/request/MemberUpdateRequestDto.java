@@ -183,13 +183,15 @@ public class MemberUpdateRequestDto {
 
         private LocalDateTime endedAt;
 
+        private boolean inProgress;
+
         private String contents;
 
         private List<RoleTagType> roleTags;
 
         public Project toDomain() {
 
-            return new Project(projectName, startedAt, endedAt, contents, roleTags);
+            return new Project(projectName, startedAt, endedAt, inProgress, contents, roleTags);
         }
     }
 

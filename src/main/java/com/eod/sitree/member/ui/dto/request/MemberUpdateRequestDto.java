@@ -15,7 +15,9 @@ import com.eod.sitree.member.domain.model.type.LinkProviderType;
 import com.eod.sitree.member.domain.model.type.RoleTagType;
 import com.eod.sitree.member.domain.model.type.TechStackType;
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,6 +54,7 @@ public class MemberUpdateRequestDto {
     private Long belongingId;
 
     @Nullable
+    @Valid
     private MyPageDto myPage;
 
     public Member toDomain() {
@@ -78,6 +81,7 @@ public class MemberUpdateRequestDto {
 
         private SelfIntroductionDto selfIntroduction;
 
+        @Valid
         private CareersDto careers;
 
         private List<EducationActivityDto> educationActivities;
@@ -125,6 +129,8 @@ public class MemberUpdateRequestDto {
     @Getter
     public static class CareersDto {
 
+
+        @Valid
         List<CareerDto> careerList;
 
         public Careers toDomain() {
@@ -141,6 +147,7 @@ public class MemberUpdateRequestDto {
     @Getter
     public static class CareerDto {
 
+        @NotNull
         private Long belongingId;
 
         private String belongingName;
